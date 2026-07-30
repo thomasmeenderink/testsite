@@ -150,21 +150,29 @@
     font-size: 0.68rem; letter-spacing: 0.08em; background: rgba(18,32,58,0.06);
     color: var(--text-dim); padding: 3px 8px; border-radius: 3px;
   }
-  .route-cities{ display:flex; justify-content:space-between; align-items:flex-start; gap: 10px; }
+  .route-cities{ display:grid; grid-template-columns: 1fr 64px 1fr; align-items:flex-start; gap: 10px; }
   .route-cities .place{ font-size: 0.95rem; font-weight: 600; }
   .route-cities .region{ color: var(--text-dim); font-size: 0.75rem; }
   .route-cities .place.dest{ text-align:right; }
   .route-mid{
-    flex: 1; text-align:center; padding-top: 4px;
+    text-align:center; padding-top: 4px;
   }
-  .route-mid .dur{ color: var(--text-dim); font-size: 0.72rem; margin-bottom: 4px; }
+  .route-mid .dur{ color: var(--text-dim); font-size: 0.72rem; margin-bottom: 4px; white-space:nowrap; }
   .route-mid .dots{ height:1px; background: var(--panel-line); position:relative; }
   .route-mid .dots::after{ content:'✈'; position:absolute; top:-8px; left:50%; transform:translateX(-50%); font-size: 0.7rem; color: var(--accent); background: var(--panel); padding: 0 4px; }
   .deal-when{ color: var(--text-dim); font-size: 0.8rem; margin: 14px 0; padding-top: 14px; border-top: 1px solid var(--panel-line); }
   .deal-plane{ display:flex; justify-content:space-between; align-items:flex-end; margin-bottom: 16px; }
   .deal-plane .name{ font-size: 0.88rem; }
   .deal-plane .cap{ color: var(--text-dim); font-size: 0.75rem; }
-  .deal-plane .price{ text-align:right; font-family:'Playfair Display', serif; font-size: 1.3rem; color: var(--accent); }
+  .deal-plane .price-block{ text-align:right; }
+  .deal-plane .price-old{
+    font-family:'Inter', sans-serif; font-size: 0.78rem; color: var(--text-dim);
+    text-decoration: line-through; font-variant-numeric: tabular-nums;
+  }
+  .deal-plane .price{
+    font-family:'Inter', sans-serif; font-weight: 700; font-size: 1.3rem; color: var(--accent);
+    font-variant-numeric: tabular-nums; letter-spacing: -0.01em;
+  }
   .deal-plane .whole{ color: var(--text-dim); font-size: 0.7rem; text-align:right; }
   .deal-actions{ display:flex; gap: 10px; }
   .deal-actions a{
@@ -382,7 +390,7 @@
         <div class="deal-when">Do 30 jul · 14:00</div>
         <div class="deal-plane">
           <div><div class="name">Cessna Citation CJ3</div><div class="cap">Midsize · tot 8 passagiers</div></div>
-          <div><div class="price">€4.200</div><div class="whole">Heel toestel</div></div>
+          <div class="price-block"><div class="price-old">€11.500</div><div class="price">€4.200</div><div class="whole">Heel toestel</div></div>
         </div>
         <div class="deal-actions">
           <a href="#" class="view">BEKIJK ›</a>
@@ -405,7 +413,7 @@
         <div class="deal-when">Za 1 aug · 09:30</div>
         <div class="deal-plane">
           <div><div class="name">Embraer Phenom 300</div><div class="cap">Light jet · tot 7 passagiers</div></div>
-          <div><div class="price">€3.800</div><div class="whole">Heel toestel</div></div>
+          <div class="price-block"><div class="price-old">€11.000</div><div class="price">€3.800</div><div class="whole">Heel toestel</div></div>
         </div>
         <div class="deal-actions">
           <a href="#" class="view">BEKIJK ›</a>
@@ -428,7 +436,7 @@
         <div class="deal-when">Zo 2 aug · 16:15</div>
         <div class="deal-plane">
           <div><div class="name">Bombardier Challenger 350</div><div class="cap">Super-midsize · tot 10 passagiers</div></div>
-          <div><div class="price">€6.500</div><div class="whole">Heel toestel</div></div>
+          <div class="price-block"><div class="price-old">€17.000</div><div class="price">€6.500</div><div class="whole">Heel toestel</div></div>
         </div>
         <div class="deal-actions">
           <a href="#" class="view">BEKIJK ›</a>
@@ -445,13 +453,13 @@
         <div class="codes"><span>AMS</span><span>CEQ</span></div>
         <div class="route-cities">
           <div class="place">Amsterdam<div class="region">Nederland</div></div>
-          <div class="route-mid"><div class="dur">—</div><div class="dots"></div></div>
+          <div class="route-mid"><div class="dur">1h 50m</div><div class="dots"></div></div>
           <div class="place dest">Cannes<div class="region">Frankrijk</div></div>
         </div>
-        <div class="deal-when">Ma 3 aug · 07:00–17:00</div>
+        <div class="deal-when">Ma 3 aug · Beschikbaar tussen 07:00 en 17:00</div>
         <div class="deal-plane">
           <div><div class="name">Cessna CJ3</div><div class="cap">Midsize · tot 8 passagiers</div></div>
-          <div><div class="price">€7.800</div><div class="whole">Heel toestel</div></div>
+          <div class="price-block"><div class="price-old">€19.500</div><div class="price">€7.800</div><div class="whole">Heel toestel</div></div>
         </div>
         <div class="deal-actions">
           <a href="#" class="view">BEKIJK ›</a>
@@ -468,13 +476,13 @@
         <div class="codes"><span>FSC</span><span>TLN</span></div>
         <div class="route-cities">
           <div class="place">Figari<div class="region">Corsica, Frankrijk</div></div>
-          <div class="route-mid"><div class="dur">—</div><div class="dots"></div></div>
+          <div class="route-mid"><div class="dur">45m</div><div class="dots"></div></div>
           <div class="place dest">Hyères<div class="region">Frankrijk</div></div>
         </div>
-        <div class="deal-when">Zo 9 aug · 06:30–11:00</div>
+        <div class="deal-when">Zo 9 aug · Beschikbaar tussen 06:30 en 11:00</div>
         <div class="deal-plane">
           <div><div class="name">Cessna CJ3</div><div class="cap">Midsize · tot 8 passagiers</div></div>
-          <div><div class="price">€5.200</div><div class="whole">Heel toestel</div></div>
+          <div class="price-block"><div class="price-old">€14.000</div><div class="price">€5.200</div><div class="whole">Heel toestel</div></div>
         </div>
         <div class="deal-actions">
           <a href="#" class="view">BEKIJK ›</a>
@@ -491,13 +499,13 @@
         <div class="codes"><span>RTM</span><span>KIR</span></div>
         <div class="route-cities">
           <div class="place">Rotterdam<div class="region">Nederland</div></div>
-          <div class="route-mid"><div class="dur">—</div><div class="dots"></div></div>
+          <div class="route-mid"><div class="dur">1h 40m</div><div class="dots"></div></div>
           <div class="place dest">Kerry<div class="region">Ierland</div></div>
         </div>
-        <div class="deal-when">Za 15 aug · 10:30–11:00</div>
+        <div class="deal-when">Za 15 aug · Beschikbaar tussen 10:30 en 11:00</div>
         <div class="deal-plane">
           <div><div class="name">Cessna CJ3</div><div class="cap">Midsize · tot 8 passagiers</div></div>
-          <div><div class="price">€7.900</div><div class="whole">Heel toestel</div></div>
+          <div class="price-block"><div class="price-old">€19.800</div><div class="price">€7.900</div><div class="whole">Heel toestel</div></div>
         </div>
         <div class="deal-actions">
           <a href="#" class="view">BEKIJK ›</a>
@@ -514,13 +522,13 @@
         <div class="codes"><span>LCY</span><span>CEQ</span></div>
         <div class="route-cities">
           <div class="place">Londen<div class="region">Verenigd Koninkrijk</div></div>
-          <div class="route-mid"><div class="dur">—</div><div class="dots"></div></div>
+          <div class="route-mid"><div class="dur">1h 35m</div><div class="dots"></div></div>
           <div class="place dest">Cannes<div class="region">Frankrijk</div></div>
         </div>
         <div class="deal-when">Za 15 aug · 15:45</div>
         <div class="deal-plane">
           <div><div class="name">Cessna CJ3</div><div class="cap">Midsize · tot 8 passagiers</div></div>
-          <div><div class="price">€7.900</div><div class="whole">Heel toestel</div></div>
+          <div class="price-block"><div class="price-old">€19.000</div><div class="price">€7.900</div><div class="whole">Heel toestel</div></div>
         </div>
         <div class="deal-actions">
           <a href="#" class="view">BEKIJK ›</a>
@@ -537,13 +545,13 @@
         <div class="codes"><span>AMS</span><span>FAB</span></div>
         <div class="route-cities">
           <div class="place">Amsterdam<div class="region">Nederland</div></div>
-          <div class="route-mid"><div class="dur">—</div><div class="dots"></div></div>
+          <div class="route-mid"><div class="dur">1h 05m</div><div class="dots"></div></div>
           <div class="place dest">Farnborough<div class="region">Verenigd Koninkrijk</div></div>
         </div>
-        <div class="deal-when">Wo 26 aug · 09:00–15:45</div>
+        <div class="deal-when">Wo 26 aug · Beschikbaar tussen 09:00 en 15:45</div>
         <div class="deal-plane">
           <div><div class="name">Cessna CJ3</div><div class="cap">Midsize · tot 8 passagiers</div></div>
-          <div><div class="price">€5.950</div><div class="whole">Heel toestel</div></div>
+          <div class="price-block"><div class="price-old">€15.500</div><div class="price">€5.950</div><div class="whole">Heel toestel</div></div>
         </div>
         <div class="deal-actions">
           <a href="#" class="view">BEKIJK ›</a>
@@ -560,13 +568,13 @@
         <div class="codes"><span>FAB</span><span>AMS</span></div>
         <div class="route-cities">
           <div class="place">Farnborough<div class="region">Verenigd Koninkrijk</div></div>
-          <div class="route-mid"><div class="dur">—</div><div class="dots"></div></div>
+          <div class="route-mid"><div class="dur">1h 05m</div><div class="dots"></div></div>
           <div class="place dest">Amsterdam<div class="region">Nederland</div></div>
         </div>
-        <div class="deal-when">Do 27 aug · 19:15–20:00</div>
+        <div class="deal-when">Do 27 aug · Beschikbaar tussen 19:15 en 20:00</div>
         <div class="deal-plane">
           <div><div class="name">Cessna CJ3</div><div class="cap">Midsize · tot 8 passagiers</div></div>
-          <div><div class="price">€5.850</div><div class="whole">Heel toestel</div></div>
+          <div class="price-block"><div class="price-old">€15.200</div><div class="price">€5.850</div><div class="whole">Heel toestel</div></div>
         </div>
         <div class="deal-actions">
           <a href="#" class="view">BEKIJK ›</a>
@@ -583,13 +591,13 @@
         <div class="codes"><span>AMS</span><span>CEG</span></div>
         <div class="route-cities">
           <div class="place">Amsterdam<div class="region">Nederland</div></div>
-          <div class="route-mid"><div class="dur">—</div><div class="dots"></div></div>
+          <div class="route-mid"><div class="dur">1h 10m</div><div class="dots"></div></div>
           <div class="place dest">Hawarden<div class="region">Wales, VK</div></div>
         </div>
-        <div class="deal-when">Za 5 sep · 07:00–08:30</div>
+        <div class="deal-when">Za 5 sep · Beschikbaar tussen 07:00 en 08:30</div>
         <div class="deal-plane">
           <div><div class="name">Cessna CJ3</div><div class="cap">Midsize · tot 8 passagiers</div></div>
-          <div><div class="price">€6.650</div><div class="whole">Heel toestel</div></div>
+          <div class="price-block"><div class="price-old">€16.500</div><div class="price">€6.650</div><div class="whole">Heel toestel</div></div>
         </div>
         <div class="deal-actions">
           <a href="#" class="view">BEKIJK ›</a>
@@ -606,13 +614,13 @@
         <div class="codes"><span>CEG</span><span>AMS</span></div>
         <div class="route-cities">
           <div class="place">Hawarden<div class="region">Wales, VK</div></div>
-          <div class="route-mid"><div class="dur">—</div><div class="dots"></div></div>
+          <div class="route-mid"><div class="dur">1h 10m</div><div class="dots"></div></div>
           <div class="place dest">Amsterdam<div class="region">Nederland</div></div>
         </div>
-        <div class="deal-when">Za 12 sep · 17:00–20:00</div>
+        <div class="deal-when">Za 12 sep · Beschikbaar tussen 17:00 en 20:00</div>
         <div class="deal-plane">
           <div><div class="name">Cessna CJ3</div><div class="cap">Midsize · tot 8 passagiers</div></div>
-          <div><div class="price">€6.500</div><div class="whole">Heel toestel</div></div>
+          <div class="price-block"><div class="price-old">€16.200</div><div class="price">€6.500</div><div class="whole">Heel toestel</div></div>
         </div>
         <div class="deal-actions">
           <a href="#" class="view">BEKIJK ›</a>
@@ -629,13 +637,13 @@
         <div class="codes"><span>AMS</span><span>OXF</span></div>
         <div class="route-cities">
           <div class="place">Amsterdam<div class="region">Nederland</div></div>
-          <div class="route-mid"><div class="dur">—</div><div class="dots"></div></div>
+          <div class="route-mid"><div class="dur">1h 00m</div><div class="dots"></div></div>
           <div class="place dest">Londen Oxford<div class="region">Verenigd Koninkrijk</div></div>
         </div>
-        <div class="deal-when">Di 13 okt · 09:00–16:00</div>
+        <div class="deal-when">Di 13 okt · Beschikbaar tussen 09:00 en 16:00</div>
         <div class="deal-plane">
           <div><div class="name">Cessna CJ3</div><div class="cap">Midsize · tot 8 passagiers</div></div>
-          <div><div class="price">€5.300</div><div class="whole">Heel toestel</div></div>
+          <div class="price-block"><div class="price-old">€14.300</div><div class="price">€5.300</div><div class="whole">Heel toestel</div></div>
         </div>
         <div class="deal-actions">
           <a href="#" class="view">BEKIJK ›</a>
@@ -652,13 +660,13 @@
         <div class="codes"><span>OXF</span><span>AMS</span></div>
         <div class="route-cities">
           <div class="place">Londen Oxford<div class="region">Verenigd Koninkrijk</div></div>
-          <div class="route-mid"><div class="dur">—</div><div class="dots"></div></div>
+          <div class="route-mid"><div class="dur">1h 00m</div><div class="dots"></div></div>
           <div class="place dest">Amsterdam<div class="region">Nederland</div></div>
         </div>
         <div class="deal-when">Za 17 okt · 20:00</div>
         <div class="deal-plane">
           <div><div class="name">Cessna CJ3</div><div class="cap">Midsize · tot 8 passagiers</div></div>
-          <div><div class="price">€4.450</div><div class="whole">Heel toestel</div></div>
+          <div class="price-block"><div class="price-old">€12.500</div><div class="price">€4.450</div><div class="whole">Heel toestel</div></div>
         </div>
         <div class="deal-actions">
           <a href="#" class="view">BEKIJK ›</a>
