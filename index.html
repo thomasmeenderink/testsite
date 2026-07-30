@@ -45,9 +45,12 @@
 
   header{
     position: relative; z-index: 1;
-    display:flex; justify-content: space-between; align-items:center;
     padding: 28px 6vw;
     border-bottom: 1px solid var(--panel-line);
+  }
+  .bar{
+    max-width: 1180px; margin: 0 auto;
+    display:flex; justify-content: space-between; align-items:center;
   }
   .logo{
     font-size: 1.3rem; letter-spacing: 0.12em; font-weight: 700;
@@ -62,7 +65,7 @@
   .hero{
     position: relative; z-index: 1;
     padding: 8vh 6vw 6vh;
-    max-width: 1100px;
+    max-width: 1180px; margin: 0 auto;
   }
   .eyebrow{
     color: var(--gold); font-size: 0.78rem; letter-spacing: 0.18em;
@@ -227,9 +230,9 @@
 
   footer{
     border-top: 1px solid var(--panel-line); padding: 40px 6vw;
-    display:flex; justify-content: space-between; flex-wrap:wrap; gap: 20px;
     color: var(--text-dim); font-size: 0.75rem;
   }
+  footer .bar{ flex-wrap:wrap; gap: 20px; }
 
   @media (prefers-reduced-motion: reduce){
     * { animation: none !important; transition: none !important; }
@@ -240,13 +243,15 @@
 <div class="stars"></div>
 
 <header>
-  <div class="logo">DEAD<span>HEAD</span></div>
-  <nav>
-    <a href="#routes">Live legs</a>
-    <a href="#how">Hoe het werkt</a>
-    <a href="#why">Waarom</a>
-    <a href="#signup">Meld je aan</a>
-  </nav>
+  <div class="bar">
+    <div class="logo">DEAD<span>HEAD</span></div>
+    <nav>
+      <a href="#routes">Live legs</a>
+      <a href="#how">Hoe het werkt</a>
+      <a href="#why">Waarom</a>
+      <a href="#signup">Meld je aan</a>
+    </nav>
+  </div>
 </header>
 
 <div class="hero">
@@ -525,8 +530,10 @@
 </section>
 
 <footer>
-  <div>DEADHEAD — empty legs, real prices.</div>
-  <div>Amsterdam · Teterboro · Nice</div>
+  <div class="bar">
+    <div>DEADHEAD — empty legs, real prices.</div>
+    <div>Amsterdam · Teterboro · Nice</div>
+  </div>
 </footer>
 
 </body>
