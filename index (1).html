@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DEADHEAD — Empty legs. Real prices.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0b0f17;
+    --panel: #121a27;
+    --panel-line: #232d40;
+    --gold: #c9a227;
+    --gold-dim: #6e5c22;
+    --text: #edeae0;
+    --text-dim: #8b9ab0;
+    --rust: #b4532a;
+    --radius: 4px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'IBM Plex Mono', monospace;
+    line-height: 1.5;
+    overflow-x: hidden;
+  }
+  h1, h2, .serif{ font-family: 'Playfair Display', serif; }
+  a{ color: inherit; }
+
+  /* subtle night-sky texture */
+  .stars{
+    position: fixed; inset:0; z-index:0; pointer-events:none;
+    background-image:
+      radial-gradient(1px 1px at 20% 30%, rgba(237,234,224,0.35), transparent),
+      radial-gradient(1px 1px at 70% 60%, rgba(237,234,224,0.25), transparent),
+      radial-gradient(1px 1px at 85% 20%, rgba(237,234,224,0.3), transparent),
+      radial-gradient(1px 1px at 40% 80%, rgba(237,234,224,0.2), transparent),
+      radial-gradient(1px 1px at 10% 70%, rgba(237,234,224,0.3), transparent),
+      radial-gradient(1px 1px at 60% 10%, rgba(237,234,224,0.25), transparent);
+    background-size: 100% 100%;
+  }
+
+  header{
+    position: relative; z-index: 1;
+    display:flex; justify-content: space-between; align-items:center;
+    padding: 28px 6vw;
+    border-bottom: 1px solid var(--panel-line);
+  }
+  .logo{
+    font-size: 1.3rem; letter-spacing: 0.12em; font-weight: 700;
+  }
+  .logo span{ color: var(--gold); }
+  nav a{
+    color: var(--text-dim); text-decoration:none; font-size: 0.8rem;
+    letter-spacing: 0.05em; margin-left: 28px;
+  }
+  nav a:hover{ color: var(--gold); }
+
+  .hero{
+    position: relative; z-index: 1;
+    padding: 8vh 6vw 6vh;
+    max-width: 1100px;
+  }
+  .eyebrow{
+    color: var(--gold); font-size: 0.78rem; letter-spacing: 0.18em;
+    margin-bottom: 18px; display:block;
+  }
+  .hero h1{
+    font-size: clamp(2.4rem, 5vw, 4.2rem);
+    font-weight: 700; line-height: 1.08;
+    max-width: 14ch;
+  }
+  .hero h1 em{ color: var(--gold); font-style: italic; }
+  .hero p.sub{
+    color: var(--text-dim); max-width: 46ch; margin-top: 22px;
+    font-size: 0.95rem;
+  }
+
+  /* --- popular routes --- */
+  .routes-intro{ text-align:center; max-width: 620px; margin: 0 auto 50px; }
+  .routes-intro p{ color: var(--text-dim); font-size: 0.9rem; margin-top: 14px; }
+  .routes-grid{
+    display:grid; grid-template-columns: repeat(3, 1fr); gap: 26px;
+  }
+  @media (max-width: 900px){ .routes-grid{ grid-template-columns: 1fr; } }
+  .route-card{
+    position:relative; border-radius: 10px; overflow:hidden;
+    border: 1px solid var(--panel-line);
+    aspect-ratio: 3/4; display:flex; flex-direction:column; justify-content:flex-end;
+  }
+  .route-card .scene{ position:absolute; inset:0; z-index:0; }
+  .route-card .scene svg{ width:100%; height:100%; display:block; }
+  .route-card .shade{
+    position:absolute; inset:0; z-index:1;
+    background: linear-gradient(180deg, rgba(11,15,23,0) 30%, rgba(11,15,23,0.55) 65%, rgba(11,15,23,0.92) 100%);
+  }
+  .route-card .top{
+    position:relative; z-index:2; padding: 20px 22px 0;
+  }
+  .route-line{
+    display:flex; align-items:center; gap: 10px; font-size: 0.72rem;
+    letter-spacing: 0.1em; color: #f2efe6; margin-bottom: 8px;
+  }
+  .route-line .dash{ flex:1; height:1px; background: rgba(242,239,230,0.5); }
+  .route-line.dest{ justify-content:flex-end; }
+  .bottom{
+    position:relative; z-index:2; padding: 0 22px 22px;
+  }
+  .bottom .label{ color: var(--gold); font-size: 0.68rem; letter-spacing: 0.12em; display:block; margin-bottom: 4px; }
+  .bottom .price{ font-family:'Playfair Display', serif; font-size: 1.9rem; color: #fff; }
+  .bottom .flights{ color: #d9d3c2; font-size: 0.78rem; margin-top: 6px; }
+  .routes-cta{ display:flex; justify-content:center; gap: 14px; margin-top: 44px; flex-wrap: wrap; }
+  .btn-solid, .btn-outline{
+    font-family:'IBM Plex Mono', monospace; font-size: 0.82rem; letter-spacing: 0.03em;
+    padding: 13px 24px; border-radius: var(--radius); text-decoration:none; display:inline-flex; align-items:center; gap:8px;
+  }
+  .btn-solid{ background: var(--gold); color: var(--bg); font-weight:600; }
+  .btn-solid:hover{ background: #ddb534; }
+  .btn-outline{ border: 1px solid var(--panel-line); color: var(--text); }
+  .btn-outline:hover{ border-color: var(--gold); color: var(--gold); }
+
+  section{ position: relative; z-index:1; padding: 8vh 6vw; }
+  .section-label{
+    color: var(--gold); font-size: 0.75rem; letter-spacing: 0.15em; margin-bottom: 10px; display:block;
+  }
+  .section-title{ font-size: clamp(1.6rem, 3vw, 2.2rem); max-width: 20ch; }
+
+  .steps{
+    display:grid; grid-template-columns: repeat(3, 1fr); gap: 40px; margin-top: 50px;
+  }
+  @media (max-width: 800px){ .steps{ grid-template-columns: 1fr; } }
+  .step-num{
+    font-family: 'Playfair Display', serif; font-style: italic;
+    color: var(--gold-dim); font-size: 2.2rem; margin-bottom: 14px;
+  }
+  .step h3{ font-family: 'Playfair Display', serif; font-size: 1.15rem; margin-bottom: 10px; }
+  .step p{ color: var(--text-dim); font-size: 0.88rem; }
+
+  .why{
+    background: var(--panel); border: 1px solid var(--panel-line);
+    border-radius: var(--radius); padding: 6vh 6vw; margin: 0 6vw;
+  }
+  .why-grid{ display:grid; grid-template-columns: 1fr 1fr; gap: 50px; margin-top: 40px; }
+  @media (max-width: 800px){ .why-grid{ grid-template-columns: 1fr; } }
+  .why-grid p{ color: var(--text-dim); font-size: 0.9rem; }
+  .why-grid .stat{ font-family:'Playfair Display', serif; color: var(--gold); font-size: 2rem; display:block; margin-bottom: 6px; }
+
+  .cta{
+    text-align:center; padding: 10vh 6vw;
+  }
+  .cta h2{ font-size: clamp(1.8rem, 4vw, 2.8rem); max-width: 18ch; margin: 0 auto 26px; }
+  form{
+    display:flex; justify-content:center; gap: 10px; flex-wrap: wrap; margin-top: 30px;
+  }
+  input[type=email]{
+    background: var(--panel); border: 1px solid var(--panel-line); color: var(--text);
+    padding: 14px 16px; font-family: 'IBM Plex Mono', monospace; font-size: 0.85rem;
+    border-radius: var(--radius); width: 320px; max-width: 70vw;
+  }
+  input[type=email]:focus{ outline: 2px solid var(--gold); outline-offset: 2px; }
+  button{
+    background: var(--gold); color: var(--bg); border:none; font-weight:600;
+    padding: 14px 26px; font-family: 'IBM Plex Mono', monospace; font-size: 0.85rem;
+    letter-spacing: 0.05em; border-radius: var(--radius); cursor:pointer;
+  }
+  button:hover{ background: #ddb534; }
+  button:focus-visible, a:focus-visible{ outline: 2px solid var(--gold); outline-offset: 2px; }
+  .form-note{ color: var(--text-dim); font-size: 0.75rem; margin-top: 14px; }
+
+  footer{
+    border-top: 1px solid var(--panel-line); padding: 40px 6vw;
+    display:flex; justify-content: space-between; flex-wrap:wrap; gap: 20px;
+    color: var(--text-dim); font-size: 0.75rem;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    * { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+<div class="stars"></div>
+
+<header>
+  <div class="logo">DEAD<span>HEAD</span></div>
+  <nav>
+    <a href="#routes">Live legs</a>
+    <a href="#how">Hoe het werkt</a>
+    <a href="#why">Waarom</a>
+    <a href="#signup">Meld je aan</a>
+  </nav>
+</header>
+
+<div class="hero">
+  <span class="eyebrow">EMPTY LEG MARKETPLACE</span>
+  <h1>Het vliegtuig vliegt <em>toch al</em> terug.</h1>
+  <p class="sub">Wij verkopen "deadhead"-vluchten: privéjets die leeg terug- of doorvliegen naar hun volgende klus. Jij boekt de stoel, de operator dekt de kosten. Vlieg privé tegen een fractie van de prijs.</p>
+</div>
+
+<section id="routes">
+  <div class="routes-intro">
+    <span class="section-label" style="text-align:center;">POPULAIRE ROUTES</span>
+    <h2 class="section-title serif" style="margin:0 auto;">Ontdek onze meest geboekte empty legs</h2>
+    <p>Bekijk de routes die het vaakst leeg terugvliegen en profiteer van scherpe prijzen voor privéjet-reizen.</p>
+  </div>
+
+  <div class="routes-grid">
+    <div class="route-card">
+      <div class="scene">
+        <svg viewBox="0 0 400 520" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="sky1" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#274a63"/>
+              <stop offset="55%" stop-color="#3f7a86"/>
+              <stop offset="100%" stop-color="#c9a227"/>
+            </linearGradient>
+          </defs>
+          <rect width="400" height="520" fill="url(#sky1)"/>
+          <ellipse cx="320" cy="330" rx="90" ry="90" fill="#f2d98a" opacity="0.35"/>
+          <path d="M0 400 Q100 380 200 400 T400 395 V520 H0 Z" fill="#12303a"/>
+          <path d="M40 480 C40 430 55 430 55 480 M120 470 C120 410 138 410 138 470 M260 485 C260 420 280 420 280 485 M330 475 C330 425 346 425 346 475" stroke="#0c2027" stroke-width="6" fill="none" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="shade"></div>
+      <div class="top">
+        <div class="route-line"><span>TETERBORO</span><span class="dash"></span></div>
+        <div class="route-line dest"><span class="dash"></span><span>✈ WEST PALM BEACH</span></div>
+      </div>
+      <div class="bottom">
+        <span class="label">VANAF</span>
+        <div class="price">$4.200</div>
+        <div class="flights">✈ 14 vluchten deze maand</div>
+      </div>
+    </div>
+
+    <div class="route-card">
+      <div class="scene">
+        <svg viewBox="0 0 400 520" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="sky2" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#2b1f3d"/>
+              <stop offset="45%" stop-color="#7a3f56"/>
+              <stop offset="100%" stop-color="#e0864a"/>
+            </linearGradient>
+          </defs>
+          <rect width="400" height="520" fill="url(#sky2)"/>
+          <circle cx="300" cy="300" r="55" fill="#f4b56a" opacity="0.55"/>
+          <path d="M0 360 Q80 300 160 350 T400 330 V520 H0 Z" fill="#221327" opacity="0.9"/>
+          <path d="M0 420 Q120 400 240 415 T400 405 V520 H0 Z" fill="#170c1c"/>
+        </svg>
+      </div>
+      <div class="shade"></div>
+      <div class="top">
+        <div class="route-line"><span>LONDON LUTON</span><span class="dash"></span></div>
+        <div class="route-line dest"><span class="dash"></span><span>✈ NICE</span></div>
+      </div>
+      <div class="bottom">
+        <span class="label">VANAF</span>
+        <div class="price">€3.800</div>
+        <div class="flights">✈ 11 vluchten deze maand</div>
+      </div>
+    </div>
+
+    <div class="route-card">
+      <div class="scene">
+        <svg viewBox="0 0 400 520" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="sky3" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#16283f"/>
+              <stop offset="60%" stop-color="#3a5a78"/>
+              <stop offset="100%" stop-color="#c7d4de"/>
+            </linearGradient>
+          </defs>
+          <rect width="400" height="520" fill="url(#sky3)"/>
+          <path d="M0 380 L70 260 L120 320 L190 220 L260 330 L320 270 L400 370 V520 H0 Z" fill="#eef2f5"/>
+          <path d="M0 380 L70 260 L90 288 L60 320 Z M190 220 L210 250 L170 260 Z M320 270 L340 300 L300 300 Z" fill="#c7d4de"/>
+          <path d="M0 430 Q120 400 240 420 T400 410 V520 H0 Z" fill="#0e2036"/>
+        </svg>
+      </div>
+      <div class="shade"></div>
+      <div class="top">
+        <div class="route-line"><span>VAN NUYS</span><span class="dash"></span></div>
+        <div class="route-line dest"><span class="dash"></span><span>✈ ASPEN</span></div>
+      </div>
+      <div class="bottom">
+        <span class="label">VANAF</span>
+        <div class="price">$6.500</div>
+        <div class="flights">✈ 9 vluchten deze maand</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="routes-cta">
+    <a href="#signup" class="btn-solid">Bekijk alle vluchten →</a>
+    <a href="#how" class="btn-outline">Blader door routes →</a>
+  </div>
+</section>
+
+<section id="how">
+  <span class="section-label">HOE HET WERKT</span>
+  <h2 class="section-title serif">Van lege stoel naar geboekte vlucht in drie stappen</h2>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">01</div>
+      <h3>Operator meldt de leg</h3>
+      <p>Zodra een privéjet zonder betalende passagiers moet terugvliegen of doorvliegen, komt de route direct op ons bord.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">02</div>
+      <h3>Jij claimt de stoel</h3>
+      <p>Boek één stoel of het hele toestel. Prijzen liggen doorgaans 60–75% onder een reguliere charter.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">03</div>
+      <h3>Je vliegt privé</h3>
+      <p>Geen instapstress, geen tussenstops. Het toestel vloog toch al die kant op — jij profiteert mee.</p>
+    </div>
+  </div>
+</section>
+
+<section id="why">
+  <div class="why">
+    <span class="section-label">WAAROM DIT WERKT</span>
+    <h2 class="section-title serif">De economie van een leeg toestel</h2>
+    <div class="why-grid">
+      <div>
+        <span class="stat">70%</span>
+        <p>gemiddelde korting ten opzichte van een normale charterprijs, omdat de vlucht toch al gemaakt wordt.</p>
+      </div>
+      <div>
+        <span class="stat">±48u</span>
+        <p>vooraankondiging is gebruikelijk — empty legs ontstaan kort van tevoren, dus flexibiliteit loont.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta" id="signup">
+  <span class="section-label">MELD JE AAN</span>
+  <h2 class="serif">Krijg een seintje zodra jouw route leeg terugvliegt</h2>
+  <form onsubmit="event.preventDefault(); this.querySelector('button').textContent='Aangemeld ✓';">
+    <input type="email" placeholder="jij@voorbeeld.nl" required aria-label="E-mailadres">
+    <button type="submit">Hou me op de hoogte</button>
+  </form>
+  <p class="form-note">Routes en tijden kunnen wijzigen — operators kunnen een leg tot vlak voor vertrek aanpassen of annuleren.</p>
+</section>
+
+<footer>
+  <div>DEADHEAD — empty legs, real prices.</div>
+  <div>Amsterdam · Teterboro · Nice</div>
+</footer>
+
+</body>
+</html>
