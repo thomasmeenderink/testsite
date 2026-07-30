@@ -80,8 +80,8 @@
     border: 1px solid var(--panel-line);
     aspect-ratio: 3/4; display:flex; flex-direction:column; justify-content:flex-end;
   }
-  .route-card .scene{ position:absolute; inset:0; z-index:0; }
-  .route-card .scene svg{ width:100%; height:100%; display:block; }
+  .route-card .scene{ position:absolute; inset:0; z-index:0; background: var(--panel); }
+  .route-card .scene img{ width:100%; height:100%; display:block; object-fit:cover; }
   .route-card .shade{
     position:absolute; inset:0; z-index:1;
     background: linear-gradient(180deg, rgba(11,15,23,0) 30%, rgba(11,15,23,0.55) 65%, rgba(11,15,23,0.92) 100%);
@@ -134,8 +134,8 @@
   .deal-card{
     background: var(--panel); border: 1px solid var(--panel-line); border-radius: 10px; overflow:hidden;
   }
-  .deal-scene{ position:relative; aspect-ratio: 16/10; }
-  .deal-scene svg{ width:100%; height:100%; display:block; }
+  .deal-scene{ position:relative; aspect-ratio: 16/10; background: var(--panel); }
+  .deal-scene img{ width:100%; height:100%; display:block; object-fit:cover; }
   .deal-body{ padding: 18px 20px 20px; }
   .codes{ display:flex; justify-content:space-between; margin-bottom: 10px; }
   .codes span{
@@ -254,19 +254,7 @@
   <div class="routes-grid">
     <div class="route-card">
       <div class="scene">
-        <svg viewBox="0 0 400 520" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="sky1" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#274a63"/>
-              <stop offset="55%" stop-color="#3f7a86"/>
-              <stop offset="100%" stop-color="#c9a227"/>
-            </linearGradient>
-          </defs>
-          <rect width="400" height="520" fill="url(#sky1)"/>
-          <ellipse cx="320" cy="330" rx="90" ry="90" fill="#f2d98a" opacity="0.35"/>
-          <path d="M0 400 Q100 380 200 400 T400 395 V520 H0 Z" fill="#12303a"/>
-          <path d="M40 480 C40 430 55 430 55 480 M120 470 C120 410 138 410 138 470 M260 485 C260 420 280 420 280 485 M330 475 C330 425 346 425 346 475" stroke="#0c2027" stroke-width="6" fill="none" stroke-linecap="round"/>
-        </svg>
+        <img src="images/route-teterboro-westpalmbeach.jpg" alt="Teterboro naar West Palm Beach">
       </div>
       <div class="shade"></div>
       <div class="top">
@@ -275,26 +263,14 @@
       </div>
       <div class="bottom">
         <span class="label">VANAF</span>
-        <div class="price">$4.200</div>
+        <div class="price">€4.200</div>
         <div class="flights">✈ 14 vluchten deze maand</div>
       </div>
     </div>
 
     <div class="route-card">
       <div class="scene">
-        <svg viewBox="0 0 400 520" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="sky2" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#2b1f3d"/>
-              <stop offset="45%" stop-color="#7a3f56"/>
-              <stop offset="100%" stop-color="#e0864a"/>
-            </linearGradient>
-          </defs>
-          <rect width="400" height="520" fill="url(#sky2)"/>
-          <circle cx="300" cy="300" r="55" fill="#f4b56a" opacity="0.55"/>
-          <path d="M0 360 Q80 300 160 350 T400 330 V520 H0 Z" fill="#221327" opacity="0.9"/>
-          <path d="M0 420 Q120 400 240 415 T400 405 V520 H0 Z" fill="#170c1c"/>
-        </svg>
+        <img src="images/route-luton-nice.jpg" alt="London Luton naar Nice">
       </div>
       <div class="shade"></div>
       <div class="top">
@@ -310,19 +286,7 @@
 
     <div class="route-card">
       <div class="scene">
-        <svg viewBox="0 0 400 520" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="sky3" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#16283f"/>
-              <stop offset="60%" stop-color="#3a5a78"/>
-              <stop offset="100%" stop-color="#c7d4de"/>
-            </linearGradient>
-          </defs>
-          <rect width="400" height="520" fill="url(#sky3)"/>
-          <path d="M0 380 L70 260 L120 320 L190 220 L260 330 L320 270 L400 370 V520 H0 Z" fill="#eef2f5"/>
-          <path d="M0 380 L70 260 L90 288 L60 320 Z M190 220 L210 250 L170 260 Z M320 270 L340 300 L300 300 Z" fill="#c7d4de"/>
-          <path d="M0 430 Q120 400 240 420 T400 410 V520 H0 Z" fill="#0e2036"/>
-        </svg>
+        <img src="images/route-vannuys-aspen.jpg" alt="Van Nuys naar Aspen">
       </div>
       <div class="shade"></div>
       <div class="top">
@@ -331,7 +295,7 @@
       </div>
       <div class="bottom">
         <span class="label">VANAF</span>
-        <div class="price">$6.500</div>
+        <div class="price">€6.500</div>
         <div class="flights">✈ 9 vluchten deze maand</div>
       </div>
     </div>
@@ -365,17 +329,6 @@
   </div>
 </section>
 
-<svg style="display:none" xmlns="http://www.w3.org/2000/svg">
-  <symbol id="jetSide" viewBox="0 0 400 160">
-    <ellipse cx="200" cy="85" rx="150" ry="17" fill="#0c1c2b"/>
-    <polygon points="185,95 120,140 155,102" fill="#0c1c2b"/>
-    <polygon points="230,95 300,140 260,102" fill="#0c1c2b"/>
-    <polygon points="335,72 362,42 345,82" fill="#0c1c2b"/>
-    <ellipse cx="150" cy="103" rx="16" ry="7" fill="#0c1c2b"/>
-    <ellipse cx="245" cy="103" rx="16" ry="7" fill="#0c1c2b"/>
-  </symbol>
-</svg>
-
 <section id="deals">
   <div class="deals-head">
     <div>
@@ -393,15 +346,7 @@
   <div class="deals-grid">
     <div class="deal-card">
       <div class="deal-scene">
-        <svg viewBox="0 0 400 250" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-          <defs><linearGradient id="dsky1" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#3a6b8a"/><stop offset="100%" stop-color="#9fc2d6"/>
-          </linearGradient></defs>
-          <rect width="400" height="250" fill="url(#dsky1)"/>
-          <rect y="205" width="400" height="45" fill="#25384a"/>
-          <rect y="215" width="400" height="4" fill="#4a6178" opacity="0.6"/>
-          <use href="#jetSide" x="30" y="60" width="340" height="130"/>
-        </svg>
+        <img src="images/jet-citation-cj3.jpg" alt="Cessna Citation CJ3">
       </div>
       <div class="deal-body">
         <div class="codes"><span>TEB</span><span>PBI</span></div>
@@ -413,7 +358,7 @@
         <div class="deal-when">Do 30 jul · 14:00</div>
         <div class="deal-plane">
           <div><div class="name">Cessna Citation CJ3</div><div class="cap">Midsize · tot 8 passagiers</div></div>
-          <div><div class="price">$4.200</div><div class="whole">Heel toestel</div></div>
+          <div><div class="price">€4.200</div><div class="whole">Heel toestel</div></div>
         </div>
         <div class="deal-actions">
           <a href="#" class="view">BEKIJK ›</a>
@@ -424,15 +369,7 @@
 
     <div class="deal-card">
       <div class="deal-scene">
-        <svg viewBox="0 0 400 250" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-          <defs><linearGradient id="dsky2" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#7c8b98"/><stop offset="100%" stop-color="#d7dee2"/>
-          </linearGradient></defs>
-          <rect width="400" height="250" fill="url(#dsky2)"/>
-          <rect y="205" width="400" height="45" fill="#3a4249"/>
-          <rect y="215" width="400" height="4" fill="#5a656d" opacity="0.6"/>
-          <use href="#jetSide" x="30" y="60" width="340" height="130"/>
-        </svg>
+        <img src="images/jet-phenom-300.jpg" alt="Embraer Phenom 300">
       </div>
       <div class="deal-body">
         <div class="codes"><span>LTN</span><span>NCE</span></div>
@@ -455,15 +392,7 @@
 
     <div class="deal-card">
       <div class="deal-scene">
-        <svg viewBox="0 0 400 250" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-          <defs><linearGradient id="dsky3" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#1c2e42"/><stop offset="100%" stop-color="#5c7690"/>
-          </linearGradient></defs>
-          <rect width="400" height="250" fill="url(#dsky3)"/>
-          <rect y="205" width="400" height="45" fill="#101c28"/>
-          <rect y="215" width="400" height="4" fill="#33465a" opacity="0.6"/>
-          <use href="#jetSide" x="30" y="60" width="340" height="130"/>
-        </svg>
+        <img src="images/jet-challenger-350.jpg" alt="Bombardier Challenger 350">
       </div>
       <div class="deal-body">
         <div class="codes"><span>VNY</span><span>ASE</span></div>
@@ -475,7 +404,7 @@
         <div class="deal-when">Zo 2 aug · 16:15</div>
         <div class="deal-plane">
           <div><div class="name">Bombardier Challenger 350</div><div class="cap">Super-midsize · tot 10 passagiers</div></div>
-          <div><div class="price">$6.500</div><div class="whole">Heel toestel</div></div>
+          <div><div class="price">€6.500</div><div class="whole">Heel toestel</div></div>
         </div>
         <div class="deal-actions">
           <a href="#" class="view">BEKIJK ›</a>
