@@ -69,7 +69,7 @@
   }
 
   /* --- popular routes --- */
-  .routes-intro{ text-align:center; max-width: 620px; margin: 0 auto 50px; }
+  .routes-intro{ max-width: 620px; margin: 0 0 50px; }
   .routes-intro p{ color: var(--text-dim); font-size: 0.9rem; margin-top: 14px; }
   .routes-grid{
     display:grid; grid-template-columns: repeat(3, 1fr); gap: 26px;
@@ -101,7 +101,7 @@
   .bottom .label{ color: var(--accent); font-size: 0.68rem; letter-spacing: 0.12em; display:block; margin-bottom: 4px; }
   .bottom .price{ font-family:'Playfair Display', serif; font-size: 1.9rem; color: #fff; }
   .bottom .flights{ color: #d9d3c2; font-size: 0.78rem; margin-top: 6px; }
-  .routes-cta{ display:flex; justify-content:center; gap: 14px; margin-top: 44px; flex-wrap: wrap; }
+  .routes-cta{ display:flex; justify-content:flex-start; gap: 14px; margin-top: 44px; flex-wrap: wrap; }
   .btn-solid, .btn-outline{
     font-family:'Inter', sans-serif; font-size: 0.82rem; letter-spacing: 0.03em;
     padding: 13px 24px; border-radius: var(--radius); text-decoration:none; display:inline-flex; align-items:center; gap:8px;
@@ -193,11 +193,11 @@
   .why-grid .stat{ font-family:'Playfair Display', serif; color: var(--accent); font-size: 2rem; display:block; margin-bottom: 6px; }
 
   .cta{
-    text-align:center; padding: 10vh 6vw;
+    padding: 10vh 6vw;
   }
-  .cta h2{ font-size: clamp(1.8rem, 4vw, 2.8rem); max-width: 18ch; margin: 0 auto 26px; }
+  .cta h2{ font-size: clamp(1.8rem, 4vw, 2.8rem); max-width: 18ch; margin: 0 0 26px; }
   form{
-    display:flex; justify-content:center; gap: 10px; flex-wrap: wrap; margin-top: 30px;
+    display:flex; justify-content:flex-start; gap: 10px; flex-wrap: wrap; margin-top: 30px;
   }
   input[type=email]{
     background: var(--panel); border: 1px solid var(--panel-line); color: var(--text);
@@ -246,8 +246,8 @@
 
 <section id="routes">
   <div class="routes-intro">
-    <span class="section-label" style="text-align:center;">POPULAIRE ROUTES</span>
-    <h2 class="section-title serif" style="margin:0 auto;">Ontdek onze meest geboekte empty legs</h2>
+    <span class="section-label">POPULAIRE ROUTES</span>
+    <h2 class="section-title serif">Ontdek onze meest geboekte empty legs</h2>
     <p>Bekijk de routes die het vaakst leeg terugvliegen en profiteer van scherpe prijzen voor privéjet-reizen.</p>
   </div>
 
