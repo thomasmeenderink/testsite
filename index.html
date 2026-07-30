@@ -141,10 +141,11 @@
   }
   .deal-card{
     background: var(--panel); border: 1px solid var(--panel-line); border-radius: 10px; overflow:hidden;
+    display:flex; flex-direction:column; height: 100%;
   }
-  .deal-scene{ position:relative; aspect-ratio: 16/10; background: var(--panel); }
+  .deal-scene{ position:relative; aspect-ratio: 16/10; background: var(--panel); flex-shrink:0; }
   .deal-scene img{ width:100%; height:100%; display:block; object-fit:cover; }
-  .deal-body{ padding: 18px 20px 20px; }
+  .deal-body{ padding: 18px 20px 20px; display:flex; flex-direction:column; flex:1; }
   .codes{ display:flex; justify-content:space-between; margin-bottom: 10px; }
   .codes span{
     font-size: 0.68rem; letter-spacing: 0.08em; background: rgba(18,32,58,0.06);
@@ -174,7 +175,7 @@
     font-variant-numeric: tabular-nums; letter-spacing: -0.01em;
   }
   .deal-plane .whole{ color: var(--text-dim); font-size: 0.7rem; text-align:right; }
-  .deal-actions{ display:flex; gap: 10px; }
+  .deal-actions{ display:flex; gap: 10px; margin-top: auto; }
   .deal-actions a{
     flex:1; text-align:center; padding: 11px 0; border-radius: var(--radius);
     font-size: 0.78rem; letter-spacing: 0.03em; text-decoration:none;
