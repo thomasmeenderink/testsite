@@ -122,7 +122,59 @@
   .btn-outline{ border: 1px solid var(--panel-line); color: var(--text); }
   .btn-outline:hover{ border-color: var(--gold); color: var(--gold); }
 
-  section{ position: relative; z-index:1; padding: 8vh 6vw; }
+  /* --- deals section --- */
+  .deals-head{
+    display:flex; justify-content:space-between; align-items:flex-end; gap: 20px; margin-bottom: 44px; flex-wrap: wrap;
+  }
+  .deals-head p{ color: var(--text-dim); font-size: 0.9rem; margin-top: 14px; max-width: 52ch; }
+  .deals-nav{ display:flex; align-items:center; gap: 10px; }
+  .deals-nav button{
+    width: 38px; height: 38px; border-radius: 50%; background: transparent;
+    border: 1px solid var(--panel-line); color: var(--text-dim); display:flex; align-items:center; justify-content:center; padding:0;
+  }
+  .deals-nav button:hover{ border-color: var(--gold); color: var(--gold); }
+  .deals-dots{ display:flex; gap: 6px; margin: 0 6px; }
+  .deals-dots span{ width:6px; height:6px; border-radius:50%; background: var(--panel-line); }
+  .deals-dots span:first-child{ background: var(--gold); }
+
+  .deals-grid{ display:grid; grid-template-columns: repeat(3, 1fr); gap: 26px; }
+  @media (max-width: 900px){ .deals-grid{ grid-template-columns: 1fr; } }
+  .deal-card{
+    background: var(--panel); border: 1px solid var(--panel-line); border-radius: 10px; overflow:hidden;
+  }
+  .deal-scene{ position:relative; aspect-ratio: 16/10; }
+  .deal-scene svg{ width:100%; height:100%; display:block; }
+  .deal-body{ padding: 18px 20px 20px; }
+  .codes{ display:flex; justify-content:space-between; margin-bottom: 10px; }
+  .codes span{
+    font-size: 0.68rem; letter-spacing: 0.08em; background: rgba(139,154,180,0.12);
+    color: var(--text-dim); padding: 3px 8px; border-radius: 3px;
+  }
+  .route-cities{ display:flex; justify-content:space-between; align-items:flex-start; gap: 10px; }
+  .route-cities .place{ font-size: 0.95rem; font-weight: 600; }
+  .route-cities .region{ color: var(--text-dim); font-size: 0.75rem; }
+  .route-cities .place.dest{ text-align:right; }
+  .route-mid{
+    flex: 1; text-align:center; padding-top: 4px;
+  }
+  .route-mid .dur{ color: var(--text-dim); font-size: 0.72rem; margin-bottom: 4px; }
+  .route-mid .dots{ height:1px; background: var(--panel-line); position:relative; }
+  .route-mid .dots::after{ content:'✈'; position:absolute; top:-8px; left:50%; transform:translateX(-50%); font-size: 0.7rem; color: var(--gold); background: var(--panel); padding: 0 4px; }
+  .deal-when{ color: var(--text-dim); font-size: 0.8rem; margin: 14px 0; padding-top: 14px; border-top: 1px solid var(--panel-line); }
+  .deal-plane{ display:flex; justify-content:space-between; align-items:flex-end; margin-bottom: 16px; }
+  .deal-plane .name{ font-size: 0.88rem; }
+  .deal-plane .cap{ color: var(--text-dim); font-size: 0.75rem; }
+  .deal-plane .price{ text-align:right; font-family:'Playfair Display', serif; font-size: 1.3rem; color: var(--gold); }
+  .deal-plane .whole{ color: var(--text-dim); font-size: 0.7rem; text-align:right; }
+  .deal-actions{ display:flex; gap: 10px; }
+  .deal-actions a{
+    flex:1; text-align:center; padding: 11px 0; border-radius: var(--radius);
+    font-size: 0.78rem; letter-spacing: 0.03em; text-decoration:none;
+  }
+  .deal-actions .view{ border: 1px solid var(--panel-line); color: var(--text); }
+  .deal-actions .view:hover{ border-color: var(--gold); color: var(--gold); }
+  .deal-actions .book{ background: var(--gold); color: var(--bg); font-weight:600; }
+  .deal-actions .book:hover{ background: #ddb534; }
   .section-label{
     color: var(--gold); font-size: 0.75rem; letter-spacing: 0.15em; margin-bottom: 10px; display:block;
   }
@@ -317,6 +369,127 @@
       <div class="step-num">03</div>
       <h3>Je vliegt privé</h3>
       <p>Geen instapstress, geen tussenstops. Het toestel vloog toch al die kant op — jij profiteert mee.</p>
+    </div>
+  </div>
+</section>
+
+<svg style="display:none" xmlns="http://www.w3.org/2000/svg">
+  <symbol id="jetSide" viewBox="0 0 400 160">
+    <ellipse cx="200" cy="85" rx="150" ry="17" fill="#0c1c2b"/>
+    <polygon points="185,95 120,140 155,102" fill="#0c1c2b"/>
+    <polygon points="230,95 300,140 260,102" fill="#0c1c2b"/>
+    <polygon points="335,72 362,42 345,82" fill="#0c1c2b"/>
+    <ellipse cx="150" cy="103" rx="16" ry="7" fill="#0c1c2b"/>
+    <ellipse cx="245" cy="103" rx="16" ry="7" fill="#0c1c2b"/>
+  </symbol>
+</svg>
+
+<section id="deals">
+  <div class="deals-head">
+    <div>
+      <span class="section-label">BESTE DEALS</span>
+      <h2 class="section-title serif">De scherpste empty leg deals van dit moment</h2>
+      <p>Deze routes staan al vast om te vliegen — hoe eerder je boekt, hoe groter de korting op het volledige toestel.</p>
+    </div>
+    <div class="deals-nav">
+      <button aria-label="Vorige">‹</button>
+      <div class="deals-dots"><span></span><span></span><span></span></div>
+      <button aria-label="Volgende">›</button>
+    </div>
+  </div>
+
+  <div class="deals-grid">
+    <div class="deal-card">
+      <div class="deal-scene">
+        <svg viewBox="0 0 400 250" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+          <defs><linearGradient id="dsky1" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#3a6b8a"/><stop offset="100%" stop-color="#9fc2d6"/>
+          </linearGradient></defs>
+          <rect width="400" height="250" fill="url(#dsky1)"/>
+          <rect y="205" width="400" height="45" fill="#25384a"/>
+          <rect y="215" width="400" height="4" fill="#4a6178" opacity="0.6"/>
+          <use href="#jetSide" x="30" y="60" width="340" height="130"/>
+        </svg>
+      </div>
+      <div class="deal-body">
+        <div class="codes"><span>TEB</span><span>PBI</span></div>
+        <div class="route-cities">
+          <div class="place">Teterboro<div class="region">New Jersey</div></div>
+          <div class="route-mid"><div class="dur">2h 05m</div><div class="dots"></div></div>
+          <div class="place dest">West Palm Beach<div class="region">Florida</div></div>
+        </div>
+        <div class="deal-when">Do 30 jul · 14:00</div>
+        <div class="deal-plane">
+          <div><div class="name">Cessna Citation CJ3</div><div class="cap">Midsize · tot 8 passagiers</div></div>
+          <div><div class="price">$4.200</div><div class="whole">Heel toestel</div></div>
+        </div>
+        <div class="deal-actions">
+          <a href="#" class="view">BEKIJK ›</a>
+          <a href="#signup" class="book">BOEK NU ›</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="deal-card">
+      <div class="deal-scene">
+        <svg viewBox="0 0 400 250" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+          <defs><linearGradient id="dsky2" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#7c8b98"/><stop offset="100%" stop-color="#d7dee2"/>
+          </linearGradient></defs>
+          <rect width="400" height="250" fill="url(#dsky2)"/>
+          <rect y="205" width="400" height="45" fill="#3a4249"/>
+          <rect y="215" width="400" height="4" fill="#5a656d" opacity="0.6"/>
+          <use href="#jetSide" x="30" y="60" width="340" height="130"/>
+        </svg>
+      </div>
+      <div class="deal-body">
+        <div class="codes"><span>LTN</span><span>NCE</span></div>
+        <div class="route-cities">
+          <div class="place">Londen<div class="region">Verenigd Koninkrijk</div></div>
+          <div class="route-mid"><div class="dur">1h 55m</div><div class="dots"></div></div>
+          <div class="place dest">Nice<div class="region">Frankrijk</div></div>
+        </div>
+        <div class="deal-when">Za 1 aug · 09:30</div>
+        <div class="deal-plane">
+          <div><div class="name">Embraer Phenom 300</div><div class="cap">Light jet · tot 7 passagiers</div></div>
+          <div><div class="price">€3.800</div><div class="whole">Heel toestel</div></div>
+        </div>
+        <div class="deal-actions">
+          <a href="#" class="view">BEKIJK ›</a>
+          <a href="#signup" class="book">BOEK NU ›</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="deal-card">
+      <div class="deal-scene">
+        <svg viewBox="0 0 400 250" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+          <defs><linearGradient id="dsky3" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#1c2e42"/><stop offset="100%" stop-color="#5c7690"/>
+          </linearGradient></defs>
+          <rect width="400" height="250" fill="url(#dsky3)"/>
+          <rect y="205" width="400" height="45" fill="#101c28"/>
+          <rect y="215" width="400" height="4" fill="#33465a" opacity="0.6"/>
+          <use href="#jetSide" x="30" y="60" width="340" height="130"/>
+        </svg>
+      </div>
+      <div class="deal-body">
+        <div class="codes"><span>VNY</span><span>ASE</span></div>
+        <div class="route-cities">
+          <div class="place">Van Nuys<div class="region">Californië</div></div>
+          <div class="route-mid"><div class="dur">1h 20m</div><div class="dots"></div></div>
+          <div class="place dest">Aspen<div class="region">Colorado</div></div>
+        </div>
+        <div class="deal-when">Zo 2 aug · 16:15</div>
+        <div class="deal-plane">
+          <div><div class="name">Bombardier Challenger 350</div><div class="cap">Super-midsize · tot 10 passagiers</div></div>
+          <div><div class="price">$6.500</div><div class="whole">Heel toestel</div></div>
+        </div>
+        <div class="deal-actions">
+          <a href="#" class="view">BEKIJK ›</a>
+          <a href="#signup" class="book">BOEK NU ›</a>
+        </div>
+      </div>
     </div>
   </div>
 </section>
