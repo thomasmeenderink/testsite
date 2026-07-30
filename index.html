@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DEADHEAD — Empty legs. Real prices.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0b0f17;
+    --panel: #121a27;
+    --panel-line: #232d40;
+    --gold: #c9a227;
+    --gold-dim: #6e5c22;
+    --text: #edeae0;
+    --text-dim: #8b9ab0;
+    --rust: #b4532a;
+    --radius: 4px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'IBM Plex Mono', monospace;
+    line-height: 1.5;
+    overflow-x: hidden;
+  }
+  h1, h2, .serif{ font-family: 'Playfair Display', serif; }
+  a{ color: inherit; }
+
+  /* subtle night-sky texture */
+  .stars{
+    position: fixed; inset:0; z-index:0; pointer-events:none;
+    background-image:
+      radial-gradient(1px 1px at 20% 30%, rgba(237,234,224,0.35), transparent),
+      radial-gradient(1px 1px at 70% 60%, rgba(237,234,224,0.25), transparent),
+      radial-gradient(1px 1px at 85% 20%, rgba(237,234,224,0.3), transparent),
+      radial-gradient(1px 1px at 40% 80%, rgba(237,234,224,0.2), transparent),
+      radial-gradient(1px 1px at 10% 70%, rgba(237,234,224,0.3), transparent),
+      radial-gradient(1px 1px at 60% 10%, rgba(237,234,224,0.25), transparent);
+    background-size: 100% 100%;
+  }
+
+  header{
+    position: relative; z-index: 1;
+    display:flex; justify-content: space-between; align-items:center;
+    padding: 28px 6vw;
+    border-bottom: 1px solid var(--panel-line);
+  }
+  .logo{
+    font-size: 1.3rem; letter-spacing: 0.12em; font-weight: 700;
+  }
+  .logo span{ color: var(--gold); }
+  nav a{
+    color: var(--text-dim); text-decoration:none; font-size: 0.8rem;
+    letter-spacing: 0.05em; margin-left: 28px;
+  }
+  nav a:hover{ color: var(--gold); }
+
+  .hero{
+    position: relative; z-index: 1;
+    padding: 8vh 6vw 6vh;
+    max-width: 1100px;
+  }
+  .eyebrow{
+    color: var(--gold); font-size: 0.78rem; letter-spacing: 0.18em;
+    margin-bottom: 18px; display:block;
+  }
+  .hero h1{
+    font-size: clamp(2.4rem, 5vw, 4.2rem);
+    font-weight: 700; line-height: 1.08;
+    max-width: 14ch;
+  }
+  .hero h1 em{ color: var(--gold); font-style: italic; }
+  .hero p.sub{
+    color: var(--text-dim); max-width: 46ch; margin-top: 22px;
+    font-size: 0.95rem;
+  }
+
+  /* --- split flap board --- */
+  .board-wrap{
+    position: relative; z-index: 1;
+    margin: 6vh 6vw; border: 1px solid var(--panel-line);
+    background: var(--panel); border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .board-head{
+    display:grid; grid-template-columns: 1.1fr 1.3fr 1fr 1.2fr 1.1fr 0.9fr;
+    padding: 12px 20px; font-size: 0.68rem; letter-spacing: 0.1em;
+    color: var(--text-dim); border-bottom: 1px solid var(--panel-line);
+  }
+  .row{
+    display:grid; grid-template-columns: 1.1fr 1.3fr 1fr 1.2fr 1.1fr 0.9fr;
+    padding: 16px 20px; border-bottom: 1px solid var(--panel-line);
+    align-items:center; font-size: 0.85rem;
+  }
+  .row:last-child{ border-bottom:none; }
+  .flap{ letter-spacing: 0.04em; }
+  .price-old{ color: var(--text-dim); text-decoration: line-through; font-size: 0.78rem; }
+  .price-new{ color: var(--gold); font-weight: 600; }
+  .badge{
+    display:inline-block; font-size: 0.68rem; padding: 3px 8px;
+    border: 1px solid var(--rust); color: var(--rust); border-radius: 3px;
+    letter-spacing: 0.05em;
+  }
+  @media (max-width: 800px){
+    .board-head{ display:none; }
+    .row{ grid-template-columns: 1fr 1fr; row-gap: 6px; }
+  }
+
+  section{ position: relative; z-index:1; padding: 8vh 6vw; }
+  .section-label{
+    color: var(--gold); font-size: 0.75rem; letter-spacing: 0.15em; margin-bottom: 10px; display:block;
+  }
+  .section-title{ font-size: clamp(1.6rem, 3vw, 2.2rem); max-width: 20ch; }
+
+  .steps{
+    display:grid; grid-template-columns: repeat(3, 1fr); gap: 40px; margin-top: 50px;
+  }
+  @media (max-width: 800px){ .steps{ grid-template-columns: 1fr; } }
+  .step-num{
+    font-family: 'Playfair Display', serif; font-style: italic;
+    color: var(--gold-dim); font-size: 2.2rem; margin-bottom: 14px;
+  }
+  .step h3{ font-family: 'Playfair Display', serif; font-size: 1.15rem; margin-bottom: 10px; }
+  .step p{ color: var(--text-dim); font-size: 0.88rem; }
+
+  .why{
+    background: var(--panel); border: 1px solid var(--panel-line);
+    border-radius: var(--radius); padding: 6vh 6vw; margin: 0 6vw;
+  }
+  .why-grid{ display:grid; grid-template-columns: 1fr 1fr; gap: 50px; margin-top: 40px; }
+  @media (max-width: 800px){ .why-grid{ grid-template-columns: 1fr; } }
+  .why-grid p{ color: var(--text-dim); font-size: 0.9rem; }
+  .why-grid .stat{ font-family:'Playfair Display', serif; color: var(--gold); font-size: 2rem; display:block; margin-bottom: 6px; }
+
+  .cta{
+    text-align:center; padding: 10vh 6vw;
+  }
+  .cta h2{ font-size: clamp(1.8rem, 4vw, 2.8rem); max-width: 18ch; margin: 0 auto 26px; }
+  form{
+    display:flex; justify-content:center; gap: 10px; flex-wrap: wrap; margin-top: 30px;
+  }
+  input[type=email]{
+    background: var(--panel); border: 1px solid var(--panel-line); color: var(--text);
+    padding: 14px 16px; font-family: 'IBM Plex Mono', monospace; font-size: 0.85rem;
+    border-radius: var(--radius); width: 320px; max-width: 70vw;
+  }
+  input[type=email]:focus{ outline: 2px solid var(--gold); outline-offset: 2px; }
+  button{
+    background: var(--gold); color: var(--bg); border:none; font-weight:600;
+    padding: 14px 26px; font-family: 'IBM Plex Mono', monospace; font-size: 0.85rem;
+    letter-spacing: 0.05em; border-radius: var(--radius); cursor:pointer;
+  }
+  button:hover{ background: #ddb534; }
+  button:focus-visible, a:focus-visible{ outline: 2px solid var(--gold); outline-offset: 2px; }
+  .form-note{ color: var(--text-dim); font-size: 0.75rem; margin-top: 14px; }
+
+  footer{
+    border-top: 1px solid var(--panel-line); padding: 40px 6vw;
+    display:flex; justify-content: space-between; flex-wrap:wrap; gap: 20px;
+    color: var(--text-dim); font-size: 0.75rem;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    * { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+<div class="stars"></div>
+
+<header>
+  <div class="logo">DEAD<span>HEAD</span></div>
+  <nav>
+    <a href="#board">Live legs</a>
+    <a href="#how">Hoe het werkt</a>
+    <a href="#why">Waarom</a>
+    <a href="#signup">Meld je aan</a>
+  </nav>
+</header>
+
+<div class="hero">
+  <span class="eyebrow">EMPTY LEG MARKETPLACE</span>
+  <h1>Het vliegtuig vliegt <em>toch al</em> terug.</h1>
+  <p class="sub">Wij verkopen "deadhead"-vluchten: privéjets die leeg terug- of doorvliegen naar hun volgende klus. Jij boekt de stoel, de operator dekt de kosten. Vlieg privé tegen een fractie van de prijs.</p>
+</div>
+
+<div class="board-wrap" id="board">
+  <div class="board-head">
+    <span>ROUTE</span><span>VERTREK</span><span>TOESTEL</span><span>WAS</span><span>NU</span><span>STATUS</span>
+  </div>
+  <div class="row">
+    <span class="flap" data-final="TEB → PBI">TEB → PBI</span>
+    <span class="flap" data-final="VR 14:00">VR 14:00</span>
+    <span class="flap" data-final="Citation CJ3">Citation CJ3</span>
+    <span class="price-old">$18.500</span>
+    <span class="price-new">$4.200</span>
+    <span class="badge">18U TOT VERTREK</span>
+  </div>
+  <div class="row">
+    <span class="flap" data-final="LTN → NCE">LTN → NCE</span>
+    <span class="flap" data-final="ZA 09:30">ZA 09:30</span>
+    <span class="flap" data-final="Phenom 300">Phenom 300</span>
+    <span class="price-old">€14.200</span>
+    <span class="price-new">€3.800</span>
+    <span class="badge">2 DAGEN</span>
+  </div>
+  <div class="row">
+    <span class="flap" data-final="VNY → ASE">VNY → ASE</span>
+    <span class="flap" data-final="ZO 16:15">ZO 16:15</span>
+    <span class="flap" data-final="Challenger 350">Challenger 350</span>
+    <span class="price-old">$22.000</span>
+    <span class="price-new">$6.500</span>
+    <span class="badge">4 DAGEN</span>
+  </div>
+  <div class="row">
+    <span class="flap" data-final="AMS → IBZ">AMS → IBZ</span>
+    <span class="flap" data-final="VR 11:45">VR 11:45</span>
+    <span class="flap" data-final="Legacy 500">Legacy 500</span>
+    <span class="price-old">€16.900</span>
+    <span class="price-new">€4.950</span>
+    <span class="badge">6 DAGEN</span>
+  </div>
+</div>
+
+<section id="how">
+  <span class="section-label">HOE HET WERKT</span>
+  <h2 class="section-title serif">Van lege stoel naar geboekte vlucht in drie stappen</h2>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">01</div>
+      <h3>Operator meldt de leg</h3>
+      <p>Zodra een privéjet zonder betalende passagiers moet terugvliegen of doorvliegen, komt de route direct op ons bord.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">02</div>
+      <h3>Jij claimt de stoel</h3>
+      <p>Boek één stoel of het hele toestel. Prijzen liggen doorgaans 60–75% onder een reguliere charter.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">03</div>
+      <h3>Je vliegt privé</h3>
+      <p>Geen instapstress, geen tussenstops. Het toestel vloog toch al die kant op — jij profiteert mee.</p>
+    </div>
+  </div>
+</section>
+
+<section id="why">
+  <div class="why">
+    <span class="section-label">WAAROM DIT WERKT</span>
+    <h2 class="section-title serif">De economie van een leeg toestel</h2>
+    <div class="why-grid">
+      <div>
+        <span class="stat">70%</span>
+        <p>gemiddelde korting ten opzichte van een normale charterprijs, omdat de vlucht toch al gemaakt wordt.</p>
+      </div>
+      <div>
+        <span class="stat">±48u</span>
+        <p>vooraankondiging is gebruikelijk — empty legs ontstaan kort van tevoren, dus flexibiliteit loont.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta" id="signup">
+  <span class="section-label">MELD JE AAN</span>
+  <h2 class="serif">Krijg een seintje zodra jouw route leeg terugvliegt</h2>
+  <form onsubmit="event.preventDefault(); this.querySelector('button').textContent='Aangemeld ✓';">
+    <input type="email" placeholder="jij@voorbeeld.nl" required aria-label="E-mailadres">
+    <button type="submit">Hou me op de hoogte</button>
+  </form>
+  <p class="form-note">Routes en tijden kunnen wijzigen — operators kunnen een leg tot vlak voor vertrek aanpassen of annuleren.</p>
+</section>
+
+<footer>
+  <div>DEADHEAD — empty legs, real prices.</div>
+  <div>Amsterdam · Teterboro · Nice</div>
+</footer>
+
+<script>
+  // split-flap reveal on load
+  const CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 →:.";
+  function randChar(){ return CHARS[Math.floor(Math.random()*CHARS.length)]; }
+
+  function flapIn(el, delay){
+    const final = el.getAttribute('data-final');
+    let frame = 0;
+    const totalFrames = 10;
+    setTimeout(() => {
+      const iv = setInterval(() => {
+        frame++;
+        if(frame >= totalFrames){
+          el.textContent = final;
+          clearInterval(iv);
+          return;
+        }
+        el.textContent = final.split('').map((c,i) =>
+          i < (frame/totalFrames)*final.length ? c : randChar()
+        ).join('');
+      }, 45);
+    }, delay);
+  }
+
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.querySelectorAll('.flap').forEach((el, i) => {
+      flapIn(el, 150 + i * 90);
+    });
+  }
+</script>
+
+</body>
+</html>
