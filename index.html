@@ -48,9 +48,11 @@
   }
   nav a:hover{ color: var(--accent); }
 
-  .hero{
+  .hero-wrap{
     position: relative; z-index: 1;
     padding: 8vh 6vw 6vh;
+  }
+  .hero{
     max-width: 1180px; margin: 0 auto;
   }
   .eyebrow{
@@ -183,15 +185,6 @@
   .step h3{ font-family: 'Playfair Display', serif; font-size: 1.15rem; margin-bottom: 10px; }
   .step p{ color: var(--text-dim); font-size: 0.88rem; }
 
-  .why{
-    background: var(--panel); border: 1px solid var(--panel-line);
-    border-radius: var(--radius); padding: 6vh 6vw; margin: 0 6vw;
-  }
-  .why-grid{ display:grid; grid-template-columns: 1fr 1fr; gap: 50px; margin-top: 40px; }
-  @media (max-width: 800px){ .why-grid{ grid-template-columns: 1fr; } }
-  .why-grid p{ color: var(--text-dim); font-size: 0.9rem; }
-  .why-grid .stat{ font-family:'Playfair Display', serif; color: var(--accent); font-size: 2rem; display:block; margin-bottom: 6px; }
-
   .cta{
     text-align:center; padding: 10vh 6vw;
   }
@@ -232,16 +225,17 @@
     <nav>
       <a href="#routes">Live legs</a>
       <a href="#how">Hoe het werkt</a>
-      <a href="#why">Waarom</a>
       <a href="#signup">Meld je aan</a>
     </nav>
   </div>
 </header>
 
-<div class="hero">
-  <span class="eyebrow">EMPTY LEG MARKETPLACE</span>
-  <h1>Het vliegtuig vliegt <em>toch al</em> terug.</h1>
-  <p class="sub">Wij verkopen "deadhead"-vluchten: privéjets die leeg terug- of doorvliegen naar hun volgende klus. Jij boekt de stoel, de operator dekt de kosten. Vlieg privé tegen een fractie van de prijs.</p>
+<div class="hero-wrap">
+  <div class="hero">
+    <span class="eyebrow">EMPTY LEG MARKETPLACE</span>
+    <h1>Het vliegtuig vliegt <em>toch al</em> terug.</h1>
+    <p class="sub">Wij verkopen "deadhead"-vluchten: privéjets die leeg terug- of doorvliegen naar hun volgende klus. Jij boekt de stoel, de operator dekt de kosten. Vlieg privé tegen een fractie van de prijs.</p>
+  </div>
 </div>
 
 <section id="routes">
@@ -308,8 +302,10 @@
 </section>
 
 <section id="how">
-  <span class="section-label">HOE HET WERKT</span>
-  <h2 class="section-title serif">Van lege stoel naar geboekte vlucht in drie stappen</h2>
+  <div class="how-head">
+    <span class="section-label">HOE HET WERKT</span>
+    <h2 class="section-title serif">Van lege stoel naar geboekte vlucht in drie stappen</h2>
+  </div>
   <div class="steps">
     <div class="step">
       <div class="step-num">01</div>
@@ -410,23 +406,6 @@
           <a href="#" class="view">BEKIJK ›</a>
           <a href="#signup" class="book">BOEK NU ›</a>
         </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="why">
-  <div class="why">
-    <span class="section-label">WAAROM DIT WERKT</span>
-    <h2 class="section-title serif">De economie van een leeg toestel</h2>
-    <div class="why-grid">
-      <div>
-        <span class="stat">70%</span>
-        <p>gemiddelde korting ten opzichte van een normale charterprijs, omdat de vlucht toch al gemaakt wordt.</p>
-      </div>
-      <div>
-        <span class="stat">±48u</span>
-        <p>vooraankondiging is gebruikelijk — empty legs ontstaan kort van tevoren, dus flexibiliteit loont.</p>
       </div>
     </div>
   </div>
