@@ -128,11 +128,17 @@
   }
   .deals-nav button:hover{ border-color: var(--accent); color: var(--accent); }
   .deals-dots{ display:flex; gap: 6px; margin: 0 6px; }
-  .deals-dots span{ width:6px; height:6px; border-radius:50%; background: var(--panel-line); }
-  .deals-dots span:first-child{ background: var(--accent); }
+  .deals-dots span{ width:6px; height:6px; border-radius:50%; background: var(--panel-line); cursor:pointer; }
+  .deals-dots span.active{ background: var(--accent); }
 
-  .deals-grid{ display:grid; grid-template-columns: repeat(3, 1fr); gap: 26px; }
-  @media (max-width: 900px){ .deals-grid{ grid-template-columns: 1fr; } }
+  .deals-grid{
+    display:flex; gap: 26px; overflow-x:auto; scroll-snap-type:x mandatory;
+    scrollbar-width:none; padding-bottom: 4px;
+  }
+  .deals-grid::-webkit-scrollbar{ display:none; }
+  .deals-grid .deal-card{
+    flex: 0 0 clamp(260px, 30vw, 350px); scroll-snap-align:start;
+  }
   .deal-card{
     background: var(--panel); border: 1px solid var(--panel-line); border-radius: 10px; overflow:hidden;
   }
@@ -355,13 +361,13 @@
       <p>Deze routes staan al vast om te vliegen — hoe eerder je boekt, hoe groter de korting op het volledige toestel.</p>
     </div>
     <div class="deals-nav">
-      <button aria-label="Vorige">‹</button>
-      <div class="deals-dots"><span></span><span></span><span></span></div>
-      <button aria-label="Volgende">›</button>
+      <button id="dealsPrev" aria-label="Vorige">‹</button>
+      <div class="deals-dots" id="dealsDots"></div>
+      <button id="dealsNext" aria-label="Volgende">›</button>
     </div>
   </div>
 
-  <div class="deals-grid">
+  <div class="deals-grid" id="dealsTrack">
     <div class="deal-card">
       <div class="deal-scene">
         <img src="images/jet-citation-cj3.jpg" alt="Cessna Citation CJ3">
@@ -427,6 +433,236 @@
         <div class="deal-actions">
           <a href="#" class="view">BEKIJK ›</a>
           <a href="#signup" class="book">BOEK NU ›</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="deal-card">
+      <div class="deal-scene">
+        <img src="images/jet-citation-cj3.jpg" alt="Cessna CJ3">
+      </div>
+      <div class="deal-body">
+        <div class="codes"><span>AMS</span><span>CEQ</span></div>
+        <div class="route-cities">
+          <div class="place">Amsterdam<div class="region">Nederland</div></div>
+          <div class="route-mid"><div class="dur">—</div><div class="dots"></div></div>
+          <div class="place dest">Cannes<div class="region">Frankrijk</div></div>
+        </div>
+        <div class="deal-when">Ma 3 aug · 07:00–17:00</div>
+        <div class="deal-plane">
+          <div><div class="name">Cessna CJ3</div><div class="cap">Midsize · tot 8 passagiers</div></div>
+          <div><div class="price">€7.800</div><div class="whole">Heel toestel</div></div>
+        </div>
+        <div class="deal-actions">
+          <a href="#" class="view">BEKIJK ›</a>
+          <a href="#signup" class="book">CONTACT ›</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="deal-card">
+      <div class="deal-scene">
+        <img src="images/jet-citation-cj3.jpg" alt="Cessna CJ3">
+      </div>
+      <div class="deal-body">
+        <div class="codes"><span>FSC</span><span>TLN</span></div>
+        <div class="route-cities">
+          <div class="place">Figari<div class="region">Corsica, Frankrijk</div></div>
+          <div class="route-mid"><div class="dur">—</div><div class="dots"></div></div>
+          <div class="place dest">Hyères<div class="region">Frankrijk</div></div>
+        </div>
+        <div class="deal-when">Zo 9 aug · 06:30–11:00</div>
+        <div class="deal-plane">
+          <div><div class="name">Cessna CJ3</div><div class="cap">Midsize · tot 8 passagiers</div></div>
+          <div><div class="price">€5.200</div><div class="whole">Heel toestel</div></div>
+        </div>
+        <div class="deal-actions">
+          <a href="#" class="view">BEKIJK ›</a>
+          <a href="#signup" class="book">CONTACT ›</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="deal-card">
+      <div class="deal-scene">
+        <img src="images/jet-citation-cj3.jpg" alt="Cessna CJ3">
+      </div>
+      <div class="deal-body">
+        <div class="codes"><span>RTM</span><span>KIR</span></div>
+        <div class="route-cities">
+          <div class="place">Rotterdam<div class="region">Nederland</div></div>
+          <div class="route-mid"><div class="dur">—</div><div class="dots"></div></div>
+          <div class="place dest">Kerry<div class="region">Ierland</div></div>
+        </div>
+        <div class="deal-when">Za 15 aug · 10:30–11:00</div>
+        <div class="deal-plane">
+          <div><div class="name">Cessna CJ3</div><div class="cap">Midsize · tot 8 passagiers</div></div>
+          <div><div class="price">€7.900</div><div class="whole">Heel toestel</div></div>
+        </div>
+        <div class="deal-actions">
+          <a href="#" class="view">BEKIJK ›</a>
+          <a href="#signup" class="book">CONTACT ›</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="deal-card">
+      <div class="deal-scene">
+        <img src="images/jet-citation-cj3.jpg" alt="Cessna CJ3">
+      </div>
+      <div class="deal-body">
+        <div class="codes"><span>LCY</span><span>CEQ</span></div>
+        <div class="route-cities">
+          <div class="place">Londen<div class="region">Verenigd Koninkrijk</div></div>
+          <div class="route-mid"><div class="dur">—</div><div class="dots"></div></div>
+          <div class="place dest">Cannes<div class="region">Frankrijk</div></div>
+        </div>
+        <div class="deal-when">Za 15 aug · 15:45</div>
+        <div class="deal-plane">
+          <div><div class="name">Cessna CJ3</div><div class="cap">Midsize · tot 8 passagiers</div></div>
+          <div><div class="price">€7.900</div><div class="whole">Heel toestel</div></div>
+        </div>
+        <div class="deal-actions">
+          <a href="#" class="view">BEKIJK ›</a>
+          <a href="#signup" class="book">CONTACT ›</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="deal-card">
+      <div class="deal-scene">
+        <img src="images/jet-citation-cj3.jpg" alt="Cessna CJ3">
+      </div>
+      <div class="deal-body">
+        <div class="codes"><span>AMS</span><span>FAB</span></div>
+        <div class="route-cities">
+          <div class="place">Amsterdam<div class="region">Nederland</div></div>
+          <div class="route-mid"><div class="dur">—</div><div class="dots"></div></div>
+          <div class="place dest">Farnborough<div class="region">Verenigd Koninkrijk</div></div>
+        </div>
+        <div class="deal-when">Wo 26 aug · 09:00–15:45</div>
+        <div class="deal-plane">
+          <div><div class="name">Cessna CJ3</div><div class="cap">Midsize · tot 8 passagiers</div></div>
+          <div><div class="price">€5.950</div><div class="whole">Heel toestel</div></div>
+        </div>
+        <div class="deal-actions">
+          <a href="#" class="view">BEKIJK ›</a>
+          <a href="#signup" class="book">CONTACT ›</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="deal-card">
+      <div class="deal-scene">
+        <img src="images/jet-citation-cj3.jpg" alt="Cessna CJ3">
+      </div>
+      <div class="deal-body">
+        <div class="codes"><span>FAB</span><span>AMS</span></div>
+        <div class="route-cities">
+          <div class="place">Farnborough<div class="region">Verenigd Koninkrijk</div></div>
+          <div class="route-mid"><div class="dur">—</div><div class="dots"></div></div>
+          <div class="place dest">Amsterdam<div class="region">Nederland</div></div>
+        </div>
+        <div class="deal-when">Do 27 aug · 19:15–20:00</div>
+        <div class="deal-plane">
+          <div><div class="name">Cessna CJ3</div><div class="cap">Midsize · tot 8 passagiers</div></div>
+          <div><div class="price">€5.850</div><div class="whole">Heel toestel</div></div>
+        </div>
+        <div class="deal-actions">
+          <a href="#" class="view">BEKIJK ›</a>
+          <a href="#signup" class="book">CONTACT ›</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="deal-card">
+      <div class="deal-scene">
+        <img src="images/jet-citation-cj3.jpg" alt="Cessna CJ3">
+      </div>
+      <div class="deal-body">
+        <div class="codes"><span>AMS</span><span>CEG</span></div>
+        <div class="route-cities">
+          <div class="place">Amsterdam<div class="region">Nederland</div></div>
+          <div class="route-mid"><div class="dur">—</div><div class="dots"></div></div>
+          <div class="place dest">Hawarden<div class="region">Wales, VK</div></div>
+        </div>
+        <div class="deal-when">Za 5 sep · 07:00–08:30</div>
+        <div class="deal-plane">
+          <div><div class="name">Cessna CJ3</div><div class="cap">Midsize · tot 8 passagiers</div></div>
+          <div><div class="price">€6.650</div><div class="whole">Heel toestel</div></div>
+        </div>
+        <div class="deal-actions">
+          <a href="#" class="view">BEKIJK ›</a>
+          <a href="#signup" class="book">CONTACT ›</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="deal-card">
+      <div class="deal-scene">
+        <img src="images/jet-citation-cj3.jpg" alt="Cessna CJ3">
+      </div>
+      <div class="deal-body">
+        <div class="codes"><span>CEG</span><span>AMS</span></div>
+        <div class="route-cities">
+          <div class="place">Hawarden<div class="region">Wales, VK</div></div>
+          <div class="route-mid"><div class="dur">—</div><div class="dots"></div></div>
+          <div class="place dest">Amsterdam<div class="region">Nederland</div></div>
+        </div>
+        <div class="deal-when">Za 12 sep · 17:00–20:00</div>
+        <div class="deal-plane">
+          <div><div class="name">Cessna CJ3</div><div class="cap">Midsize · tot 8 passagiers</div></div>
+          <div><div class="price">€6.500</div><div class="whole">Heel toestel</div></div>
+        </div>
+        <div class="deal-actions">
+          <a href="#" class="view">BEKIJK ›</a>
+          <a href="#signup" class="book">CONTACT ›</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="deal-card">
+      <div class="deal-scene">
+        <img src="images/jet-citation-cj3.jpg" alt="Cessna CJ3">
+      </div>
+      <div class="deal-body">
+        <div class="codes"><span>AMS</span><span>OXF</span></div>
+        <div class="route-cities">
+          <div class="place">Amsterdam<div class="region">Nederland</div></div>
+          <div class="route-mid"><div class="dur">—</div><div class="dots"></div></div>
+          <div class="place dest">Londen Oxford<div class="region">Verenigd Koninkrijk</div></div>
+        </div>
+        <div class="deal-when">Di 13 okt · 09:00–16:00</div>
+        <div class="deal-plane">
+          <div><div class="name">Cessna CJ3</div><div class="cap">Midsize · tot 8 passagiers</div></div>
+          <div><div class="price">€5.300</div><div class="whole">Heel toestel</div></div>
+        </div>
+        <div class="deal-actions">
+          <a href="#" class="view">BEKIJK ›</a>
+          <a href="#signup" class="book">CONTACT ›</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="deal-card">
+      <div class="deal-scene">
+        <img src="images/jet-citation-cj3.jpg" alt="Cessna CJ3">
+      </div>
+      <div class="deal-body">
+        <div class="codes"><span>OXF</span><span>AMS</span></div>
+        <div class="route-cities">
+          <div class="place">Londen Oxford<div class="region">Verenigd Koninkrijk</div></div>
+          <div class="route-mid"><div class="dur">—</div><div class="dots"></div></div>
+          <div class="place dest">Amsterdam<div class="region">Nederland</div></div>
+        </div>
+        <div class="deal-when">Za 17 okt · 20:00</div>
+        <div class="deal-plane">
+          <div><div class="name">Cessna CJ3</div><div class="cap">Midsize · tot 8 passagiers</div></div>
+          <div><div class="price">€4.450</div><div class="whole">Heel toestel</div></div>
+        </div>
+        <div class="deal-actions">
+          <a href="#" class="view">BEKIJK ›</a>
+          <a href="#signup" class="book">CONTACT ›</a>
         </div>
       </div>
     </div>
@@ -503,6 +739,65 @@
     <div>Amsterdam · Teterboro · Nice</div>
   </div>
 </footer>
+
+<script>
+  (function(){
+    const track = document.getElementById('dealsTrack');
+    const prevBtn = document.getElementById('dealsPrev');
+    const nextBtn = document.getElementById('dealsNext');
+    const dotsWrap = document.getElementById('dealsDots');
+    if(!track) return;
+    const cards = Array.from(track.querySelectorAll('.deal-card'));
+
+    function cardStep(){
+      const style = getComputedStyle(track);
+      const gap = parseFloat(style.columnGap || style.gap || 26);
+      return (cards[0] ? cards[0].getBoundingClientRect().width : 300) + gap;
+    }
+    function perPage(){
+      return Math.max(1, Math.round(track.clientWidth / cardStep()));
+    }
+    function pageCount(){
+      return Math.max(1, Math.ceil(cards.length / perPage()));
+    }
+    function currentPage(){
+      const maxScroll = track.scrollWidth - track.clientWidth;
+      if(maxScroll <= 0) return 0;
+      return Math.round((track.scrollLeft / maxScroll) * (pageCount() - 1));
+    }
+    function buildDots(){
+      dotsWrap.innerHTML = '';
+      const n = pageCount();
+      for(let i=0;i<n;i++){
+        const dot = document.createElement('span');
+        dot.addEventListener('click', ()=>{
+          track.scrollTo({ left: i * track.clientWidth, behavior:'smooth' });
+        });
+        dotsWrap.appendChild(dot);
+      }
+      updateDots();
+    }
+    function updateDots(){
+      const active = currentPage();
+      Array.from(dotsWrap.children).forEach((el,i)=> el.classList.toggle('active', i===active));
+    }
+
+    prevBtn.addEventListener('click', ()=> track.scrollBy({ left: -track.clientWidth, behavior:'smooth' }));
+    nextBtn.addEventListener('click', ()=> track.scrollBy({ left: track.clientWidth, behavior:'smooth' }));
+
+    let scrollTimer;
+    track.addEventListener('scroll', ()=>{
+      clearTimeout(scrollTimer);
+      scrollTimer = setTimeout(updateDots, 60);
+    });
+    window.addEventListener('resize', ()=>{
+      clearTimeout(scrollTimer);
+      scrollTimer = setTimeout(buildDots, 150);
+    });
+
+    buildDots();
+  })();
+</script>
 
 </body>
 </html>
