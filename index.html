@@ -109,7 +109,7 @@
     padding: 13px 24px; border-radius: var(--radius); text-decoration:none; display:inline-flex; align-items:center; gap:8px;
   }
   .btn-solid{ background: var(--accent); color: var(--bg); font-weight:600; }
-  .btn-solid:hover{ background: #ddb534; }
+  .btn-solid:hover{ background: #123a63; }
   .btn-outline{ border: 1px solid var(--panel-line); color: var(--text); }
   .btn-outline:hover{ border-color: var(--accent); color: var(--accent); }
 
@@ -168,7 +168,7 @@
   .deal-actions .view{ border: 1px solid var(--panel-line); color: var(--text); }
   .deal-actions .view:hover{ border-color: var(--accent); color: var(--accent); }
   .deal-actions .book{ background: var(--accent); color: var(--bg); font-weight:600; }
-  .deal-actions .book:hover{ background: #ddb534; }
+  .deal-actions .book:hover{ background: #123a63; }
   .section-label{
     color: var(--accent); font-size: 0.75rem; letter-spacing: 0.15em; margin-bottom: 10px; display:block;
   }
@@ -203,9 +203,30 @@
     padding: 14px 26px; font-family: 'Inter', sans-serif; font-size: 0.85rem;
     letter-spacing: 0.05em; border-radius: var(--radius); cursor:pointer;
   }
-  button:hover{ background: #ddb534; }
+  button:hover{ background: #123a63; }
   button:focus-visible, a:focus-visible{ outline: 2px solid var(--accent); outline-offset: 2px; }
   .form-note{ color: var(--text-dim); font-size: 0.75rem; margin-top: 14px; }
+
+  /* --- advantages gallery --- */
+  .adv-intro{ max-width: 620px; margin: 0 0 44px; }
+  .adv-intro p{ color: var(--text-dim); font-size: 0.9rem; margin-top: 14px; }
+  .adv-top{ display:grid; grid-template-columns: 2fr 1fr; gap: 22px; margin-bottom: 22px; }
+  .adv-bottom{ display:grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+  @media (max-width: 800px){
+    .adv-top{ grid-template-columns: 1fr; }
+    .adv-bottom{ grid-template-columns: 1fr; }
+  }
+  .adv-card{
+    background: var(--panel); border: 1px solid var(--panel-line); border-radius: 10px; overflow:hidden;
+  }
+  .adv-card .adv-img{ aspect-ratio: 4/3; background: var(--panel-line); }
+  .adv-top .adv-card:first-child .adv-img{ aspect-ratio: 5/4; }
+  .adv-top .adv-card:last-child .adv-img{ aspect-ratio: 4/3; }
+  .adv-card .adv-img img{ width:100%; height:100%; display:block; object-fit:cover; }
+  .adv-body{ padding: 16px 20px 20px; }
+  .adv-tag{ color: var(--accent); font-size: 0.68rem; letter-spacing: 0.1em; display:block; margin-bottom: 6px; }
+  .adv-card h3{ font-family:'Playfair Display', serif; font-size: 1.05rem; margin-bottom: 6px; }
+  .adv-card p{ color: var(--text-dim); font-size: 0.85rem; }
 
   footer{
     border-top: 1px solid var(--panel-line); padding: 40px 6vw;
@@ -225,6 +246,7 @@
     <nav>
       <a href="#routes">Live legs</a>
       <a href="#how">Hoe het werkt</a>
+      <a href="#voordelen">Voordelen</a>
       <a href="#signup">Meld je aan</a>
     </nav>
   </div>
@@ -406,6 +428,60 @@
           <a href="#" class="view">BEKIJK ›</a>
           <a href="#signup" class="book">BOEK NU ›</a>
         </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="voordelen">
+  <div class="adv-intro">
+    <span class="section-label">WAAROM PRIVÉ VLIEGEN</span>
+    <h2 class="section-title serif">De voordelen van privé vliegen</h2>
+    <p>Niet elke reis heeft een jet nodig — maar zodra je er een boekt, voel je meteen het verschil. Dit zijn de voordelen die reizigers laten kiezen voor privé boven een lijnvlucht.</p>
+  </div>
+
+  <div class="adv-top">
+    <div class="adv-card">
+      <div class="adv-img"><img src="images/advantage-privacy.jpg" alt="Volledige privacy aan boord"></div>
+      <div class="adv-body">
+        <span class="adv-tag">PRIVACY · ELKE VLUCHT</span>
+        <h3>Volledige privacy</h3>
+        <p>Geen incheckrijen, geen vreemden aan boord. Jij en je gezelschap hebben de hele cabine voor jezelf, van instap tot landing.</p>
+      </div>
+    </div>
+    <div class="adv-card">
+      <div class="adv-img"><img src="images/advantage-tijd.jpg" alt="Snel inchecken zonder wachtrijen"></div>
+      <div class="adv-body">
+        <span class="adv-tag">TIJD · GEEN VERTRAGING</span>
+        <h3>15 minuten voor vertrek</h3>
+        <p>Stap in op de tarmac, geen security-rijen of gate-gedoe. Je bent aan boord voor de meeste mensen hun koffer hebben ingecheckt.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="adv-bottom">
+    <div class="adv-card">
+      <div class="adv-img"><img src="images/advantage-bereik.jpg" alt="Landen op kleinere vliegvelden"></div>
+      <div class="adv-body">
+        <span class="adv-tag">TOEGANG · 5.000+ VELDEN</span>
+        <h3>Dichter bij je bestemming</h3>
+        <p>Privéjets kunnen landen op kleine regionale vliegvelden die grote maatschappijen links laten liggen.</p>
+      </div>
+    </div>
+    <div class="adv-card">
+      <div class="adv-img"><img src="images/advantage-flexibiliteit.jpg" alt="Vliegen op je eigen schema"></div>
+      <div class="adv-body">
+        <span class="adv-tag">FLEXIBILITEIT</span>
+        <h3>Jouw schema, niet dat van de maatschappij</h3>
+        <p>Vertrek zodra jij klaar bent. Geen vaste dienstregeling, geen wachten op aansluitende vluchten.</p>
+      </div>
+    </div>
+    <div class="adv-card">
+      <div class="adv-img"><img src="images/advantage-bagage.jpg" alt="Meer ruimte voor bagage en huisdieren"></div>
+      <div class="adv-body">
+        <span class="adv-tag">BAGAGE & HUISDIEREN</span>
+        <h3>Neem mee wat je wilt</h3>
+        <p>Extra bagage, sportuitrusting of je huisdier aan je zijde — zonder beperkingen van een lijnvlucht.</p>
       </div>
     </div>
   </div>
