@@ -100,10 +100,12 @@
   .routes-intro{ margin-bottom: 50px; }
   .routes-intro p{ color: var(--text-dim); font-size: 0.9rem; margin-top: 14px; max-width: 60ch; }
   .routes-grid{
-    display:grid; grid-template-columns: repeat(3, 1fr); gap: 26px;
+    display:flex; gap: 26px; overflow-x:auto; scroll-snap-type:x mandatory;
+    scrollbar-width:none; padding-bottom: 4px;
   }
-  @media (max-width: 900px){ .routes-grid{ grid-template-columns: 1fr; } }
+  .routes-grid::-webkit-scrollbar{ display:none; }
   .route-card{
+    flex: 0 0 clamp(220px, 26vw, 280px); scroll-snap-align:start;
     position:relative; border-radius: 10px; overflow:hidden;
     border: 1px solid var(--panel-line);
     aspect-ratio: 3/4; display:flex; flex-direction:column; justify-content:flex-end;
@@ -392,6 +394,102 @@
         <span class="label">VANAF</span>
         <div class="price">€6.500</div>
         <div class="flights"><svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor" style="vertical-align:-1px;margin-right:2px;"><path d="M21,16v-2l-8-5V3.5C13,2.67,12.33,2,11.5,2S10,2.67,10,3.5V9l-8,5v2l8-2.5V19l-2.5,1.5V22L11.5,21l3.5,1.5v-1.5L12.5,19v-4.5L21,16z"/></svg> 9 vluchten deze maand</div>
+      </div>
+    </div>
+
+    <div class="route-card">
+      <div class="scene">
+        <img src="images/route-amsterdam-ibiza.jpg" alt="Amsterdam naar Ibiza">
+      </div>
+      <div class="shade"></div>
+      <div class="top">
+        <div class="route-line"><span>AMSTERDAM</span><span class="dash"></span></div>
+        <div class="route-line dest"><span class="dash"></span><span><svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor" style="vertical-align:-1px;margin-right:2px;"><path d="M21,16v-2l-8-5V3.5C13,2.67,12.33,2,11.5,2S10,2.67,10,3.5V9l-8,5v2l8-2.5V19l-2.5,1.5V22L11.5,21l3.5,1.5v-1.5L12.5,19v-4.5L21,16z"/></svg> IBIZA</span></div>
+      </div>
+      <div class="bottom">
+        <span class="label">VANAF</span>
+        <div class="price">€4.950</div>
+        <div class="flights"><svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor" style="vertical-align:-1px;margin-right:2px;"><path d="M21,16v-2l-8-5V3.5C13,2.67,12.33,2,11.5,2S10,2.67,10,3.5V9l-8,5v2l8-2.5V19l-2.5,1.5V22L11.5,21l3.5,1.5v-1.5L12.5,19v-4.5L21,16z"/></svg> 19 vluchten deze maand</div>
+      </div>
+    </div>
+
+    <div class="route-card">
+      <div class="scene">
+        <img src="images/route-geneve-londen.jpg" alt="Genève naar Londen">
+      </div>
+      <div class="shade"></div>
+      <div class="top">
+        <div class="route-line"><span>GENÈVE</span><span class="dash"></span></div>
+        <div class="route-line dest"><span class="dash"></span><span><svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor" style="vertical-align:-1px;margin-right:2px;"><path d="M21,16v-2l-8-5V3.5C13,2.67,12.33,2,11.5,2S10,2.67,10,3.5V9l-8,5v2l8-2.5V19l-2.5,1.5V22L11.5,21l3.5,1.5v-1.5L12.5,19v-4.5L21,16z"/></svg> LONDEN</span></div>
+      </div>
+      <div class="bottom">
+        <span class="label">VANAF</span>
+        <div class="price">€3.600</div>
+        <div class="flights"><svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor" style="vertical-align:-1px;margin-right:2px;"><path d="M21,16v-2l-8-5V3.5C13,2.67,12.33,2,11.5,2S10,2.67,10,3.5V9l-8,5v2l8-2.5V19l-2.5,1.5V22L11.5,21l3.5,1.5v-1.5L12.5,19v-4.5L21,16z"/></svg> 16 vluchten deze maand</div>
+      </div>
+    </div>
+
+    <div class="route-card">
+      <div class="scene">
+        <img src="images/route-milaan-monaco.jpg" alt="Milaan naar Monaco">
+      </div>
+      <div class="shade"></div>
+      <div class="top">
+        <div class="route-line"><span>MILAAN</span><span class="dash"></span></div>
+        <div class="route-line dest"><span class="dash"></span><span><svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor" style="vertical-align:-1px;margin-right:2px;"><path d="M21,16v-2l-8-5V3.5C13,2.67,12.33,2,11.5,2S10,2.67,10,3.5V9l-8,5v2l8-2.5V19l-2.5,1.5V22L11.5,21l3.5,1.5v-1.5L12.5,19v-4.5L21,16z"/></svg> MONACO</span></div>
+      </div>
+      <div class="bottom">
+        <span class="label">VANAF</span>
+        <div class="price">€5.200</div>
+        <div class="flights"><svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor" style="vertical-align:-1px;margin-right:2px;"><path d="M21,16v-2l-8-5V3.5C13,2.67,12.33,2,11.5,2S10,2.67,10,3.5V9l-8,5v2l8-2.5V19l-2.5,1.5V22L11.5,21l3.5,1.5v-1.5L12.5,19v-4.5L21,16z"/></svg> 12 vluchten deze maand</div>
+      </div>
+    </div>
+
+    <div class="route-card">
+      <div class="scene">
+        <img src="images/route-dubai-malediven.jpg" alt="Dubai naar de Malediven">
+      </div>
+      <div class="shade"></div>
+      <div class="top">
+        <div class="route-line"><span>DUBAI</span><span class="dash"></span></div>
+        <div class="route-line dest"><span class="dash"></span><span><svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor" style="vertical-align:-1px;margin-right:2px;"><path d="M21,16v-2l-8-5V3.5C13,2.67,12.33,2,11.5,2S10,2.67,10,3.5V9l-8,5v2l8-2.5V19l-2.5,1.5V22L11.5,21l3.5,1.5v-1.5L12.5,19v-4.5L21,16z"/></svg> MALEDIVEN</span></div>
+      </div>
+      <div class="bottom">
+        <span class="label">VANAF</span>
+        <div class="price">€12.800</div>
+        <div class="flights"><svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor" style="vertical-align:-1px;margin-right:2px;"><path d="M21,16v-2l-8-5V3.5C13,2.67,12.33,2,11.5,2S10,2.67,10,3.5V9l-8,5v2l8-2.5V19l-2.5,1.5V22L11.5,21l3.5,1.5v-1.5L12.5,19v-4.5L21,16z"/></svg> 8 vluchten deze maand</div>
+      </div>
+    </div>
+
+    <div class="route-card">
+      <div class="scene">
+        <img src="images/route-miami-bahamas.jpg" alt="Miami naar de Bahama's">
+      </div>
+      <div class="shade"></div>
+      <div class="top">
+        <div class="route-line"><span>MIAMI</span><span class="dash"></span></div>
+        <div class="route-line dest"><span class="dash"></span><span><svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor" style="vertical-align:-1px;margin-right:2px;"><path d="M21,16v-2l-8-5V3.5C13,2.67,12.33,2,11.5,2S10,2.67,10,3.5V9l-8,5v2l8-2.5V19l-2.5,1.5V22L11.5,21l3.5,1.5v-1.5L12.5,19v-4.5L21,16z"/></svg> BAHAMA'S</span></div>
+      </div>
+      <div class="bottom">
+        <span class="label">VANAF</span>
+        <div class="price">€3.100</div>
+        <div class="flights"><svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor" style="vertical-align:-1px;margin-right:2px;"><path d="M21,16v-2l-8-5V3.5C13,2.67,12.33,2,11.5,2S10,2.67,10,3.5V9l-8,5v2l8-2.5V19l-2.5,1.5V22L11.5,21l3.5,1.5v-1.5L12.5,19v-4.5L21,16z"/></svg> 21 vluchten deze maand</div>
+      </div>
+    </div>
+
+    <div class="route-card">
+      <div class="scene">
+        <img src="images/route-parijs-marrakech.jpg" alt="Parijs naar Marrakech">
+      </div>
+      <div class="shade"></div>
+      <div class="top">
+        <div class="route-line"><span>PARIJS</span><span class="dash"></span></div>
+        <div class="route-line dest"><span class="dash"></span><span><svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor" style="vertical-align:-1px;margin-right:2px;"><path d="M21,16v-2l-8-5V3.5C13,2.67,12.33,2,11.5,2S10,2.67,10,3.5V9l-8,5v2l8-2.5V19l-2.5,1.5V22L11.5,21l3.5,1.5v-1.5L12.5,19v-4.5L21,16z"/></svg> MARRAKECH</span></div>
+      </div>
+      <div class="bottom">
+        <span class="label">VANAF</span>
+        <div class="price">€5.700</div>
+        <div class="flights"><svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor" style="vertical-align:-1px;margin-right:2px;"><path d="M21,16v-2l-8-5V3.5C13,2.67,12.33,2,11.5,2S10,2.67,10,3.5V9l-8,5v2l8-2.5V19l-2.5,1.5V22L11.5,21l3.5,1.5v-1.5L12.5,19v-4.5L21,16z"/></svg> 10 vluchten deze maand</div>
       </div>
     </div>
   </div>
