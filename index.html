@@ -187,8 +187,12 @@
   .route-mid .dur{ color: var(--text-dim); font-size: 0.72rem; margin-bottom: 4px; white-space:nowrap; }
   .route-mid .dots{ height:1px; background: var(--panel-line); position:relative; }
   .route-mid .dots::after{ content:'✈'; position:absolute; top:-8px; left:50%; transform:translateX(-50%); font-size: 0.7rem; color: var(--accent); background: var(--panel); padding: 0 4px; }
-  .deal-when{ color: var(--text-dim); font-size: 0.8rem; margin: 14px 0; padding-top: 14px; border-top: 1px solid var(--panel-line); min-height: 42px; }
-  .deal-plane{ display:flex; justify-content:space-between; align-items:flex-end; margin-top:auto; margin-bottom: 16px; }
+  .deal-when{
+    color: var(--text-dim); font-size: 0.8rem; margin-top: auto;
+    padding: 12px 0; border-top: 1px solid var(--panel-line); border-bottom: 1px solid var(--panel-line);
+    min-height: 42px; display:flex; align-items:center;
+  }
+  .deal-plane{ display:flex; justify-content:space-between; align-items:flex-end; margin-top: 12px; margin-bottom: 16px; }
   .deal-plane .name{ font-size: 0.88rem; }
   .deal-plane .cap{ color: var(--text-dim); font-size: 0.75rem; }
   .deal-plane .price-block{ text-align:right; }
