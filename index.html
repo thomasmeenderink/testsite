@@ -50,7 +50,7 @@
 
   .hero-wrap{
     position: relative; z-index: 1;
-    padding: 5vh 6vw 6vh;
+    padding: 5vh 6vw 4vh;
   }
   .hero-banner{
     max-width: 1180px; margin: 0 auto;
@@ -83,11 +83,12 @@
   }
   .hero-pill{
     display:inline-flex; align-items:center; gap:6px; width:fit-content;
-    background:#fff; color: var(--text); font-weight:700; font-size: 0.88rem;
-    padding: 14px 20px; border-radius: 8px; text-decoration:none;
+    font-family:'Inter', sans-serif; font-weight:600; font-size: 0.82rem; letter-spacing: 0.03em;
+    background: var(--accent); color: var(--bg);
+    padding: 13px 24px; border-radius: var(--radius); text-decoration:none;
   }
-  .hero-pill:hover{ background: #eef2f7; }
-  .hero-tile .hero-pill{ position:absolute; left:18px; bottom:18px; z-index:2; padding: 12px 18px; font-size:0.85rem; }
+  .hero-pill:hover{ background: #123a63; }
+  .hero-tile .hero-pill{ position:absolute; left:18px; bottom:18px; z-index:2; padding: 11px 18px; font-size:0.8rem; }
   @media (max-width: 800px){
     .hero-banner{ grid-template-columns: 1fr; }
     .hero-main{ min-height: 340px; }
@@ -126,7 +127,7 @@
     position:relative; z-index:2; padding: 0 22px 22px;
   }
   .bottom .label{ color: #bcd6f2; font-size: 0.68rem; letter-spacing: 0.12em; display:block; margin-bottom: 4px; }
-  .bottom .price{ font-family:'Playfair Display', serif; font-size: 1.9rem; color: #fff; }
+  .bottom .price{ font-family:'Inter', sans-serif; font-weight:700; font-size: 1.7rem; color: #fff; font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
   .bottom .flights{ color: #d9d3c2; font-size: 0.78rem; margin-top: 6px; }
   .routes-cta{ display:flex; justify-content:flex-start; gap: 14px; margin-top: 44px; flex-wrap: wrap; }
   .btn-solid, .btn-outline{
@@ -138,7 +139,7 @@
   .btn-outline{ border: 1px solid var(--panel-line); color: var(--text); }
   .btn-outline:hover{ border-color: var(--accent); color: var(--accent); }
 
-  section{ position: relative; z-index:1; padding: 8vh 6vw; }
+  section{ position: relative; z-index:1; padding: 6vh 6vw; }
   section > *{ max-width: 1180px; margin-left: auto; margin-right: auto; }
 
   /* --- deals section --- */
@@ -220,9 +221,12 @@
   .section-title{ font-size: clamp(1.6rem, 3vw, 2.2rem); max-width: 20ch; }
 
   .steps{
-    display:grid; grid-template-columns: repeat(3, 1fr); gap: 40px; margin-top: 50px;
+    display:grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 40px;
   }
   @media (max-width: 800px){ .steps{ grid-template-columns: 1fr; } }
+  .step{
+    background: var(--panel); border: 1px solid var(--panel-line); border-radius: 10px; padding: 28px 24px;
+  }
   .step-num{
     font-family: 'Playfair Display', serif; font-style: italic;
     color: var(--accent-dim); font-size: 2.2rem; margin-bottom: 14px;
