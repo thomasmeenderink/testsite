@@ -187,7 +187,17 @@
   }
   .route-mid .dur{ color: var(--text-dim); font-size: 0.72rem; margin-bottom: 4px; white-space:nowrap; }
   .route-mid .dots{ height:1px; background: var(--panel-line); position:relative; }
-  .route-mid .dots::after{ content:'✈'; position:absolute; top:-8px; left:50%; transform:translateX(-50%); font-size: 0.7rem; color: var(--accent); background: var(--panel); padding: 0 4px; }
+  .route-mid .dots::after{
+    content:''; position:absolute; top:-9px; left:50%; transform:translateX(-50%);
+    width:19px; height:19px; background: var(--panel); z-index:1;
+  }
+  .route-mid .dots::before{
+    content:''; position:absolute; top:-6px; left:50%; transform:translateX(-50%);
+    width:13px; height:13px; z-index:2;
+    background-color: var(--accent);
+    -webkit-mask: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22M21%2C16v-2l-8-5V3.5C13%2C2.67%2C12.33%2C2%2C11.5%2C2S10%2C2.67%2C10%2C3.5V9l-8%2C5v2l8-2.5V19l-2.5%2C1.5V22L11.5%2C21l3.5%2C1.5v-1.5L12.5%2C19v-4.5L21%2C16z%22/%3E%3C/svg%3E") center/contain no-repeat;
+    mask: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22M21%2C16v-2l-8-5V3.5C13%2C2.67%2C12.33%2C2%2C11.5%2C2S10%2C2.67%2C10%2C3.5V9l-8%2C5v2l8-2.5V19l-2.5%2C1.5V22L11.5%2C21l3.5%2C1.5v-1.5L12.5%2C19v-4.5L21%2C16z%22/%3E%3C/svg%3E") center/contain no-repeat;
+  }
   .deal-when{
     color: var(--text-dim); font-size: 0.8rem; margin-top: auto;
     padding: 12px 0; border-top: 1px solid var(--panel-line); border-bottom: 1px solid var(--panel-line);
@@ -304,7 +314,7 @@
 <div class="hero-wrap">
   <div class="hero-banner">
     <div class="hero-main">
-      <img src="images/advantage-tijd.jpg" alt="Privéjet op de tarmac">
+      <img src="images/advantage-bereik.jpg" alt="Privéjet op de tarmac">
       <div class="hero-shade"></div>
       <div class="hero-main-content">
         <div>
@@ -321,7 +331,7 @@
         <a href="#deals" class="hero-pill">Beste deals ›</a>
       </div>
       <div class="hero-tile">
-        <img src="images/route-luton-nice.jpg" alt="Populaire routes">
+        <img src="images/route-vannuys-aspen.jpg" alt="Populaire routes">
         <div class="hero-shade"></div>
         <a href="#routes" class="hero-pill">Populaire routes ›</a>
       </div>
@@ -344,12 +354,12 @@
       <div class="shade"></div>
       <div class="top">
         <div class="route-line"><span>TETERBORO</span><span class="dash"></span></div>
-        <div class="route-line dest"><span class="dash"></span><span>✈ WEST PALM BEACH</span></div>
+        <div class="route-line dest"><span class="dash"></span><span><svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor" style="vertical-align:-1px;margin-right:2px;"><path d="M21,16v-2l-8-5V3.5C13,2.67,12.33,2,11.5,2S10,2.67,10,3.5V9l-8,5v2l8-2.5V19l-2.5,1.5V22L11.5,21l3.5,1.5v-1.5L12.5,19v-4.5L21,16z"/></svg> WEST PALM BEACH</span></div>
       </div>
       <div class="bottom">
         <span class="label">VANAF</span>
         <div class="price">€4.200</div>
-        <div class="flights">✈ 14 vluchten deze maand</div>
+        <div class="flights"><svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor" style="vertical-align:-1px;margin-right:2px;"><path d="M21,16v-2l-8-5V3.5C13,2.67,12.33,2,11.5,2S10,2.67,10,3.5V9l-8,5v2l8-2.5V19l-2.5,1.5V22L11.5,21l3.5,1.5v-1.5L12.5,19v-4.5L21,16z"/></svg> 14 vluchten deze maand</div>
       </div>
     </div>
 
@@ -360,12 +370,12 @@
       <div class="shade"></div>
       <div class="top">
         <div class="route-line"><span>LONDON LUTON</span><span class="dash"></span></div>
-        <div class="route-line dest"><span class="dash"></span><span>✈ NICE</span></div>
+        <div class="route-line dest"><span class="dash"></span><span><svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor" style="vertical-align:-1px;margin-right:2px;"><path d="M21,16v-2l-8-5V3.5C13,2.67,12.33,2,11.5,2S10,2.67,10,3.5V9l-8,5v2l8-2.5V19l-2.5,1.5V22L11.5,21l3.5,1.5v-1.5L12.5,19v-4.5L21,16z"/></svg> NICE</span></div>
       </div>
       <div class="bottom">
         <span class="label">VANAF</span>
         <div class="price">€3.800</div>
-        <div class="flights">✈ 11 vluchten deze maand</div>
+        <div class="flights"><svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor" style="vertical-align:-1px;margin-right:2px;"><path d="M21,16v-2l-8-5V3.5C13,2.67,12.33,2,11.5,2S10,2.67,10,3.5V9l-8,5v2l8-2.5V19l-2.5,1.5V22L11.5,21l3.5,1.5v-1.5L12.5,19v-4.5L21,16z"/></svg> 11 vluchten deze maand</div>
       </div>
     </div>
 
@@ -376,12 +386,12 @@
       <div class="shade"></div>
       <div class="top">
         <div class="route-line"><span>VAN NUYS</span><span class="dash"></span></div>
-        <div class="route-line dest"><span class="dash"></span><span>✈ ASPEN</span></div>
+        <div class="route-line dest"><span class="dash"></span><span><svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor" style="vertical-align:-1px;margin-right:2px;"><path d="M21,16v-2l-8-5V3.5C13,2.67,12.33,2,11.5,2S10,2.67,10,3.5V9l-8,5v2l8-2.5V19l-2.5,1.5V22L11.5,21l3.5,1.5v-1.5L12.5,19v-4.5L21,16z"/></svg> ASPEN</span></div>
       </div>
       <div class="bottom">
         <span class="label">VANAF</span>
         <div class="price">€6.500</div>
-        <div class="flights">✈ 9 vluchten deze maand</div>
+        <div class="flights"><svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor" style="vertical-align:-1px;margin-right:2px;"><path d="M21,16v-2l-8-5V3.5C13,2.67,12.33,2,11.5,2S10,2.67,10,3.5V9l-8,5v2l8-2.5V19l-2.5,1.5V22L11.5,21l3.5,1.5v-1.5L12.5,19v-4.5L21,16z"/></svg> 9 vluchten deze maand</div>
       </div>
     </div>
   </div>
