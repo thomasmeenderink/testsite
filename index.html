@@ -50,24 +50,49 @@
 
   .hero-wrap{
     position: relative; z-index: 1;
-    padding: 8vh 6vw 6vh;
+    padding: 5vh 6vw 6vh;
   }
-  .hero{
+  .hero-banner{
     max-width: 1180px; margin: 0 auto;
+    display:grid; grid-template-columns: 2fr 1fr; gap: 18px;
   }
-  .eyebrow{
-    color: var(--accent); font-size: 0.78rem; letter-spacing: 0.18em;
-    margin-bottom: 18px; display:block;
+  .hero-main, .hero-tile{
+    position:relative; border-radius: 14px; overflow:hidden;
+    background: var(--panel);
   }
-  .hero h1{
-    font-size: clamp(2.4rem, 5vw, 4.2rem);
-    font-weight: 700; line-height: 1.08;
-    max-width: 14ch;
+  .hero-main{ min-height: 520px; }
+  .hero-side{ display:grid; grid-template-rows: 1fr 1fr; gap: 18px; }
+  .hero-tile{ min-height: 251px; }
+  .hero-main img, .hero-tile img{
+    position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block;
   }
-  .hero h1 em{ color: var(--accent); font-style: italic; }
-  .hero p.sub{
-    color: var(--text-dim); max-width: 46ch; margin-top: 22px;
-    font-size: 0.95rem;
+  .hero-shade{
+    position:absolute; inset:0;
+    background: linear-gradient(180deg, rgba(10,20,35,0.25) 0%, rgba(10,20,35,0.35) 55%, rgba(10,20,35,0.75) 100%);
+  }
+  .hero-main-content{
+    position:relative; z-index:2; height:100%; padding: 40px;
+    display:flex; flex-direction:column; justify-content:space-between;
+  }
+  .hero-eyebrow{
+    color:#dce8f7; font-size: 0.78rem; letter-spacing: 0.18em; display:block;
+  }
+  .hero-main h1{
+    font-family:'Playfair Display', serif; font-weight:700; color:#fff;
+    font-size: clamp(2rem, 4vw, 3.2rem); line-height:1.1; max-width: 11ch; margin-top:18px;
+  }
+  .hero-pill{
+    display:inline-flex; align-items:center; gap:6px; width:fit-content;
+    background:#fff; color: var(--text); font-weight:700; font-size: 0.88rem;
+    padding: 14px 20px; border-radius: 8px; text-decoration:none;
+  }
+  .hero-pill:hover{ background: #eef2f7; }
+  .hero-tile .hero-pill{ position:absolute; left:18px; bottom:18px; z-index:2; padding: 12px 18px; font-size:0.85rem; }
+  @media (max-width: 800px){
+    .hero-banner{ grid-template-columns: 1fr; }
+    .hero-main{ min-height: 340px; }
+    .hero-side{ grid-template-rows: 1fr 1fr; }
+    .hero-tile{ min-height: 180px; }
   }
 
   /* --- popular routes --- */
@@ -269,10 +294,30 @@
 </header>
 
 <div class="hero-wrap">
-  <div class="hero">
-    <span class="eyebrow">EMPTY LEG MARKETPLACE</span>
-    <h1>Het vliegtuig vliegt <em>toch al</em> terug.</h1>
-    <p class="sub">Wij verkopen "deadhead"-vluchten: privéjets die leeg terug- of doorvliegen naar hun volgende klus. Jij boekt de stoel, de operator dekt de kosten. Vlieg privé tegen een fractie van de prijs.</p>
+  <div class="hero-banner">
+    <div class="hero-main">
+      <img src="images/hero-main.jpg" alt="Privéjet op de tarmac">
+      <div class="hero-shade"></div>
+      <div class="hero-main-content">
+        <div>
+          <span class="hero-eyebrow">EMPTY LEG MARKETPLACE</span>
+          <h1>Vlieg deze zomer voor een fractie van de prijs.</h1>
+        </div>
+        <a href="#deals" class="hero-pill">Bekijk alle empty legs ›</a>
+      </div>
+    </div>
+    <div class="hero-side">
+      <div class="hero-tile">
+        <img src="images/hero-deals.jpg" alt="Beste deals">
+        <div class="hero-shade"></div>
+        <a href="#deals" class="hero-pill">Beste deals ›</a>
+      </div>
+      <div class="hero-tile">
+        <img src="images/hero-routes.jpg" alt="Populaire routes">
+        <div class="hero-shade"></div>
+        <a href="#routes" class="hero-pill">Populaire routes ›</a>
+      </div>
+    </div>
   </div>
 </div>
 
