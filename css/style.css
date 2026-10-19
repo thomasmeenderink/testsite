@@ -813,7 +813,7 @@ footer ul a:hover, .footer-bottom a:hover{ color: var(--accent); }
 .dt-pin{ display:block; width: 16px; height: 16px; border-radius: 50%; border: 3px solid var(--white); box-shadow: 0 2px 6px rgba(0,0,0,0.3); }
 .dt-plane-icon{ display:block; width: 22px; height: 22px; }
 .dt-section{ padding: 24px 28px; border-top: 1px solid var(--panel-line); margin-top: 8px; }
-.dt-specs{ display:grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 14px; }
+.dt-specs{ display:grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; margin-top: 14px; }
 .dt-specs div{ background: var(--panel); border-radius: 12px; padding: 14px 16px; }
 .dt-specs small{ display:block; color: var(--text-dim); font-size: 0.78rem; }
 .dt-specs strong{ display:block; margin-top: 4px; font-size: 0.98rem; }
@@ -843,3 +843,5 @@ footer ul a:hover, .footer-bottom a:hover{ color: var(--accent); }
 }
 /* soften the OpenStreetMap colours so the route stands out */
 .dt-map .leaflet-tile-pane{ filter: saturate(0.55) brightness(1.04); }
+.dt-gallery img.is-plan{ object-fit: contain; background: var(--white); padding: 24px; }
+.dt-gallery:has(img.is-plan)::after{ display:none; }

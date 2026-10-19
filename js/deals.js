@@ -1,6 +1,7 @@
 // Airport positions (latitude, longitude) for the route map in the detail pop-up.
 // Add a line here when you add a flight from or to a new airport.
 const AIRPORTS = {
+  EHAM: [52.3105, 4.7683],  EGSS: [51.8850, 0.2350],
   AMS: [52.3105, 4.7683],   CEG: [53.1781, -2.9778],  CEQ: [43.5420, 6.9534],
   FAB: [51.2758, -0.7763],  FSC: [41.5006, 9.0978],   KIR: [52.1809, -9.5238],
   LCY: [51.5053, 0.0553],   LTN: [51.8747, -0.3683],  NCE: [43.6584, 7.2159],
@@ -11,13 +12,16 @@ const AIRPORTS = {
 
 // All empty legs on the site. Add, change or remove a flight here and it updates
 // the homepage carousel, the "Alle empty legs" page and the search pop-ups at once.
+// Fields: duration and oldPrice are optional; leave them out when they are not known.
+// images: extra photos for the detail pop-up (the first one is also shown on the card).
+const CJ3_PHOTOS = ['images/cj3-exterieur.webp', 'images/cj3-cabine.webp', 'images/cj3-plattegrond.webp'];
 const DEALS = [
-  { from: 'Teterboro', fromRegion: 'New Jersey', fromCode: 'TEB', to: 'West Palm Beach', toRegion: 'Florida', toCode: 'PBI',
-    duration: '2h 05m', when: 'Do 30 jul · 14:00', plane: 'Cessna Citation CJ3', cap: 'Midsize · tot 8 passagiers',
-    oldPrice: '€11.500', price: '€4.200', img: 'images/jet-citation-cj3.jpg' },
-  { from: 'Londen', fromRegion: 'Verenigd Koninkrijk', fromCode: 'LTN', to: 'Nice', toRegion: 'Frankrijk', toCode: 'NCE',
-    duration: '1h 55m', when: 'Za 1 aug · 09:30', plane: 'Embraer Phenom 300', cap: 'Light jet · tot 7 passagiers',
-    oldPrice: '€11.000', price: '€3.800', img: 'images/jet-phenom-300.jpg', imgClass: 'crop-phenom' },
+  { from: 'Amsterdam', fromRegion: 'Schiphol, Nederland', fromCode: 'EHAM', to: 'Londen Stansted', toRegion: 'Verenigd Koninkrijk', toCode: 'EGSS',
+    when: 'Wo 2 dec 2026 · 10:29', plane: 'Cessna Citation CJ3', cap: 'Light jet · tot 7 passagiers',
+    price: '€6.500', img: CJ3_PHOTOS[0], images: CJ3_PHOTOS },
+  { from: 'Londen Stansted', fromRegion: 'Verenigd Koninkrijk', fromCode: 'EGSS', to: 'Amsterdam', toRegion: 'Schiphol, Nederland', toCode: 'EHAM',
+    when: 'Wo 9 dec 2026 · 18:00', plane: 'Cessna Citation CJ3', cap: 'Light jet · tot 7 passagiers',
+    price: '€5.350', img: CJ3_PHOTOS[0], images: CJ3_PHOTOS },
   { from: 'Van Nuys', fromRegion: 'Californië', fromCode: 'VNY', to: 'Aspen', toRegion: 'Colorado', toCode: 'ASE',
     duration: '1h 20m', when: 'Zo 2 aug · 16:15', plane: 'Bombardier Challenger 350', cap: 'Super-midsize · tot 10 passagiers',
     oldPrice: '€17.000', price: '€6.500', img: 'images/jet-challenger-350.jpg' },
@@ -64,13 +68,13 @@ function dealCardHtml(d, i){
         <div class="codes"><span>${esc(d.fromCode)}</span><span>${esc(d.toCode)}</span></div>
         <div class="route-cities">
           <div class="place">${esc(d.from)}<div class="region">${esc(d.fromRegion)}</div></div>
-          <div class="route-mid"><div class="dur">${esc(d.duration)}</div><div class="dots"></div></div>
+          <div class="route-mid"><div class="dur">${esc(d.duration || '')}</div><div class="dots"></div></div>
           <div class="place dest">${esc(d.to)}<div class="region">${esc(d.toRegion)}</div></div>
         </div>
         <div class="deal-when">${esc(d.when)}</div>
         <div class="deal-plane">
           <div><div class="name">${esc(d.plane)}</div><div class="cap">${esc(d.cap)}</div></div>
-          <div class="price-block"><div class="price-old">${esc(d.oldPrice)}</div><div class="price">${esc(d.price)}</div><div class="whole">Heel toestel</div></div>
+          <div class="price-block">${d.oldPrice ? `<div class="price-old">${esc(d.oldPrice)}</div>` : ''}<div class="price">${esc(d.price)}</div><div class="whole">Heel toestel</div></div>
         </div>
         <div class="deal-actions">
           <button type="button" class="reserve" data-deal="${i}">MEER INFORMATIE ›</button>
