@@ -49,7 +49,7 @@
     display:flex; justify-content: space-between; align-items:center;
   }
   .logo{ display:flex; align-items:center; text-decoration:none; }
-  .logo-mark img{ display:block; height: 44px; width:auto; }
+  .logo-mark img{ display:block; height: 40px; width:auto; }
   .menu{ display:flex; align-items:center; gap: 34px; }
   .menu a{
     color: var(--navy); text-decoration:none; font-size: 0.88rem; font-weight: 500;
@@ -394,7 +394,7 @@
   }
   .req-badge::before{ content:''; width:7px; height:7px; border-radius:50%; background: var(--accent); }
   .req-head h3{ font-family:'Playfair Display', serif; font-size: 1.7rem; line-height: 1.15; margin-top: 14px; }
-  .req-head h3 em{ font-style: normal; color: var(--accent); margin: 0 6px; }
+  .req-head h3 em{ font-style: italic; color: var(--accent); }
   .req-head p{ color: rgba(255,255,255,0.75); font-size: 0.9rem; margin-top: 6px; }
   .req-modal .req-close{
     position:absolute; top: 18px; right: 18px; width: 38px; height: 38px; border-radius: 50%; padding: 0;
@@ -428,8 +428,20 @@
     border: 1px solid var(--panel-line); border-radius: 8px; padding: 12px 14px;
     font-family: 'Inter', sans-serif; font-size: 0.95rem; font-weight: 400; letter-spacing: normal;
   }
+  .req-fields select{
+    width: 100%; background: var(--white); color: var(--navy);
+    border: 1px solid var(--panel-line); border-radius: 8px; padding: 12px 14px;
+    font-family: 'Inter', sans-serif; font-size: 0.95rem; font-weight: 400; letter-spacing: normal;
+  }
   .req-fields textarea{ min-height: 84px; resize: vertical; }
-  .req-fields input:focus, .req-fields textarea:focus{ outline: 2px solid var(--accent); outline-offset: 0; border-color: transparent; }
+  .req-fields input:focus, .req-fields textarea:focus, .req-fields select:focus{ outline: 2px solid var(--accent); outline-offset: 0; border-color: transparent; }
+  .req-fields + .req-legend{ margin-top: 24px; }
+  .req-fields .req-check{
+    flex-direction: row; align-items: center; gap: 10px; cursor: pointer;
+    font-size: 0.9rem; font-weight: 500; letter-spacing: normal;
+  }
+  .req-fields .req-check input{ width: 18px; height: 18px; padding: 0; accent-color: var(--accent); }
+  .req-fields [hidden]{ display: none; }
   .req-modal .req-submit{ width: 100%; margin-top: 18px; padding: 15px; font-size: 0.95rem; }
   .req-note{ color: var(--text-dim); font-size: 0.76rem; margin-top: 12px; }
   .req-note.error{ color: #c0392b; }
@@ -532,7 +544,7 @@
     display:grid; grid-template-columns: 2fr 1fr 1fr; gap: 40px;
   }
   .footer-logo{ display:inline-block; }
-  .footer-logo img{ display:block; height: 52px; width:auto; }
+  .footer-logo img{ display:block; height: 44px; width:auto; }
   .footer-grid p{ margin-top: 18px; max-width: 38ch; }
   footer h4{ color: var(--white); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.16em; margin-bottom: 16px; }
   footer ul{ list-style: none; }
@@ -555,7 +567,7 @@
 <header id="top">
   <div class="bar">
     <a href="#top" class="logo" aria-label="Home">
-      <span class="logo-mark"><img src="images/logo.webp" alt=""></span>
+      <span class="logo-mark"><img src="images/logo-dutchjet.webp" alt="DutchJet"></span>
     </a>
     <button class="menu-toggle" id="menuToggle" aria-label="Menu" aria-expanded="false" aria-controls="menu">
       <span></span><span></span><span></span>
@@ -950,7 +962,7 @@
   <div class="book-inner">
     <span class="section-label">VLUCHT SAMENSTELLEN</span>
     <h2 class="section-title">Waar gaan we <em>naartoe</em>?</h2>
-    <p class="section-lead">Kies je route, datum en het aantal passagiers. Je ziet meteen welke empty legs passen, of je vraagt in één stap een privévlucht aan.</p>
+    <p class="section-lead">Kies je route, datum en het aantal passagiers en vraag in één stap je eigen privévlucht aan. Je ontvangt een voorstel op maat.</p>
 
     <form class="search-bar" id="flightSearch" autocomplete="off">
       <label class="sb-field sb-from"><span>VAN</span><input id="sbFrom" list="cityList" placeholder="Overal"></label>
@@ -1063,7 +1075,7 @@
 <footer>
   <div class="footer-grid">
     <div>
-      <a href="#top" class="footer-logo"><img src="images/logo-light.webp" alt="Naar boven"></a>
+      <a href="#top" class="footer-logo"><img src="images/logo-dutchjet-light.webp" alt="DutchJet, naar boven"></a>
       <p>Empty legs, real prices. Vlieg privé op routes die toch al gevlogen worden, voor een fractie van de charterprijs.</p>
     </div>
     <div>
@@ -1192,49 +1204,23 @@
     if(!form) return;
     const $ = id => document.getElementById(id);
     const fromIn = $('sbFrom'), toIn = $('sbTo'), whenIn = $('sbWhen'), paxIn = $('sbPax');
-    const MONTHS = ['jan','feb','mrt','apr','mei','jun','jul','aug','sep','okt','nov','dec'];
+    const modal = $('reqModal');
     const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-    const text = el => el ? el.textContent.trim() : '';
-    const placeName = el => el ? el.firstChild.textContent.trim() : '';
 
-    // The deal cards are the single source of truth for which legs can be booked.
-    const legs = Array.from(document.querySelectorAll('#dealsTrack .deal-card')).map(card => {
-      const places = card.querySelectorAll('.route-cities .place');
-      const when = text(card.querySelector('.deal-when'));
-      const m = when.match(/(\d{1,2}) ([a-z]{3})/);
-      const cap = text(card.querySelector('.deal-plane .cap'));
-      const price = text(card.querySelector('.deal-plane .price'));
-      return {
-        from: placeName(places[0]), fromRegion: text(places[0].querySelector('.region')),
-        to: placeName(places[1]), toRegion: text(places[1].querySelector('.region')),
-        when, day: m ? +m[1] : null, month: m ? MONTHS.indexOf(m[2]) : -1,
-        plane: text(card.querySelector('.deal-plane .name')), cap,
-        seats: +((cap.match(/tot (\d+)/) || [])[1] || 0),
-        oldPrice: text(card.querySelector('.deal-plane .price-old')),
-        price, priceNum: +price.replace(/\D/g, '')
-      };
-    });
-
-    // city suggestions
-    const cities = [...new Set(legs.flatMap(l => [l.from, l.to]))].sort((a, b) => a.localeCompare(b, 'nl'));
-    $('cityList').innerHTML = cities.map(c => `<option value="${esc(c)}">`).join('');
-
-    const hit = (q, name, region) => !q || name.toLowerCase().includes(q) || region.toLowerCase().includes(q);
-
-    // popular routes from Amsterdam, most popular first; the price comes from a matching empty leg
+    // city suggestions: popular destinations plus every city from the deals
     const POPULAR_FROM = 'Amsterdam';
     const POPULAR_TO = ['Londen', 'Nice', 'Ibiza', 'Cannes', 'Genève', 'Mykonos'];
-    const popular = POPULAR_TO.map(to => {
-      const cheapest = legs
-        .filter(l => hit(POPULAR_FROM.toLowerCase(), l.from, l.fromRegion) && hit(to.toLowerCase(), l.to, l.toRegion))
-        .sort((a, b) => a.priceNum - b.priceNum)[0];
-      return { to, price: cheapest ? cheapest.price : '' };
-    });
-    $('popularList').innerHTML = popular.map((p, i) =>
-      `<button type="button" class="chip" data-i="${i}">${esc(POPULAR_FROM)} → ${esc(p.to)} <small>${p.price ? 'vanaf ' + esc(p.price) : 'op aanvraag'}</small></button>`).join('');
+    const dealCities = Array.from(document.querySelectorAll('#dealsTrack .route-cities .place'))
+      .map(el => el.firstChild.textContent.trim());
+    const cities = [...new Set([POPULAR_FROM, ...POPULAR_TO, ...dealCities])].sort((a, b) => a.localeCompare(b, 'nl'));
+    $('cityList').innerHTML = cities.map(c => `<option value="${esc(c)}">`).join('');
+
+    // popular routes from Amsterdam, most popular first
+    $('popularList').innerHTML = POPULAR_TO.map(to =>
+      `<button type="button" class="chip" data-to="${esc(to)}">${esc(POPULAR_FROM)} → ${esc(to)}</button>`).join('');
     $('popularList').addEventListener('click', e => {
       const chip = e.target.closest('.chip'); if (!chip) return;
-      fromIn.value = POPULAR_FROM; toIn.value = popular[+chip.dataset.i].to;
+      fromIn.value = POPULAR_FROM; toIn.value = chip.dataset.to;
       form.requestSubmit();
     });
 
@@ -1244,76 +1230,39 @@
     paxIn.addEventListener('change', () => paxIn.classList.toggle('empty', !paxIn.value));
 
     $('sbSwap').addEventListener('click', () => { [fromIn.value, toIn.value] = [toIn.value, fromIn.value]; });
-    function daysApart(leg, iso){
-      if (leg.month < 0) return Infinity;
-      const d = new Date(iso + 'T00:00');
-      const legDate = new Date(d.getFullYear(), leg.month, leg.day);
-      return Math.round(Math.abs(legDate - d) / 864e5);
-    }
-    function niceDate(iso){
-      const d = new Date(iso + 'T00:00');
-      return d.getDate() + ' ' + MONTHS[d.getMonth()];
-    }
-
-    let query = {};
-    let found = [];
 
     form.addEventListener('submit', e => {
       e.preventDefault();
-      query = {
+      openModal({
         from: fromIn.value.trim(), to: toIn.value.trim(),
-        when: whenIn.type === 'date' ? whenIn.value : '', pax: +paxIn.value || 0
-      };
-      const qf = query.from.toLowerCase(), qt = query.to.toLowerCase();
-      found = legs.filter(l =>
-        hit(qf, l.from, l.fromRegion) && hit(qt, l.to, l.toRegion) &&
-        (!query.pax || l.seats >= query.pax) &&
-        (!query.when || daysApart(l, query.when) <= 3)
-      ).sort((a, b) => a.priceNum - b.priceNum);
-      openModal();
+        date: whenIn.type === 'date' ? whenIn.value : '', pax: paxIn.value
+      });
     });
 
-    const paxText = n => n + (n === 1 ? ' passagier' : ' passagiers');
-    const routeText = () => (query.from || 'Overal') + ' → ' + (query.to || 'Overal');
-    function extrasText(){
-      const parts = [];
-      if (query.when) parts.push(niceDate(query.when) + ' (± 3 dagen)');
-      if (query.pax) parts.push(paxText(query.pax));
-      return parts.join(' · ');
-    }
-    const summary = () => [routeText(), extrasText()].filter(Boolean).join(' · ');
+    const today = new Date().toISOString().slice(0, 10);
+    const paxOptions = sel => ['1','2','3','4','5','6','7','8','9','10','12']
+      .map(n => `<option value="${n}" ${n === sel ? 'selected' : ''}>${n === '12' ? '12+' : n}</option>`).join('');
 
-    const modal = $('reqModal');
-    const MAX_OPTIONS = 4;
-
-    function openModal(){
-      const opts = found.slice(0, MAX_OPTIONS);
-      const optionsHtml = opts.length ? `
-        <span class="req-legend">${found.length} ${found.length === 1 ? 'EMPTY LEG' : 'EMPTY LEGS'} GEVONDEN</span>
-        <div class="req-options">
-          ${opts.map((l, i) => `
-            <label class="req-option">
-              <input type="radio" name="choice" value="${i}" ${i === 0 ? 'checked' : ''}>
-              <span class="o-main">${esc(l.from)} → ${esc(l.to)}<small>${esc(l.when)} · ${esc(l.plane)} · ${esc(l.cap)}</small></span>
-              <span class="o-price">${esc(l.price)}</span>
-            </label>`).join('')}
-          <label class="req-option">
-            <input type="radio" name="choice" value="charter">
-            <span class="o-main">Privévlucht op maat<small>Eigen datum en tijd, wij zoeken een toestel voor je</small></span>
-            <span class="o-price">op aanvraag</span>
-          </label>
-        </div>` : `
-        <div class="req-empty"><strong>Geen empty leg op deze route</strong>We stellen een privévlucht op maat voor je samen en sturen je een voorstel.</div>`;
-
+    function openModal(q){
       modal.innerHTML = `
         <div class="req-head">
-          <span class="req-badge">VLUCHT AANVRAGEN</span>
-          <h3 id="reqTitle">${esc(query.from || 'Overal')}<em>→</em>${esc(query.to || 'Overal')}</h3>
-          <p>${esc(extrasText() || 'Datum en aantal passagiers flexibel')}</p>
+          <span class="req-badge">NIEUWE VLUCHTAANVRAAG</span>
+          <h3 id="reqTitle">Stel je <em>eigen vlucht</em> samen</h3>
+          <p>Vul je reis aan en laat je gegevens achter. We sturen je een voorstel op maat.</p>
           <button type="button" class="req-close" aria-label="Sluiten">×</button>
         </div>
         <form class="req-body" novalidate>
-          ${optionsHtml}
+          <span class="req-legend">JE REIS</span>
+          <div class="req-fields">
+            <label>VAN<input name="from" required list="cityList" placeholder="Vertrekplaats" value="${esc(q.from)}"></label>
+            <label>NAAR<input name="to" required list="cityList" placeholder="Bestemming" value="${esc(q.to)}"></label>
+            <label>VERTREKDATUM<input name="date" type="date" required min="${today}" value="${esc(q.date)}"></label>
+            <label>PASSAGIERS<select name="pax" required><option value="">Kies</option>${paxOptions(q.pax)}</select></label>
+            <label class="req-check full"><input type="checkbox" name="return"> Ik wil ook een retourvlucht</label>
+            <label class="full req-return" hidden>RETOURDATUM<input name="returnDate" type="date" min="${today}"></label>
+          </div>
+
+          <span class="req-legend">JE GEGEVENS</span>
           <div class="req-fields">
             <label>NAAM<input name="name" required placeholder="Voor- en achternaam" autocomplete="name"></label>
             <label>E-MAIL<input name="email" type="email" required placeholder="jij@voorbeeld.nl" autocomplete="email"></label>
@@ -1321,50 +1270,57 @@
             <label class="full">OPMERKING<textarea name="message" placeholder="Bijvoorbeeld gewenste vertrektijd, bagage of huisdieren"></textarea></label>
           </div>
           <button type="submit" class="req-submit">Verstuur aanvraag</button>
-          <p class="req-note">Je boeking is pas definitief na bevestiging door de operator. Routes en tijden kunnen tot vlak voor vertrek wijzigen.</p>
+          <p class="req-note">Je aanvraag is vrijblijvend. Je ontvangt eerst een voorstel; pas na jouw akkoord wordt de vlucht geboekt.</p>
         </form>`;
 
+      const f = modal.querySelector('form');
+      const ret = f.querySelector('.req-return');
+      f.elements.return.addEventListener('change', () => {
+        ret.hidden = !f.elements.return.checked;
+        f.elements.returnDate.required = f.elements.return.checked;
+      });
+      f.elements.date.addEventListener('change', () => { f.elements.returnDate.min = f.elements.date.value || today; });
       modal.querySelector('.req-close').addEventListener('click', () => modal.close());
-      modal.querySelector('form').addEventListener('submit', submitRequest);
+      f.addEventListener('submit', submitRequest);
       modal.showModal();
-      modal.querySelector('input[name=name]').focus();
+      // focus the first field that still needs filling in
+      const firstEmpty = ['from', 'to', 'date', 'pax', 'name'].map(n => f.elements[n]).find(el => !el.value);
+      (firstEmpty || f.elements.name).focus();
     }
 
     // clicking the dimmed backdrop closes the pop-up
     modal.addEventListener('click', e => { if (e.target === modal) modal.close(); });
 
+    const niceDate = iso => new Date(iso + 'T00:00').toLocaleDateString('nl-NL', { weekday: 'short', day: 'numeric', month: 'long', year: 'numeric' });
+
     function submitRequest(ev){
       ev.preventDefault();
       const f = ev.target;
       if (!f.reportValidity()) return;
-      const choice = f.elements.choice ? f.elements.choice.value : 'charter';
-      let title, details;
-      if (choice === 'charter') {
-        title = 'Privévlucht aanvragen';
-        details = summary();
-      } else {
-        const l = found[+choice];
-        title = 'Boek ' + l.from + ' → ' + l.to;
-        details = [l.when, l.plane, query.pax ? paxText(query.pax) : l.cap, l.price + ' heel toestel'].join(' · ');
-      }
-      const name = f.elements.name.value, email = f.elements.email.value;
+      const v = n => f.elements[n].value.trim();
+      const route = v('from') + ' → ' + v('to');
+      const pax = v('pax') === '12' ? '12+ passagiers' : v('pax') + (v('pax') === '1' ? ' passagier' : ' passagiers');
+      const trip = f.elements.return.checked
+        ? 'Retour · heen ' + niceDate(v('date')) + ' · terug ' + niceDate(v('returnDate'))
+        : 'Enkele reis · ' + niceDate(v('date'));
+      const email = v('email');
       const btn = f.querySelector('.req-submit');
       const note = f.querySelector('.req-note');
       btn.disabled = true; btn.textContent = 'Versturen…';
-      sendRequest(title + ' (' + details + ')', {
-        'Aanvraag': title,
-        'Details': details,
-        'Gezocht': summary(),
-        'Naam': name, 'E-mail': email,
-        'Telefoon': f.elements.phone.value || '-',
-        'Opmerking': f.elements.message.value || '-',
+      sendRequest('Nieuwe vluchtaanvraag: ' + route + ' (' + pax + ')', {
+        'Route': route,
+        'Reis': trip,
+        'Passagiers': pax,
+        'Naam': v('name'), 'E-mail': email,
+        'Telefoon': v('phone') || '-',
+        'Opmerking': v('message') || '-',
         _replyto: email
       }).then(() => {
         modal.innerHTML = `
           <div class="req-done">
             <div class="tick">✓</div>
             <h3 id="reqTitle">Aanvraag verstuurd</h3>
-            <p>${esc(title)} · ${esc(details)}. We nemen zo snel mogelijk contact met je op via ${esc(email)}.</p>
+            <p>${esc(route)} · ${esc(trip)} · ${esc(pax)}. We sturen je zo snel mogelijk een voorstel via ${esc(email)}.</p>
             <button type="button" class="req-ok">Sluiten</button>
           </div>`;
         modal.querySelector('.req-ok').addEventListener('click', () => modal.close());
