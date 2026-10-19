@@ -25,7 +25,7 @@
     --radius: 4px;
   }
   *{box-sizing:border-box; margin:0; padding:0;}
-  html{scroll-behavior:smooth;}
+  html{scroll-behavior:smooth; scroll-padding-top: 80px;}
   body{
     background: var(--bg);
     color: var(--text);
@@ -36,73 +36,148 @@
   h1, h2, .serif{ font-family: 'Playfair Display', serif; }
   a{ color: inherit; }
 
+  /* --- menu --- */
   header{
-    position: relative; z-index: 1;
-    padding: 28px 6vw;
+    position: sticky; top: 0; z-index: 50;
+    padding: 14px 6vw;
+    background: rgba(255,255,255,0.94);
+    -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
     border-bottom: 1px solid var(--panel-line);
   }
   .bar{
     max-width: 1180px; margin: 0 auto;
     display:flex; justify-content: space-between; align-items:center;
   }
-  .logo{
-    display:flex; align-items:center; gap: 12px; text-decoration:none;
-    font-size: 1.3rem; letter-spacing: 0.12em; font-weight: 700; color: var(--navy);
+  .logo{ display:flex; align-items:center; text-decoration:none; }
+  .logo-mark img{ display:block; height: 44px; width:auto; }
+  .menu{ display:flex; align-items:center; gap: 34px; }
+  .menu a{
+    color: var(--navy); text-decoration:none; font-size: 0.88rem; font-weight: 500;
+    position: relative; padding: 6px 0;
   }
-  .logo span{ color: var(--accent); }
-  .logo-mark img{ display:block; height: 48px; width:auto; }
-  nav a{
-    color: var(--text-dim); text-decoration:none; font-size: 0.8rem;
-    letter-spacing: 0.05em; margin-left: 28px;
+  .menu a::after{
+    content:''; position:absolute; left:0; right:0; bottom:0; height:2px;
+    background: var(--accent); transform: scaleX(0); transform-origin: left;
+    transition: transform .2s ease;
   }
-  nav a:hover{ color: var(--accent); }
-
-  .hero-wrap{
-    position: relative; z-index: 1;
-    padding: 5vh 6vw 4vh;
+  .menu a:hover::after{ transform: scaleX(1); }
+  .menu .menu-cta{
+    background: var(--accent); color: var(--white); font-weight: 600;
+    padding: 11px 20px; border-radius: var(--radius);
   }
-  .hero-banner{
-    max-width: 1180px; margin: 0 auto;
-    display:grid; grid-template-columns: 2fr 1fr; gap: 18px;
+  .menu .menu-cta::after{ display:none; }
+  .menu .menu-cta:hover{ background: var(--accent-hover); }
+  .menu-toggle{
+    display:none; background: transparent; border: 1px solid var(--panel-line);
+    width: 44px; height: 44px; padding: 0; border-radius: var(--radius);
+    align-items:center; justify-content:center; flex-direction:column; gap: 5px;
   }
-  .hero-main, .hero-tile{
-    position:relative; border-radius: 14px; overflow:hidden;
-    background: var(--panel);
-  }
-  .hero-main{ min-height: 520px; }
-  .hero-side{ display:grid; grid-template-rows: 1fr 1fr; gap: 18px; }
-  .hero-tile{ min-height: 251px; }
-  .hero-main img, .hero-tile img{
-    position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block;
-  }
-  .hero-shade{
-    position:absolute; inset:0;
-    background: linear-gradient(180deg, rgba(30,46,61,0.25) 0%, rgba(30,46,61,0.35) 55%, rgba(30,46,61,0.8) 100%);
-  }
-  .hero-main-content{
-    position:relative; z-index:2; height:100%; padding: 40px;
-    display:flex; flex-direction:column; justify-content:space-between;
-  }
-  .hero-eyebrow{
-    color: var(--white); font-weight:600; font-size: 0.78rem; letter-spacing: 0.18em; display:block;
-  }
-  .hero-main h1{
-    font-family:'Playfair Display', serif; font-weight:700; color:#fff;
-    font-size: clamp(2rem, 4vw, 3.2rem); line-height:1.1; max-width: 11ch; margin-top:18px;
-  }
-  .hero-pill{
-    display:inline-flex; align-items:center; gap:6px; width:fit-content;
-    font-family:'Inter', sans-serif; font-weight:600; font-size: 0.82rem; letter-spacing: 0.03em;
-    background: var(--accent); color: var(--bg);
-    padding: 13px 24px; border-radius: var(--radius); text-decoration:none;
-  }
-  .hero-pill:hover{ background: var(--accent-hover); }
-  .hero-tile .hero-pill{ position:absolute; left:18px; bottom:18px; z-index:2; padding: 11px 18px; font-size:0.8rem; }
+  .menu-toggle:hover{ background: transparent; border-color: var(--navy); }
+  .menu-toggle span{ display:block; width: 20px; height: 2px; background: var(--navy); transition: transform .2s ease, opacity .2s ease; }
+  header.open .menu-toggle span:nth-child(1){ transform: translateY(7px) rotate(45deg); }
+  header.open .menu-toggle span:nth-child(2){ opacity: 0; }
+  header.open .menu-toggle span:nth-child(3){ transform: translateY(-7px) rotate(-45deg); }
   @media (max-width: 800px){
-    .hero-banner{ grid-template-columns: 1fr; }
-    .hero-main{ min-height: 340px; }
-    .hero-side{ grid-template-rows: 1fr 1fr; }
-    .hero-tile{ min-height: 180px; }
+    .menu-toggle{ display:flex; }
+    .menu{
+      display:none; position:absolute; left:0; right:0; top:100%;
+      flex-direction:column; align-items:stretch; gap: 0;
+      background: var(--white); border-bottom: 1px solid var(--panel-line);
+      padding: 8px 6vw 20px;
+    }
+    header.open .menu{ display:flex; }
+    .menu a{ padding: 14px 0; border-bottom: 1px solid var(--panel-line); font-size: 1rem; }
+    .menu a::after{ display:none; }
+    .menu .menu-cta{ margin-top: 16px; text-align:center; border-bottom: none; }
+  }
+
+  /* --- hero --- */
+  .hero{
+    position: relative; overflow: hidden;
+    min-height: min(88vh, 760px);
+    display:flex; align-items:center;
+    padding: 80px 6vw;
+    background: var(--navy);
+  }
+  .hero > .hero-bg{ position:absolute; inset:0; width:100%; max-width:none; height:100%; margin:0; object-fit:cover; display:block; }
+  .hero::before{
+    content:''; position:absolute; inset:0; z-index:1;
+    background:
+      linear-gradient(90deg, rgba(30,46,61,0.95) 0%, rgba(30,46,61,0.8) 40%, rgba(30,46,61,0.25) 100%),
+      linear-gradient(0deg, rgba(30,46,61,0.6) 0%, rgba(30,46,61,0) 40%);
+  }
+  .hero-inner{
+    position:relative; z-index:2; width:100%; max-width: 1180px; margin: 0 auto;
+    display:grid; grid-template-columns: 1.4fr 1fr; gap: 60px; align-items:center;
+  }
+  .hero-badge{
+    display:inline-flex; align-items:center; gap: 8px;
+    color: var(--white); font-size: 0.75rem; font-weight: 600; letter-spacing: 0.16em;
+    border: 1px solid rgba(255,255,255,0.3); border-radius: 999px; padding: 7px 14px;
+  }
+  .hero-badge::before{ content:''; width:7px; height:7px; border-radius:50%; background: var(--accent); }
+  .hero h1{
+    font-family:'Playfair Display', serif; font-weight:700; color: var(--white);
+    font-size: clamp(2.4rem, 5.2vw, 4.2rem); line-height:1.05; margin-top: 24px; max-width: 13ch;
+  }
+  .hero h1 em{ font-style: italic; color: var(--accent); }
+  .hero-lead{ color: rgba(255,255,255,0.82); font-size: 1.05rem; max-width: 46ch; margin-top: 22px; }
+  .hero-actions{ display:flex; gap: 12px; flex-wrap: wrap; margin-top: 34px; }
+  .hero-btn{
+    display:inline-flex; align-items:center; gap: 8px;
+    font-weight:600; font-size: 0.9rem; text-decoration:none;
+    padding: 15px 26px; border-radius: var(--radius);
+  }
+  .hero-btn.primary{ background: var(--accent); color: var(--white); }
+  .hero-btn.primary:hover{ background: var(--accent-hover); }
+  .hero-btn.ghost{ color: var(--white); border: 1px solid rgba(255,255,255,0.45); }
+  .hero-btn.ghost:hover{ border-color: var(--white); background: rgba(255,255,255,0.08); }
+  .hero-stats{
+    display:grid; grid-template-columns: repeat(3, auto); justify-content:start; gap: 40px; margin-top: 48px; padding-top: 28px;
+    border-top: 1px solid rgba(255,255,255,0.18);
+  }
+  .hero-stats strong{ display:block; color: var(--white); font-size: 1.6rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .hero-stats span{ color: rgba(255,255,255,0.7); font-size: 0.8rem; }
+
+  .hero-deal{
+    background: var(--white); border-radius: 12px; overflow:hidden;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.3);
+  }
+  .hero-deal-img{ position:relative; aspect-ratio: 16/9; }
+  .hero-deal-img img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .hero-deal-tag{
+    position:absolute; top: 14px; left: 14px;
+    background: var(--accent); color: var(--white);
+    font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em;
+    padding: 6px 10px; border-radius: 3px;
+  }
+  .hero-deal-body{ padding: 20px 22px 22px; }
+  .hero-deal-route{ display:flex; align-items:center; gap: 12px; font-weight: 700; font-size: 1.05rem; }
+  .hero-deal-route .line{ flex:1; height:1px; background: var(--panel-line); position:relative; }
+  .hero-deal-route .line::after{
+    content:'✈'; position:absolute; left:50%; top:50%; transform: translate(-50%,-55%);
+    background: var(--white); color: var(--accent); padding: 0 6px; font-size: 0.85rem;
+  }
+  .hero-deal-meta{ color: var(--text-dim); font-size: 0.8rem; margin-top: 6px; }
+  .hero-deal-foot{
+    display:flex; justify-content:space-between; align-items:flex-end;
+    margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--panel-line);
+  }
+  .hero-deal-foot .old{ color: var(--text-dim); font-size: 0.8rem; text-decoration: line-through; }
+  .hero-deal-foot .now{ color: var(--accent); font-size: 1.6rem; font-weight: 700; line-height: 1.1; font-variant-numeric: tabular-nums; }
+  .hero-deal-foot a{
+    background: var(--navy); color: var(--white); text-decoration:none;
+    font-size: 0.8rem; font-weight: 600; padding: 11px 16px; border-radius: var(--radius);
+  }
+  .hero-deal-foot a:hover{ background: #2b4157; }
+
+  @media (max-width: 900px){
+    .hero{ min-height: auto; padding: 64px 6vw 56px; }
+    .hero::before{ background: linear-gradient(180deg, rgba(30,46,61,0.75) 0%, rgba(30,46,61,0.92) 100%); }
+    .hero-inner{ grid-template-columns: 1fr; gap: 40px; }
+    .hero-stats{ gap: 18px; }
+    .hero-stats strong{ font-size: 1.25rem; }
+    .hero-stats span{ font-size: 0.72rem; }
   }
 
   section{ position: relative; z-index:1; padding: 6vh 6vw; }
@@ -265,47 +340,57 @@
 </style>
 </head>
 <body>
-<header>
+<header id="top">
   <div class="bar">
-    <a href="#" class="logo" aria-label="Home">
+    <a href="#top" class="logo" aria-label="Home">
       <span class="logo-mark"><img src="images/logo.jpg" alt=""></span>
     </a>
-    <nav>
-      <a href="#deals">Live legs</a>
+    <button class="menu-toggle" id="menuToggle" aria-label="Menu" aria-expanded="false" aria-controls="menu">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="menu" id="menu">
+      <a href="#deals">Empty legs</a>
       <a href="#how">Hoe het werkt</a>
       <a href="#voordelen">Voordelen</a>
-      <a href="#signup">Meld je aan</a>
+      <a href="#signup" class="menu-cta">Meld je aan</a>
     </nav>
   </div>
 </header>
 
-<div class="hero-wrap">
-  <div class="hero-banner">
-    <div class="hero-main">
-      <img src="images/advantage-bereik.jpg" alt="Privéjet op de tarmac">
-      <div class="hero-shade"></div>
-      <div class="hero-main-content">
-        <div>
-          <span class="hero-eyebrow">EMPTY LEG MARKETPLACE</span>
-          <h1>Vlieg deze zomer voor een fractie van de prijs.</h1>
-        </div>
-        <a href="#deals" class="hero-pill">Bekijk alle empty legs ›</a>
+<section class="hero">
+  <img class="hero-bg" src="images/advantage-bereik.jpg" alt="">
+  <div class="hero-inner">
+    <div>
+      <span class="hero-badge">EMPTY LEG MARKETPLACE</span>
+      <h1>Vlieg privé voor een <em>fractie</em> van de prijs.</h1>
+      <p class="hero-lead">Privéjets vliegen dagelijks leeg terug naar hun basis. Boek die lege vlucht en reis tot 75% goedkoper, zonder rijen en zonder tussenstops.</p>
+      <div class="hero-actions">
+        <a href="#deals" class="hero-btn primary">Bekijk empty legs →</a>
+        <a href="#how" class="hero-btn ghost">Hoe het werkt</a>
+      </div>
+      <div class="hero-stats">
+        <div><strong>60–75%</strong><span>onder charterprijs</span></div>
+        <div><strong>5.000+</strong><span>vliegvelden bereikbaar</span></div>
+        <div><strong>15 min</strong><span>voor vertrek aanwezig</span></div>
       </div>
     </div>
-    <div class="hero-side">
-      <div class="hero-tile">
-        <img src="images/jet-citation-cj3.jpg" alt="Beste deals">
-        <div class="hero-shade"></div>
-        <a href="#deals" class="hero-pill">Beste deals ›</a>
+
+    <div class="hero-deal">
+      <div class="hero-deal-img">
+        <img src="images/jet-citation-cj3.jpg" alt="Cessna Citation CJ3">
+        <span class="hero-deal-tag">DEAL VAN DE WEEK</span>
       </div>
-      <div class="hero-tile">
-        <img src="images/route-vannuys-aspen.jpg" alt="Besneeuwde bergen bij Aspen">
-        <div class="hero-shade"></div>
-        <a href="#how" class="hero-pill">Hoe het werkt ›</a>
+      <div class="hero-deal-body">
+        <div class="hero-deal-route"><span>Teterboro</span><span class="line"></span><span>West Palm Beach</span></div>
+        <div class="hero-deal-meta">Do 30 jul · 14:00 · Cessna Citation CJ3 · tot 8 passagiers</div>
+        <div class="hero-deal-foot">
+          <div><div class="old">€11.500</div><div class="now">€4.200</div></div>
+          <a href="#deals">Bekijk deal ›</a>
+        </div>
       </div>
     </div>
   </div>
-</div>
+</section>
 
 <section id="deals">
   <div class="deals-head">
@@ -719,6 +804,17 @@
 </footer>
 
 <script>
+  (function(){
+    const header = document.getElementById('top');
+    const toggle = document.getElementById('menuToggle');
+    function setOpen(open){
+      header.classList.toggle('open', open);
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    }
+    toggle.addEventListener('click', ()=> setOpen(!header.classList.contains('open')));
+    document.querySelectorAll('#menu a').forEach(a => a.addEventListener('click', ()=> setOpen(false)));
+  })();
+
   (function(){
     const track = document.getElementById('dealsTrack');
     const prevBtn = document.getElementById('dealsPrev');
