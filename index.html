@@ -1033,8 +1033,8 @@
       <p class="section-lead">Laat je e-mailadres achter en we sturen je de nieuwste empty legs zodra ze beschikbaar zijn.</p>
     </div>
     <div class="cta-form">
-      <form onsubmit="event.preventDefault(); this.querySelector('button').textContent='Aangemeld ✓';">
-        <input type="email" placeholder="jij@voorbeeld.nl" required aria-label="E-mailadres">
+      <form id="signupForm">
+        <input type="email" name="email" placeholder="jij@voorbeeld.nl" required aria-label="E-mailadres">
         <button type="submit">Hou me op de hoogte</button>
       </form>
       <p class="form-note">Routes en tijden kunnen wijzigen — operators kunnen een leg tot vlak voor vertrek aanpassen of annuleren.</p>
@@ -1074,6 +1074,33 @@
 </footer>
 
 <script>
+  // Booking requests and sign-ups are delivered by FormSubmit (formsubmit.co) to this address.
+  // The first submission triggers a one-time activation mail from FormSubmit to this inbox.
+  const REQUEST_EMAIL = 'dutchjet0@gmail.com';
+  function sendRequest(subject, fields){
+    return fetch('https://formsubmit.co/ajax/' + REQUEST_EMAIL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(Object.assign({ _subject: subject, _template: 'table', _captcha: 'false' }, fields))
+    })
+      .then(r => r.json())
+      .then(d => { if (String(d.success) !== 'true') throw new Error(d.message || 'Versturen mislukt'); return d; });
+  }
+
+  (function(){
+    const form = document.getElementById('signupForm');
+    if(!form) return;
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      const btn = form.querySelector('button');
+      const email = form.elements.email.value;
+      btn.disabled = true; btn.textContent = 'Versturen…';
+      sendRequest('Nieuwe aanmelding voor empty leg-alerts', { 'E-mail': email, _replyto: email })
+        .then(() => { btn.textContent = 'Aangemeld ✓'; form.elements.email.disabled = true; })
+        .catch(() => { btn.disabled = false; btn.textContent = 'Opnieuw proberen'; });
+    });
+  })();
+
   (function(){
     const header = document.getElementById('top');
     const toggle = document.getElementById('menuToggle');
@@ -1175,17 +1202,22 @@
     const cities = [...new Set(legs.flatMap(l => [l.from, l.to]))].sort((a, b) => a.localeCompare(b, 'nl'));
     $('cityList').innerHTML = cities.map(c => `<option value="${esc(c)}">`).join('');
 
-    // popular routes: the five cheapest distinct routes
-    const seen = new Set();
-    const popular = legs.slice().sort((a, b) => a.priceNum - b.priceNum)
-      .filter(l => { const k = l.from + '|' + l.to; if (seen.has(k)) return false; seen.add(k); return true; })
-      .slice(0, 5);
-    $('popularList').innerHTML = popular.map((l, i) =>
-      `<button type="button" class="chip" data-i="${i}">${esc(l.from)} → ${esc(l.to)} <small>vanaf ${esc(l.price)}</small></button>`).join('');
+    const hit = (q, name, region) => !q || name.toLowerCase().includes(q) || region.toLowerCase().includes(q);
+
+    // popular routes from Amsterdam, most popular first; the price comes from a matching empty leg
+    const POPULAR_FROM = 'Amsterdam';
+    const POPULAR_TO = ['Londen', 'Nice', 'Ibiza', 'Cannes', 'Genève', 'Mykonos'];
+    const popular = POPULAR_TO.map(to => {
+      const cheapest = legs
+        .filter(l => hit(POPULAR_FROM.toLowerCase(), l.from, l.fromRegion) && hit(to.toLowerCase(), l.to, l.toRegion))
+        .sort((a, b) => a.priceNum - b.priceNum)[0];
+      return { to, price: cheapest ? cheapest.price : '' };
+    });
+    $('popularList').innerHTML = popular.map((p, i) =>
+      `<button type="button" class="chip" data-i="${i}">${esc(POPULAR_FROM)} → ${esc(p.to)} <small>${p.price ? 'vanaf ' + esc(p.price) : 'op aanvraag'}</small></button>`).join('');
     $('popularList').addEventListener('click', e => {
       const chip = e.target.closest('.chip'); if (!chip) return;
-      const l = popular[+chip.dataset.i];
-      fromIn.value = l.from; toIn.value = l.to;
+      fromIn.value = POPULAR_FROM; toIn.value = popular[+chip.dataset.i].to;
       form.requestSubmit();
     });
 
@@ -1195,8 +1227,6 @@
     paxIn.addEventListener('change', () => paxIn.classList.toggle('empty', !paxIn.value));
 
     $('sbSwap').addEventListener('click', () => { [fromIn.value, toIn.value] = [toIn.value, fromIn.value]; });
-
-    const hit = (q, name, region) => !q || name.toLowerCase().includes(q) || region.toLowerCase().includes(q);
     function daysApart(leg, iso){
       if (leg.month < 0) return Infinity;
       const d = new Date(iso + 'T00:00');
@@ -1285,12 +1315,26 @@
         <p class="bf-note">Je boeking is pas definitief na bevestiging door de operator. Routes en tijden kunnen tot vlak voor vertrek wijzigen.</p>`;
       f.addEventListener('submit', ev => {
         ev.preventDefault();
-        const email = f.elements.email.value;
-        f.innerHTML = `
-          <div class="bf-done"><span class="tick">✓</span>
-            <div><h3>Aanvraag ontvangen</h3>
-            <p class="bf-summary">${esc(title)} · ${esc(details)}. We nemen contact met je op via ${esc(email)}.</p></div>
-          </div>`;
+        const name = f.elements.name.value, email = f.elements.email.value, phone = f.elements.phone.value;
+        const btn = f.querySelector('button[type=submit]');
+        const note = f.querySelector('.bf-note');
+        btn.disabled = true; btn.textContent = 'Versturen…';
+        sendRequest(title + ' (' + details + ')', {
+          'Aanvraag': title,
+          'Details': details,
+          'Gezocht': summary(),
+          'Naam': name, 'E-mail': email, 'Telefoon': phone || '-',
+          _replyto: email
+        }).then(() => {
+          f.innerHTML = `
+            <div class="bf-done"><span class="tick">✓</span>
+              <div><h3>Aanvraag verstuurd</h3>
+              <p class="bf-summary">${esc(title)} · ${esc(details)}. We nemen contact met je op via ${esc(email)}.</p></div>
+            </div>`;
+        }).catch(() => {
+          btn.disabled = false; btn.textContent = 'Opnieuw proberen';
+          note.textContent = 'Versturen is niet gelukt. Probeer het opnieuw of mail ons via ' + REQUEST_EMAIL + '.';
+        });
       });
       results.appendChild(f);
       f.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
