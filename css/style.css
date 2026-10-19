@@ -753,3 +753,93 @@ footer ul a:hover, .footer-bottom a:hover{ color: var(--accent); }
 }
 .form-done h3{ font-family:'Playfair Display', serif; font-size: 1.5rem; }
 .form-done p{ color: var(--text-dim); margin-top: 6px; }
+/* =====================================================================
+   Detail pop-up for one empty leg
+   ===================================================================== */
+.req-modal.is-detail{ width: min(1040px, calc(100% - 32px)); max-height: calc(100% - 32px); }
+.dt{ display:flex; flex-direction:column; min-height: 100%; }
+.dt-top{ display:grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); }
+.dt-gallery{ position: relative; min-height: 420px; background: var(--navy); border-bottom-right-radius: 18px; overflow: hidden; }
+.dt-gallery img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; }
+.dt-gallery img.crop-phenom{ object-position: center 35%; }
+.dt-gallery::after{ content:''; position:absolute; inset:auto 0 0 0; height: 40%; background: linear-gradient(0deg, rgba(30,46,61,0.55), rgba(30,46,61,0)); pointer-events:none; }
+.req-modal .dt-close{
+  position:absolute; top: 16px; left: 16px; z-index: 2; width: 40px; height: 40px; padding: 0; border-radius: 50%;
+  background: rgba(255,255,255,0.92); color: var(--navy); font-size: 1.3rem; line-height: 1; letter-spacing: 0;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+.req-modal .dt-close:hover{ background: var(--white); }
+.req-modal .dt-nav{
+  position:absolute; top: 50%; transform: translateY(-50%); z-index: 2; width: 40px; height: 40px; padding: 0; border-radius: 50%;
+  background: rgba(30,46,61,0.7); color: var(--white); font-size: 1.3rem; letter-spacing: 0;
+}
+.req-modal .dt-nav.prev{ left: 14px; } .req-modal .dt-nav.next{ right: 14px; }
+.dt-count{ position:absolute; right: 16px; bottom: 16px; z-index: 2; background: rgba(30,46,61,0.75); color: var(--white); font-size: 0.78rem; padding: 6px 12px; border-radius: 999px; }
+.dt-tag{
+  position:absolute; left: 16px; bottom: 16px; z-index: 2;
+  background: rgba(30,46,61,0.85); color: var(--white); font-size: 0.82rem; font-weight: 600;
+  padding: 8px 14px; border-radius: 999px; -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);
+}
+.dt-discount{
+  position:absolute; top: 18px; right: 16px; z-index: 2;
+  background: var(--accent); color: var(--white); font-size: 0.8rem; font-weight: 700; padding: 6px 12px; border-radius: 999px;
+}
+.dt-info{ padding: 26px 28px 24px; display:flex; flex-direction:column; gap: 20px; }
+.dt-route{ display:grid; grid-template-columns: 1fr auto 1fr; gap: 14px; align-items:start; }
+.dt-route .dest{ text-align:right; }
+.dt-route strong{ display:block; font-size: 1.15rem; margin-top: 8px; }
+.dt-route small{ display:block; color: var(--text-dim); font-size: 0.85rem; }
+.dt-code{ display:inline-block; background: var(--navy); color: var(--white); font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; padding: 4px 8px; border-radius: 4px; }
+.dt-mid{ text-align:center; padding-top: 26px; min-width: 110px; }
+.dt-mid span{ color: var(--text-dim); font-size: 0.8rem; }
+.dt-mid i{ display:block; position:relative; height: 1px; margin-top: 8px; border-top: 1px dashed #b9c1ca; }
+.dt-mid i::before, .dt-mid i::after{ content:''; position:absolute; top: -3.5px; width: 6px; height: 6px; border-radius: 50%; background: var(--navy); }
+.dt-mid i::before{ left: -2px; } .dt-mid i::after{ right: -2px; background: var(--accent); }
+.dt-facts{ display:flex; justify-content:space-between; gap: 16px; padding-top: 18px; border-top: 1px solid var(--panel-line); }
+.dt-facts .right{ text-align:right; }
+.dt-facts strong{ display:block; margin-top: 6px; font-size: 0.98rem; }
+.dt-label{ display:inline-flex; align-items:center; gap: 8px; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.14em; color: var(--text-dim); }
+.dt-flex{ font-style: normal; color: var(--accent-hover); background: #fff1e9; border: 1px solid #fbd3bd; border-radius: 999px; padding: 2px 9px; font-size: 0.66rem; }
+.dt-map{
+  position: relative; flex: 1; min-height: 210px; border-radius: 14px; overflow: hidden;
+  background: var(--panel); border: 1px solid var(--panel-line); z-index: 0;
+}
+.dt-map.is-off{ display:flex; align-items:center; justify-content:center; color: var(--text-dim); font-size: 0.85rem; }
+.dt-dist{
+  position:absolute; top: 10px; left: 10px; z-index: 500;
+  background: var(--white); color: var(--navy); font-size: 0.8rem; font-weight: 600;
+  padding: 6px 12px; border-radius: 999px; box-shadow: 0 2px 8px rgba(30,46,61,0.15);
+}
+.dt-pin{ display:block; width: 16px; height: 16px; border-radius: 50%; border: 3px solid var(--white); box-shadow: 0 2px 6px rgba(0,0,0,0.3); }
+.dt-plane-icon{ display:block; width: 22px; height: 22px; }
+.dt-section{ padding: 24px 28px; border-top: 1px solid var(--panel-line); margin-top: 8px; }
+.dt-specs{ display:grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 14px; }
+.dt-specs div{ background: var(--panel); border-radius: 12px; padding: 14px 16px; }
+.dt-specs small{ display:block; color: var(--text-dim); font-size: 0.78rem; }
+.dt-specs strong{ display:block; margin-top: 4px; font-size: 0.98rem; }
+.dt-specs s{ color: var(--text-dim); font-weight: 500; }
+.dt-specs .accent{ color: var(--accent); }
+.dt-note{ color: var(--text-dim); font-size: 0.8rem; margin-top: 14px; }
+.dt-bar{
+  position: sticky; bottom: 0; z-index: 3; margin-top: auto;
+  display:flex; justify-content:space-between; align-items:center; gap: 16px;
+  background: var(--white); border-top: 1px solid var(--panel-line); padding: 16px 28px;
+  box-shadow: 0 -8px 24px rgba(30,46,61,0.06);
+}
+.dt-bar strong{ display:block; font-size: 1.6rem; color: var(--navy); font-variant-numeric: tabular-nums; line-height: 1.1; }
+.dt-bar small{ color: var(--text-dim); font-size: 0.82rem; }
+.req-modal .dt-book{ padding: 15px 28px; font-size: 0.88rem; letter-spacing: 0.08em; box-shadow: 0 8px 20px rgba(240,108,37,0.3); }
+@media (max-width: 860px){
+  .dt-top{ grid-template-columns: minmax(0, 1fr); }
+  .dt-gallery{ min-height: 240px; border-radius: 0; }
+  .dt-specs{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 480px){
+  .dt-info, .dt-section{ padding-left: 18px; padding-right: 18px; }
+  .dt-bar{ padding: 14px 18px; }
+  .dt-mid{ min-width: 70px; }
+  .dt-route strong{ font-size: 1rem; }
+  .req-modal .dt-book{ padding: 14px 18px; }
+}
+/* soften the OpenStreetMap colours so the route stands out */
+.dt-map .leaflet-tile-pane{ filter: saturate(0.55) brightness(1.04); }

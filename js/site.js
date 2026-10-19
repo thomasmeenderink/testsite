@@ -124,6 +124,12 @@ function sendRequest(subject, fields){
     document.body.appendChild(modal);
   }
   modal.addEventListener('click', e => { if (e.target === modal) modal.close(); });
+  // one dialog serves every pop-up; the detail view is wider
+  function show(detail){
+    modal.classList.toggle('is-detail', !!detail);
+    modal.scrollTop = 0;
+    if (!modal.open) modal.showModal();
+  }
 
   /* ---------- empty legs come from js/deals.js ---------- */
   const MONTHS = ['jan','feb','mrt','apr','mei','jun','jul','aug','sep','okt','nov','dec'];
@@ -242,7 +248,7 @@ function sendRequest(subject, fields){
         route + ' · ' + trip + ' · ' + pax + '. We sturen je zo snel mogelijk een voorstel via ' + email + '.'))
         .catch(() => showError(f));
     });
-    modal.showModal();
+    show(false);
     const firstEmpty = ['from', 'to', 'date', 'pax', 'name'].map(n => f.elements[n]).find(el => !el.value);
     (firstEmpty || f.elements.name).focus();
   }
@@ -274,7 +280,7 @@ function sendRequest(subject, fields){
         </div>`;
       modal.querySelector('[data-to-new]').addEventListener('click', () => { modal.close(); openRequest(q); });
       closeButton();
-      modal.showModal();
+      show(false);
       modal.querySelector('[data-to-new]').focus();
       return;
     }
@@ -327,14 +333,160 @@ function sendRequest(subject, fields){
         route + ' · ' + details + '. We bevestigen je reservering zo snel mogelijk via ' + email + '.'))
         .catch(() => showError(f));
     });
-    modal.showModal();
+    show(false);
     f.elements.name.focus();
+  }
+
+  /* ---------- pop-up: details of one empty leg ---------- */
+  const toRad = d => d * Math.PI / 180, toDeg = r => r * 180 / Math.PI;
+  function distanceNm(a, b){
+    const dLat = toRad(b[0] - a[0]), dLon = toRad(b[1] - a[1]);
+    const h = Math.sin(dLat / 2) ** 2 + Math.cos(toRad(a[0])) * Math.cos(toRad(b[0])) * Math.sin(dLon / 2) ** 2;
+    return 2 * 3440.065 * Math.asin(Math.sqrt(h));
+  }
+  // points along the great circle, so long routes curve like on a real flight map
+  function greatCircle(a, b, n){
+    const [φ1, λ1, φ2, λ2] = [a[0], a[1], b[0], b[1]].map(toRad);
+    const d = 2 * Math.asin(Math.sqrt(Math.sin((φ2 - φ1) / 2) ** 2 + Math.cos(φ1) * Math.cos(φ2) * Math.sin((λ2 - λ1) / 2) ** 2));
+    if (d === 0) return [a, b];
+    return Array.from({ length: n + 1 }, (_, i) => {
+      const f = i / n, A = Math.sin((1 - f) * d) / Math.sin(d), B = Math.sin(f * d) / Math.sin(d);
+      const x = A * Math.cos(φ1) * Math.cos(λ1) + B * Math.cos(φ2) * Math.cos(λ2);
+      const y = A * Math.cos(φ1) * Math.sin(λ1) + B * Math.cos(φ2) * Math.sin(λ2);
+      const z = A * Math.sin(φ1) + B * Math.sin(φ2);
+      return [toDeg(Math.atan2(z, Math.sqrt(x * x + y * y))), toDeg(Math.atan2(y, x))];
+    });
+  }
+
+  // the map library is only downloaded the first time someone opens a detail pop-up
+  let leaflet;
+  function loadLeaflet(){
+    if (window.L) return Promise.resolve();
+    if (!leaflet) leaflet = new Promise((resolve, reject) => {
+      const css = document.createElement('link');
+      css.rel = 'stylesheet'; css.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+      document.head.appendChild(css);
+      const js = document.createElement('script');
+      js.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+      js.onload = resolve; js.onerror = () => { leaflet = null; reject(); };
+      document.head.appendChild(js);
+    });
+    return leaflet;
+  }
+  const PLANE_SVG = '<svg viewBox="0 0 24 24" width="22" height="22"><path fill="#1E2E3D" stroke="#fff" stroke-width="1" d="M21,16v-2l-8-5V3.5C13,2.67,12.33,2,11.5,2S10,2.67,10,3.5V9l-8,5v2l8-2.5V19l-2.5,1.5V22L11.5,21l3.5,1.5v-1.5L12.5,19v-4.5L21,16z"/></svg>';
+
+  function drawMap(el, a, b){
+    const map = L.map(el, { scrollWheelZoom: false, zoomControl: false, attributionControl: true });
+    L.control.zoom({ position: 'topright' }).addTo(map);
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 18,
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }).addTo(map);
+    const path = greatCircle(a, b, 64);
+    L.polyline(path, { color: '#1E2E3D', weight: 2.5, opacity: 0.85 }).addTo(map);
+    const pin = color => L.divIcon({ className: '', html: `<span class="dt-pin" style="background:${color}"></span>`, iconSize: [16, 16], iconAnchor: [8, 8] });
+    L.marker(a, { icon: pin('#1E2E3D'), keyboard: false }).addTo(map);
+    L.marker(b, { icon: pin('#F06C25'), keyboard: false }).addTo(map);
+    map.fitBounds(L.latLngBounds(path), { padding: [36, 36] });
+    // plane halfway, turned along the line as it looks on screen
+    const mid = Math.floor(path.length / 2);
+    const p1 = map.latLngToLayerPoint(path[mid - 1]), p2 = map.latLngToLayerPoint(path[mid + 1]);
+    const angle = toDeg(Math.atan2(p2.y - p1.y, p2.x - p1.x)) + 90;
+    L.marker(path[mid], { keyboard: false, interactive: false, icon: L.divIcon({
+      className: '', iconSize: [22, 22], iconAnchor: [11, 11],
+      html: `<span class="dt-plane-icon" style="transform: rotate(${angle}deg)">${PLANE_SVG}</span>`
+    }) }).addTo(map);
+    setTimeout(() => map.invalidateSize(), 50);
+  }
+
+  function openDetail(l){
+    const a = typeof AIRPORTS !== 'undefined' ? AIRPORTS[l.fromCode] : null;
+    const b = typeof AIRPORTS !== 'undefined' ? AIRPORTS[l.toCode] : null;
+    const nm = a && b ? Math.round(distanceNm(a, b)) : null;
+    const flexible = /beschikbaar tussen/i.test(l.when);
+    const old = +l.oldPrice.replace(/\D/g, '');
+    const pct = old ? Math.round((1 - l.priceNum / old) * 100) : 0;
+    const cls = l.cap.split(' · ')[0];
+    const images = l.images || [l.img];
+    const fmt = n => n.toLocaleString('nl-NL');
+
+    modal.innerHTML = `
+      <div class="dt">
+        <div class="dt-top">
+          <div class="dt-gallery">
+            <img src="${esc(images[0])}" alt="${esc(l.plane)}"${l.imgClass ? ` class="${esc(l.imgClass)}"` : ''}>
+            <button type="button" class="dt-close req-close-btn" aria-label="Sluiten">×</button>
+            ${images.length > 1 ? `
+              <button type="button" class="dt-nav prev" aria-label="Vorige foto">‹</button>
+              <button type="button" class="dt-nav next" aria-label="Volgende foto">›</button>
+              <span class="dt-count">1 / ${images.length}</span>` : ''}
+            <span class="dt-tag">${esc(l.plane)} · ${esc(cls)}</span>
+            ${pct ? `<span class="dt-discount">−${pct}%</span>` : ''}
+          </div>
+          <div class="dt-info">
+            <div class="dt-route">
+              <div><span class="dt-code">${esc(l.fromCode)}</span><strong>${esc(l.from)}</strong><small>${esc(l.fromRegion)}</small></div>
+              <div class="dt-mid"><span>${esc(l.duration)}</span><i></i></div>
+              <div class="dest"><span class="dt-code">${esc(l.toCode)}</span><strong>${esc(l.to)}</strong><small>${esc(l.toRegion)}</small></div>
+            </div>
+            <div class="dt-facts">
+              <div>
+                <span class="dt-label">VERTREK ${flexible ? '<em class="dt-flex">FLEXIBEL</em>' : ''}</span>
+                <strong><span aria-hidden="true">🕓</span> ${esc(l.when)}</strong>
+              </div>
+              <div class="right">
+                <span class="dt-label">PASSAGIERS</span>
+                <strong>Tot ${l.seats || '?'}</strong>
+              </div>
+            </div>
+            <div class="dt-map" id="dtMap">${nm ? `<span class="dt-dist">● ${fmt(nm)} nm</span>` : ''}</div>
+          </div>
+        </div>
+
+        <div class="dt-section">
+          <span class="dt-label">OVER DEZE VLUCHT</span>
+          <div class="dt-specs">
+            <div><small>Toestel</small><strong>${esc(l.plane)}</strong></div>
+            <div><small>Klasse</small><strong>${esc(cls)}</strong></div>
+            <div><small>Vluchtduur</small><strong>${esc(l.duration)}</strong></div>
+            <div><small>Afstand</small><strong>${nm ? fmt(nm) + ' nm · ' + fmt(Math.round(nm * 1.852)) + ' km' : '–'}</strong></div>
+            <div><small>Normale prijs</small><strong><s>${esc(l.oldPrice)}</s></strong></div>
+            <div><small>Je bespaart</small><strong class="accent">${pct ? pct + '%' : '–'}</strong></div>
+          </div>
+          <p class="dt-note">Een empty leg is pas definitief na bevestiging door de operator. Als de oorspronkelijke vlucht wijzigt, kan ook deze vlucht veranderen of vervallen.</p>
+        </div>
+
+        <div class="dt-bar">
+          <div><strong>${esc(l.price)}</strong><small>Heel toestel · tot ${l.seats || '?'} passagiers</small></div>
+          <button type="button" class="dt-book">RESERVEER ›</button>
+        </div>
+      </div>`;
+
+    modal.querySelector('.dt-close').addEventListener('click', () => modal.close());
+    modal.querySelector('.dt-book').addEventListener('click', () => openLegs({ pax: '1' }, [l]));
+    if (images.length > 1) {
+      let i = 0;
+      const img = modal.querySelector('.dt-gallery img'), count = modal.querySelector('.dt-count');
+      const go = step => { i = (i + step + images.length) % images.length; img.src = images[i]; count.textContent = (i + 1) + ' / ' + images.length; };
+      modal.querySelector('.dt-nav.prev').addEventListener('click', () => go(-1));
+      modal.querySelector('.dt-nav.next').addEventListener('click', () => go(1));
+    }
+    show(true);
+    modal.querySelector('.dt-book').focus({ preventScroll: true });
+
+    const mapEl = modal.querySelector('#dtMap');
+    if (a && b) {
+      loadLeaflet().then(() => { if (mapEl.isConnected) drawMap(mapEl, a, b); })
+        .catch(() => { mapEl.classList.add('is-off'); mapEl.insertAdjacentHTML('beforeend', '<p>De kaart kon niet worden geladen.</p>'); });
+    } else {
+      mapEl.classList.add('is-off');
+    }
   }
 
   /* ---------- buttons anywhere on the page ---------- */
   document.addEventListener('click', e => {
     const dealBtn = e.target.closest('[data-deal]');
-    if (dealBtn) { const l = legs[+dealBtn.dataset.deal]; if (l) openLegs({ pax: '1' }, [l]); return; }
+    if (dealBtn) { const l = legs[+dealBtn.dataset.deal]; if (l) openDetail(l); return; }
     const reqBtn = e.target.closest('[data-open-request]');
     if (reqBtn) { e.preventDefault(); openRequest({ from: reqBtn.dataset.from || '', to: reqBtn.dataset.to || '' }); }
   });
