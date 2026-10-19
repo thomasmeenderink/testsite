@@ -222,6 +222,58 @@
   </div>
 </section>
 
+<section id="over-ons" class="section-grey">
+  <div class="split center">
+    <div class="prose">
+      <span class="section-label">OVER DUTCHJET</span>
+      <h2 class="section-title">Privé vliegen, <em>eerlijk</em> geprijsd</h2>
+      <p>Elke dag vliegen privéjets leeg naar hun volgende opdracht. DutchJet brengt die lege vluchten in beeld en maakt ze eenvoudig te reserveren. Staat jouw route er niet tussen, dan zoeken we een toestel dat wel past.</p>
+      <div class="cards two" style="margin-top: 28px;">
+        <div class="card"><div class="card-icon">€</div><h3>Transparant</h3><p>Vooraf duidelijke prijzen, zonder lidmaatschap.</p></div>
+        <div class="card"><div class="card-icon">✈</div><h3>Persoonlijk</h3><p>Eén aanspreekpunt van aanvraag tot landing.</p></div>
+      </div>
+      <div class="btn-row" style="margin-top: 28px;"><a href="over-ons.html" class="btn dark">Meer over ons →</a></div>
+    </div>
+    <div class="photo"><img src="images/advantage-tijd.jpg" alt="Instappen zonder wachtrijen" loading="lazy"></div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="split">
+    <div>
+      <span class="section-label">VEELGESTELDE VRAGEN</span>
+      <h2 class="section-title">Alles wat je wilt <em>weten</em></h2>
+      <p class="section-lead">De vragen die we het vaakst krijgen. Meer antwoorden vind je op de pagina met alle veelgestelde vragen.</p>
+      <div class="btn-row" style="margin-top: 28px;">
+        <a href="faq.html" class="btn dark">Alle vragen →</a>
+        <a href="#contact" class="btn outline">Stel je vraag</a>
+      </div>
+    </div>
+    <div class="faq">
+      <details>
+        <summary>Wat is een empty leg?</summary>
+        <div class="answer"><p>Een empty leg is een vlucht van een privéjet zonder passagiers, bijvoorbeeld nadat een klant is afgezet en het toestel terug moet naar de thuisbasis. Omdat de vlucht toch al gepland staat, kun je die vaak voor een fractie van de normale charterprijs boeken.</p></div>
+      </details>
+      <details>
+        <summary>Betaal ik per stoel of voor het hele toestel?</summary>
+        <div class="answer"><p>De prijs van een empty leg geldt voor het hele toestel. Je kunt dus met je eigen gezelschap reizen tot het maximale aantal passagiers dat bij de vlucht staat.</p></div>
+      </details>
+      <details>
+        <summary>Kan een empty leg nog veranderen?</summary>
+        <div class="answer"><p>Ja. Verandert de oorspronkelijke opdracht, dan kan ook het tijdstip of de route van de empty leg veranderen, of kan de vlucht vervallen. Je reservering is daarom pas definitief na bevestiging door de operator.</p></div>
+      </details>
+      <details>
+        <summary>Is een aanvraag vrijblijvend?</summary>
+        <div class="answer"><p>Ja. Een aanvraag of reservering via de site is een verzoek. Je zit pas ergens aan vast nadat je het voorstel of de bevestiging hebt geaccepteerd.</p></div>
+      </details>
+      <details>
+        <summary>Hoe laat moet ik op het vliegveld zijn?</summary>
+        <div class="answer"><p>Bij privé vliegen ben je meestal kort voor vertrek aanwezig, vaak zo'n 15 minuten. De precieze tijd en de vertrekterminal ontvang je bij je bevestiging.</p></div>
+      </details>
+    </div>
+  </div>
+</section>
+
 <section class="cta" id="signup">
   <div class="cta-box on-dark">
     <img src="images/advantage-flexibiliteit.jpg" alt="">
@@ -237,6 +289,51 @@
       </form>
       <p class="form-note">Routes en tijden kunnen wijzigen — operators kunnen een leg tot vlak voor vertrek aanpassen of annuleren.</p>
     </div>
+  </div>
+</section>
+
+<section id="contact" class="section-grey">
+  <div class="split">
+    <div class="prose">
+      <span class="section-label">CONTACT</span>
+      <h2 class="section-title">We helpen je <em>graag</em> verder</h2>
+      <p>Heb je een vraag over een empty leg, een vlucht op maat of iets anders? Stuur ons een bericht, dan nemen we zo snel mogelijk contact met je op.</p>
+      <ul class="contact-list">
+        <li>
+          <span class="card-icon">✉</span>
+          <div><strong>E-mail</strong><a href="mailto:dutchjet0@gmail.com">dutchjet0@gmail.com</a></div>
+        </li>
+        <li>
+          <span class="card-icon">✈</span>
+          <div><strong>Direct een vlucht aanvragen</strong><span>Gebruik het <a href="privejet-charter.html#aanvragen" data-open-request>aanvraagformulier</a> met je route en datum.</span></div>
+        </li>
+        <li>
+          <span class="card-icon">?</span>
+          <div><strong>Veelgestelde vragen</strong><span>Misschien staat je antwoord al bij de <a href="faq.html">veelgestelde vragen</a>.</span></div>
+        </li>
+      </ul>
+    </div>
+
+    <form class="contact-form" id="contactForm" novalidate>
+      <h2>Stuur een bericht</h2>
+      <div class="req-fields">
+        <label class="full">ONDERWERP
+          <select name="topic" required>
+            <option value="Algemene vraag">Algemene vraag</option>
+            <option value="Empty leg">Empty leg</option>
+            <option value="Vlucht op maat">Vlucht op maat</option>
+            <option value="Bestaande aanvraag">Bestaande aanvraag of reservering</option>
+            <option value="Samenwerking">Samenwerking</option>
+          </select>
+        </label>
+        <label>NAAM<input name="name" required placeholder="Voor- en achternaam" autocomplete="name"></label>
+        <label>E-MAIL<input name="email" type="email" required placeholder="jij@voorbeeld.nl" autocomplete="email"></label>
+        <label class="full">TELEFOON<input name="phone" type="tel" placeholder="+31 6 12345678" autocomplete="tel"></label>
+        <label class="full">BERICHT<textarea name="message" required placeholder="Waar kunnen we je mee helpen?"></textarea></label>
+      </div>
+      <button type="submit" class="req-submit">Verstuur bericht</button>
+      <p class="req-note">We gebruiken je gegevens alleen om op je bericht te reageren.</p>
+    </form>
   </div>
 </section>
 
