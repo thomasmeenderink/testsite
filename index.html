@@ -316,6 +316,133 @@
     .step:not(:last-child)::after{ display:none; }
   }
 
+  /* --- build & book a flight --- */
+  .book{ overflow:hidden; background: var(--panel); padding-top: 110px; padding-bottom: 110px; }
+  .book > .book-bg{ position:absolute; inset:0; width:100%; max-width:none; height:100%; margin:0; object-fit:cover; }
+  .book::before{
+    content:''; position:absolute; inset:0; z-index:1;
+    background: linear-gradient(90deg, rgba(244,245,247,0.97) 0%, rgba(244,245,247,0.88) 50%, rgba(244,245,247,0.7) 100%);
+  }
+  .book-inner{ position:relative; z-index:2; }
+  .book .section-title{ font-size: clamp(2.4rem, 5vw, 4rem); max-width: none; }
+
+  .search-bar{
+    display:flex; align-items:center; margin-top: 36px;
+    background: var(--white); border-radius: 999px; padding: 10px 10px 10px 30px;
+    box-shadow: 0 2px 6px rgba(30,46,61,0.06), 0 18px 44px rgba(30,46,61,0.14);
+  }
+  .sb-field{ display:flex; flex-direction:column; gap: 4px; padding: 8px 18px; min-width: 0; cursor: text; }
+  .sb-field span{ font-size: 0.68rem; font-weight: 600; letter-spacing: 0.14em; color: var(--navy); }
+  .sb-field input, .sb-field select{
+    border: none; background: transparent; padding: 0; width: 100%;
+    font-family: 'Inter', sans-serif; font-size: 1rem; color: var(--navy);
+    appearance: none; -webkit-appearance: none;
+  }
+  .sb-field input::placeholder{ color: #6b7682; }
+  .sb-field select{ cursor: pointer; }
+  .sb-field select:invalid, .sb-field select.empty{ color: #6b7682; }
+  .sb-field input:focus, .sb-field select:focus{ outline: none; }
+  .sb-field:focus-within span{ color: var(--accent); }
+  .sb-from, .sb-to{ flex: 1.6 1 0; }
+  .sb-from{ padding-left: 0; }
+  .sb-when, .sb-pax{ flex: 1 1 0; border-left: 1px solid var(--panel-line); }
+  .search-bar .sb-swap{
+    flex: 0 0 auto; width: 44px; height: 44px; border-radius: 50%; padding: 0;
+    background: var(--white); color: var(--navy); border: 1px solid var(--panel-line);
+    font-size: 1.05rem; letter-spacing: 0; box-shadow: 0 2px 6px rgba(30,46,61,0.08);
+    transition: transform .2s ease;
+  }
+  .search-bar .sb-swap:hover{ background: var(--white); border-color: var(--navy); transform: rotate(180deg); }
+  .search-bar .sb-go{
+    flex: 0 0 auto; width: 60px; height: 60px; border-radius: 50%; padding: 0; margin-left: 8px;
+    display:flex; align-items:center; justify-content:center;
+    background: var(--accent); color: var(--white);
+    box-shadow: 0 8px 20px rgba(240,108,37,0.35);
+  }
+  .search-bar .sb-go:hover{ background: var(--accent-hover); }
+  .search-bar .sb-go svg{ width: 20px; height: 20px; }
+
+  .popular{ display:flex; align-items:center; gap: 14px; margin-top: 22px; }
+  .popular-label{ flex: 0 0 auto; font-size: 0.68rem; font-weight: 600; letter-spacing: 0.14em; color: var(--navy); }
+  .popular-list{ display:flex; gap: 10px; overflow-x:auto; scrollbar-width:none; padding: 2px; }
+  .popular-list::-webkit-scrollbar{ display:none; }
+  .popular-list .chip{
+    flex: 0 0 auto; display:inline-flex; align-items:center; gap: 8px;
+    background: rgba(255,255,255,0.75); color: var(--navy); border: 1px solid var(--panel-line);
+    padding: 10px 16px; border-radius: 10px; font-size: 0.85rem; font-weight: 600; letter-spacing: 0;
+    -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+  }
+  .popular-list .chip:hover{ background: var(--white); border-color: var(--navy); }
+  .popular-list .chip small{ font-size: 0.82rem; font-weight: 400; color: var(--text-dim); }
+
+  .book-results{ margin-top: 36px; }
+  .results-head{ display:flex; justify-content:space-between; align-items:baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+  .results-head h3{ font-family:'Playfair Display', serif; font-size: 1.4rem; }
+  .results-head p{ color: var(--text-dim); font-size: 0.85rem; }
+  .result-list{ display:grid; gap: 12px; }
+  .result{
+    display:grid; grid-template-columns: 1.6fr 1fr 1.2fr auto auto; gap: 20px; align-items:center;
+    background: var(--white); border-radius: 14px; padding: 18px 22px;
+    box-shadow: 0 1px 2px rgba(30,46,61,0.06), 0 8px 22px rgba(30,46,61,0.07);
+  }
+  .result .r-route{ font-weight: 700; font-size: 1.02rem; }
+  .result .r-route em{ font-style: normal; color: var(--accent); margin: 0 6px; }
+  .result .r-sub{ color: var(--text-dim); font-size: 0.8rem; margin-top: 2px; }
+  .result .r-price{ text-align:right; }
+  .result .r-price s{ color: var(--text-dim); font-size: 0.78rem; display:block; }
+  .result .r-price strong{ color: var(--accent); font-size: 1.35rem; font-variant-numeric: tabular-nums; }
+  .result .r-book, .no-results .r-book{
+    background: var(--navy); color: var(--white); font-size: 0.82rem; padding: 12px 18px; letter-spacing: 0.02em;
+  }
+  .result .r-book:hover, .no-results .r-book:hover{ background: #2b4157; }
+  .no-results{
+    display:flex; justify-content:space-between; align-items:center; gap: 20px; flex-wrap: wrap;
+    background: var(--white); border-radius: 14px; padding: 24px;
+    box-shadow: 0 8px 22px rgba(30,46,61,0.07);
+  }
+  .no-results p{ color: var(--text-dim); font-size: 0.92rem; max-width: 60ch; }
+  .no-results strong{ display:block; color: var(--navy); font-size: 1.05rem; margin-bottom: 4px; }
+
+  .book-form{
+    margin-top: 16px; background: var(--navy); color: var(--white);
+    border-radius: 16px; padding: 28px;
+  }
+  .book-form h3{ font-family:'Playfair Display', serif; font-size: 1.4rem; }
+  .book-form .bf-summary{ color: rgba(255,255,255,0.75); font-size: 0.9rem; margin-top: 6px; }
+  .book-form .bf-grid{ display:grid; grid-template-columns: repeat(3, minmax(0, 1fr)) auto; gap: 12px; margin-top: 20px; align-items:end; }
+  .result .r-when{ font-size: 0.9rem; }
+  .book-form label{ display:flex; flex-direction:column; gap: 6px; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.12em; color: rgba(255,255,255,0.7); }
+  .book-form input{
+    background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); color: var(--white);
+    border-radius: 8px; padding: 13px 14px; font-family:'Inter', sans-serif; font-size: 0.95rem;
+    width: 100%; min-width: 0;
+  }
+  .book-form input::placeholder{ color: rgba(255,255,255,0.45); }
+  .book-form input:focus{ outline: 2px solid var(--accent); outline-offset: 1px; }
+  .book-form .bf-done{ display:flex; align-items:center; gap: 14px; }
+  .book-form .bf-done .tick{
+    flex: 0 0 auto; width: 44px; height: 44px; border-radius: 50%; background: var(--accent);
+    display:flex; align-items:center; justify-content:center; font-size: 1.2rem;
+  }
+  .book-form .bf-note{ color: rgba(255,255,255,0.55); font-size: 0.76rem; margin-top: 14px; }
+
+  @media (max-width: 900px){
+    .search-bar{ flex-wrap: wrap; border-radius: 20px; padding: 14px; position: relative; }
+    .sb-field{ padding: 12px 14px; }
+    .sb-from, .sb-to{ flex: 1 1 100%; padding-left: 14px; }
+    .sb-to{ border-top: 1px solid var(--panel-line); }
+    .sb-when, .sb-pax{ flex: 1 1 40%; border-top: 1px solid var(--panel-line); }
+    .sb-when{ border-left: none; }
+    .search-bar .sb-swap{ position:absolute; right: 24px; top: 52px; z-index: 2; }
+    .search-bar .sb-go{ flex: 1 1 100%; height: 52px; border-radius: 12px; margin: 10px 0 0; }
+    .search-bar .sb-go::after{ content:'Zoek vluchten'; margin-left: 10px; font-weight: 600; }
+    .result{ grid-template-columns: 1fr auto; gap: 8px 16px; }
+    .result .r-when, .result .r-plane{ grid-column: 1; }
+    .result .r-price{ grid-column: 2; grid-row: 1 / span 2; }
+    .result .r-book{ grid-column: 1 / -1; }
+    .book-form .bf-grid{ grid-template-columns: 1fr; }
+  }
+
   /* --- advantages gallery --- */
   .adv-intro{ margin-bottom: 48px; }
   .adv-top{ display:grid; grid-template-columns: 2fr 1fr; gap: 22px; margin-bottom: 22px; }
@@ -353,15 +480,15 @@
     background: linear-gradient(90deg, rgba(30,46,61,0.96) 0%, rgba(30,46,61,0.85) 55%, rgba(30,46,61,0.6) 100%);
   }
   .cta-copy, .cta-form{ position:relative; z-index:2; }
-  form{
+  .cta-form form{
     display:flex; gap: 8px; background: var(--white); padding: 8px; border-radius: 10px;
   }
-  form:focus-within{ outline: 2px solid var(--accent); outline-offset: 3px; }
-  input[type=email]{
+  .cta-form form:focus-within{ outline: 2px solid var(--accent); outline-offset: 3px; }
+  .cta-form input[type=email]{
     flex: 1; min-width: 0; background: transparent; border: none; color: var(--text);
     padding: 14px 12px; font-family: 'Inter', sans-serif; font-size: 0.95rem;
   }
-  input[type=email]:focus{ outline: none; }
+  .cta-form input[type=email]:focus{ outline: none; }
   button{
     background: var(--accent); color: var(--white); border:none; font-weight:600;
     padding: 14px 24px; font-family: 'Inter', sans-serif; font-size: 0.9rem;
@@ -374,7 +501,7 @@
     .cta-box{ grid-template-columns: 1fr; padding: 48px 24px; gap: 28px; }
   }
   @media (max-width: 480px){
-    form{ flex-direction: column; }
+    .cta-form form{ flex-direction: column; }
   }
 
   /* --- footer --- */
@@ -386,8 +513,8 @@
     max-width: 1180px; margin: 0 auto;
     display:grid; grid-template-columns: 2fr 1fr 1fr; gap: 40px;
   }
-  .footer-logo{ display:inline-block; background: var(--white); border-radius: 10px; padding: 8px 12px; }
-  .footer-logo img{ display:block; height: 40px; width:auto; }
+  .footer-logo{ display:inline-block; }
+  .footer-logo img{ display:block; height: 52px; width:auto; }
   .footer-grid p{ margin-top: 18px; max-width: 38ch; }
   footer h4{ color: var(--white); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.16em; margin-bottom: 16px; }
   footer ul{ list-style: none; }
@@ -418,6 +545,7 @@
     <nav class="menu" id="menu">
       <a href="#deals">Empty legs</a>
       <a href="#how">Hoe het werkt</a>
+      <a href="#boeken">Vlucht boeken</a>
       <a href="#voordelen">Voordelen</a>
       <a href="#signup" class="menu-cta">Meld je aan</a>
     </nav>
@@ -799,6 +927,49 @@
   </div>
 </section>
 
+<section id="boeken" class="book">
+  <img class="book-bg" src="images/advantage-tijd.jpg" alt="">
+  <div class="book-inner">
+    <span class="section-label">VLUCHT SAMENSTELLEN</span>
+    <h2 class="section-title">Waar gaan we <em>naartoe</em>?</h2>
+    <p class="section-lead">Kies je route, datum en het aantal passagiers. Je ziet meteen welke empty legs passen, of je vraagt in één stap een privévlucht aan.</p>
+
+    <form class="search-bar" id="flightSearch" autocomplete="off">
+      <label class="sb-field sb-from"><span>VAN</span><input id="sbFrom" list="cityList" placeholder="Overal"></label>
+      <button type="button" class="sb-swap" id="sbSwap" aria-label="Wissel vertrek en bestemming">⇆</button>
+      <label class="sb-field sb-to"><span>NAAR</span><input id="sbTo" list="cityList" placeholder="Overal"></label>
+      <label class="sb-field sb-when"><span>WANNEER</span><input id="sbWhen" type="text" placeholder="Altijd"></label>
+      <label class="sb-field sb-pax"><span>PASSAGIERS</span>
+        <select id="sbPax" class="empty">
+          <option value="">Passagiers</option>
+          <option value="1">1 passagier</option>
+          <option value="2">2 passagiers</option>
+          <option value="3">3 passagiers</option>
+          <option value="4">4 passagiers</option>
+          <option value="5">5 passagiers</option>
+          <option value="6">6 passagiers</option>
+          <option value="7">7 passagiers</option>
+          <option value="8">8 passagiers</option>
+          <option value="9">9 passagiers</option>
+          <option value="10">10 passagiers</option>
+          <option value="12">12+ passagiers</option>
+        </select>
+      </label>
+      <button type="submit" class="sb-go" aria-label="Zoek vluchten">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4.2-4.2"/></svg>
+      </button>
+    </form>
+    <datalist id="cityList"></datalist>
+
+    <div class="popular">
+      <span class="popular-label">POPULAIR</span>
+      <div class="popular-list" id="popularList"></div>
+    </div>
+
+    <div class="book-results" id="bookResults" hidden></div>
+  </div>
+</section>
+
 <section id="voordelen">
   <div class="adv-intro">
     <span class="section-label">WAAROM PRIVÉ VLIEGEN</span>
@@ -874,7 +1045,7 @@
 <footer>
   <div class="footer-grid">
     <div>
-      <a href="#top" class="footer-logo"><img src="images/logo.webp" alt="Naar boven"></a>
+      <a href="#top" class="footer-logo"><img src="images/logo-light.webp" alt="Naar boven"></a>
       <p>Empty legs, real prices. Vlieg privé op routes die toch al gevlogen worden, voor een fractie van de charterprijs.</p>
     </div>
     <div>
@@ -882,6 +1053,7 @@
       <ul>
         <li><a href="#deals">Empty legs</a></li>
         <li><a href="#how">Hoe het werkt</a></li>
+        <li><a href="#boeken">Vlucht boeken</a></li>
         <li><a href="#voordelen">Voordelen</a></li>
         <li><a href="#signup">Meld je aan</a></li>
       </ul>
@@ -968,6 +1140,162 @@
     });
 
     buildDots();
+  })();
+
+  (function(){
+    const form = document.getElementById('flightSearch');
+    if(!form) return;
+    const $ = id => document.getElementById(id);
+    const fromIn = $('sbFrom'), toIn = $('sbTo'), whenIn = $('sbWhen'), paxIn = $('sbPax');
+    const results = $('bookResults');
+    const MONTHS = ['jan','feb','mrt','apr','mei','jun','jul','aug','sep','okt','nov','dec'];
+    const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    const text = el => el ? el.textContent.trim() : '';
+    const placeName = el => el ? el.firstChild.textContent.trim() : '';
+
+    // The deal cards are the single source of truth for which legs can be booked.
+    const legs = Array.from(document.querySelectorAll('#dealsTrack .deal-card')).map(card => {
+      const places = card.querySelectorAll('.route-cities .place');
+      const when = text(card.querySelector('.deal-when'));
+      const m = when.match(/(\d{1,2}) ([a-z]{3})/);
+      const cap = text(card.querySelector('.deal-plane .cap'));
+      const price = text(card.querySelector('.deal-plane .price'));
+      return {
+        from: placeName(places[0]), fromRegion: text(places[0].querySelector('.region')),
+        to: placeName(places[1]), toRegion: text(places[1].querySelector('.region')),
+        when, day: m ? +m[1] : null, month: m ? MONTHS.indexOf(m[2]) : -1,
+        plane: text(card.querySelector('.deal-plane .name')), cap,
+        seats: +((cap.match(/tot (\d+)/) || [])[1] || 0),
+        oldPrice: text(card.querySelector('.deal-plane .price-old')),
+        price, priceNum: +price.replace(/\D/g, '')
+      };
+    });
+
+    // city suggestions
+    const cities = [...new Set(legs.flatMap(l => [l.from, l.to]))].sort((a, b) => a.localeCompare(b, 'nl'));
+    $('cityList').innerHTML = cities.map(c => `<option value="${esc(c)}">`).join('');
+
+    // popular routes: the five cheapest distinct routes
+    const seen = new Set();
+    const popular = legs.slice().sort((a, b) => a.priceNum - b.priceNum)
+      .filter(l => { const k = l.from + '|' + l.to; if (seen.has(k)) return false; seen.add(k); return true; })
+      .slice(0, 5);
+    $('popularList').innerHTML = popular.map((l, i) =>
+      `<button type="button" class="chip" data-i="${i}">${esc(l.from)} → ${esc(l.to)} <small>vanaf ${esc(l.price)}</small></button>`).join('');
+    $('popularList').addEventListener('click', e => {
+      const chip = e.target.closest('.chip'); if (!chip) return;
+      const l = popular[+chip.dataset.i];
+      fromIn.value = l.from; toIn.value = l.to;
+      form.requestSubmit();
+    });
+
+    // date field shows a placeholder until it is used
+    whenIn.addEventListener('focus', () => { whenIn.type = 'date'; });
+    whenIn.addEventListener('blur', () => { if (!whenIn.value) whenIn.type = 'text'; });
+    paxIn.addEventListener('change', () => paxIn.classList.toggle('empty', !paxIn.value));
+
+    $('sbSwap').addEventListener('click', () => { [fromIn.value, toIn.value] = [toIn.value, fromIn.value]; });
+
+    const hit = (q, name, region) => !q || name.toLowerCase().includes(q) || region.toLowerCase().includes(q);
+    function daysApart(leg, iso){
+      if (leg.month < 0) return Infinity;
+      const d = new Date(iso + 'T00:00');
+      const legDate = new Date(d.getFullYear(), leg.month, leg.day);
+      return Math.round(Math.abs(legDate - d) / 864e5);
+    }
+    function niceDate(iso){
+      const d = new Date(iso + 'T00:00');
+      return d.getDate() + ' ' + MONTHS[d.getMonth()];
+    }
+
+    let query = {};
+    let found = [];
+
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      query = {
+        from: fromIn.value.trim(), to: toIn.value.trim(),
+        when: whenIn.type === 'date' ? whenIn.value : '', pax: +paxIn.value || 0
+      };
+      const qf = query.from.toLowerCase(), qt = query.to.toLowerCase();
+      found = legs.filter(l =>
+        hit(qf, l.from, l.fromRegion) && hit(qt, l.to, l.toRegion) &&
+        (!query.pax || l.seats >= query.pax) &&
+        (!query.when || daysApart(l, query.when) <= 3)
+      ).sort((a, b) => a.priceNum - b.priceNum);
+      render();
+    });
+
+    function summary(){
+      const parts = [(query.from || 'Overal') + ' → ' + (query.to || 'Overal')];
+      if (query.when) parts.push(niceDate(query.when) + ' (± 3 dagen)');
+      if (query.pax) parts.push(query.pax + (query.pax === 1 ? ' passagier' : ' passagiers'));
+      return parts.join(' · ');
+    }
+
+    function render(){
+      results.hidden = false;
+      if (!found.length) {
+        results.innerHTML = `
+          <div class="results-head"><h3>Geen empty leg gevonden</h3><p>${esc(summary())}</p></div>
+          <div class="no-results">
+            <div><strong>Nog geen lege vlucht op deze route</strong>
+            <p>Vraag een privévlucht aan. Laat je gegevens achter, dan nemen we contact met je op met een voorstel.</p></div>
+            <button type="button" class="r-book" data-charter>Vraag privévlucht aan</button>
+          </div>`;
+      } else {
+        results.innerHTML = `
+          <div class="results-head"><h3>${found.length} ${found.length === 1 ? 'empty leg' : 'empty legs'} gevonden</h3><p>${esc(summary())}</p></div>
+          <div class="result-list">${found.map((l, i) => `
+            <div class="result">
+              <div><div class="r-route">${esc(l.from)}<em>→</em>${esc(l.to)}</div><div class="r-sub">${esc(l.fromRegion)} – ${esc(l.toRegion)}</div></div>
+              <div class="r-when">${esc(l.when)}</div>
+              <div class="r-plane">${esc(l.plane)}<div class="r-sub">${esc(l.cap)}</div></div>
+              <div class="r-price"><s>${esc(l.oldPrice)}</s><strong>${esc(l.price)}</strong></div>
+              <button type="button" class="r-book" data-i="${i}">Boek deze vlucht</button>
+            </div>`).join('')}
+          </div>`;
+      }
+      results.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    results.addEventListener('click', e => {
+      const btn = e.target.closest('.r-book'); if (!btn) return;
+      const old = results.querySelector('.book-form'); if (old) old.remove();
+      let title, details;
+      if (btn.hasAttribute('data-charter')) {
+        title = 'Privévlucht aanvragen';
+        details = summary();
+      } else {
+        const l = found[+btn.dataset.i];
+        title = 'Boek ' + l.from + ' → ' + l.to;
+        details = [l.when, l.plane, (query.pax ? query.pax + (query.pax === 1 ? ' passagier' : ' passagiers') : l.cap), l.price + ' heel toestel'].join(' · ');
+      }
+      const f = document.createElement('form');
+      f.className = 'book-form';
+      f.innerHTML = `
+        <h3>${esc(title)}</h3>
+        <p class="bf-summary">${esc(details)}</p>
+        <div class="bf-grid">
+          <label>NAAM<input name="name" required placeholder="Voor- en achternaam" autocomplete="name"></label>
+          <label>E-MAIL<input name="email" type="email" required placeholder="jij@voorbeeld.nl" autocomplete="email"></label>
+          <label>TELEFOON<input name="phone" type="tel" placeholder="+31 6 12345678" autocomplete="tel"></label>
+          <button type="submit">Verstuur aanvraag</button>
+        </div>
+        <p class="bf-note">Je boeking is pas definitief na bevestiging door de operator. Routes en tijden kunnen tot vlak voor vertrek wijzigen.</p>`;
+      f.addEventListener('submit', ev => {
+        ev.preventDefault();
+        const email = f.elements.email.value;
+        f.innerHTML = `
+          <div class="bf-done"><span class="tick">✓</span>
+            <div><h3>Aanvraag ontvangen</h3>
+            <p class="bf-summary">${esc(title)} · ${esc(details)}. We nemen contact met je op via ${esc(email)}.</p></div>
+          </div>`;
+      });
+      results.appendChild(f);
+      f.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      f.elements.name.focus({ preventScroll: true });
+    });
   })();
 </script>
 
