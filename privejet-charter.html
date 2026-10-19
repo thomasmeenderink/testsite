@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Privéjet charter · DutchJet</title>
+<meta name="description" content="Vraag een privévlucht op maat aan bij DutchJet. Jij kiest de route, datum en tijd; wij sturen een voorstel met passende toestellen.">
+<link rel="icon" type="image/webp" href="images/logo.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<!--HEADER-->
+<header id="top">
+  <div class="bar">
+    <a href="index.html" class="logo" aria-label="DutchJet home">
+      <span class="logo-mark"><img src="images/logo-dutchjet.webp" alt="DutchJet"></span>
+    </a>
+    <button class="menu-toggle" id="menuToggle" aria-label="Menu" aria-expanded="false" aria-controls="menu">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="menu" id="menu">
+      <a href="empty-legs.html">Empty legs</a>
+      <a href="privejet-charter.html" aria-current="page">Privéjet charter</a>
+      <a href="over-ons.html">Over ons</a>
+      <a href="faq.html">FAQ</a>
+      <a href="contact.html">Contact</a>
+      <a href="privejet-charter.html#aanvragen" class="menu-cta" data-open-request>Vlucht aanvragen</a>
+    </nav>
+  </div>
+</header>
+<!--/HEADER-->
+
+<section class="page-hero" id="aanvragen">
+  <img class="page-hero-bg" src="images/advantage-privacy.jpg" alt="">
+  <div class="page-hero-inner split center">
+    <div>
+      <div class="crumbs"><a href="index.html">Home</a> / Privéjet charter</div>
+      <span class="hero-badge">PRIVÉJET CHARTER</span>
+      <h1>Jouw vlucht, <em>jouw</em> schema</h1>
+      <p class="hero-lead">Bij een charter vlieg je wanneer en waarheen jij wilt. Vertel ons je route en datum, dan sturen we je een voorstel met toestellen die passen bij je gezelschap en budget.</p>
+      <div class="hero-stats">
+        <div><strong>5.000+</strong><span>vliegvelden bereikbaar</span></div>
+        <div><strong>15 min</strong><span>voor vertrek aanwezig</span></div>
+        <div><strong>1–19</strong><span>passagiers per vlucht</span></div>
+      </div>
+    </div>
+
+    <form class="trip-card charter-form" data-mode="new" autocomplete="off" novalidate>
+      <span class="trip-label">NIEUWE AANVRAAG</span>
+      <h2>Waar kunnen we je naartoe <em>brengen</em>?</h2>
+      <div class="trip-grid" style="margin-top: 20px;">
+        <label class="trip-field">Vertrek<input name="from" list="cityList" placeholder="Amsterdam"></label>
+        <button type="button" class="trip-swap" aria-label="Wissel vertrek en bestemming">⇄</button>
+        <label class="trip-field">Bestemming<input name="to" list="cityList" placeholder="Nice"></label>
+        <div class="trip-dates wide">
+          <label class="trip-field"><span data-date-label>Vertrekdatum</span><input name="date" type="date"></label>
+          <label class="trip-field" data-only="new">Retourdatum (optioneel)<input name="returnDate" type="date"></label>
+        </div>
+        <div class="trip-field wide">Passagiers
+          <div class="trip-pax">
+            <button type="button" data-step="-1" aria-label="Minder passagiers">−</button>
+            <output name="pax" aria-live="polite">1</output>
+            <button type="button" data-step="1" aria-label="Meer passagiers">+</button>
+          </div>
+        </div>
+      </div>
+      <button type="submit" class="trip-go">Vraag deze vlucht aan</button>
+      <p class="trip-note" data-only="new">Vrijblijvend: je ontvangt eerst een voorstel op maat voor jouw route en datum.</p>
+    </form>
+  </div>
+</section>
+
+<section>
+  <div class="split center">
+    <div class="prose">
+      <span class="section-label">WAT IS CHARTER</span>
+      <h2 class="section-title">Een heel toestel, <em>alleen</em> voor jou</h2>
+      <p>Bij een privéjet charter huur je het complete toestel inclusief bemanning. Je bepaalt zelf de vertrektijd, de route en wie er meevliegt. Er zijn geen tussenstops die je niet wilt en geen vaste dienstregeling.</p>
+      <p>Dat maakt charter ideaal voor zakenreizen met een strakke planning, reizen met familie of vrienden, of bestemmingen die lijnvluchten niet direct aanvliegen.</p>
+      <p><strong>Liever goedkoper en flexibel?</strong> Kijk dan eerst bij de <a href="empty-legs.html">empty legs</a>: vluchten die toch al gepland staan, tegen een fractie van de charterprijs.</p>
+    </div>
+    <div class="photo"><img src="images/advantage-flexibiliteit.jpg" alt="Vertrek op je eigen schema" loading="lazy"></div>
+  </div>
+</section>
+
+<section class="section-grey">
+  <div>
+    <span class="section-label">TOESTELKLASSEN</span>
+    <h2 class="section-title">Welk toestel <em>past</em> bij je reis?</h2>
+    <p class="section-lead">Een indicatie per klasse. Het exacte aantal stoelen en het bereik verschillen per toestel; in je voorstel zie je de precieze gegevens.</p>
+    <div class="cards four">
+      <div class="card class-card">
+        <h3>Light jet</h3>
+        <p>Wendbaar en efficiënt voor korte vluchten binnen Europa, bijvoorbeeld Amsterdam–Londen of Amsterdam–Parijs.</p>
+        <div class="card-meta"><span>4–7 passagiers</span><span>Korte afstanden</span></div>
+      </div>
+      <div class="card class-card">
+        <h3>Midsize</h3>
+        <p>Meer ruimte en bereik. Geschikt voor vluchten naar Zuid-Europa, zoals Nice, Ibiza of Mallorca.</p>
+        <div class="card-meta"><span>6–8 passagiers</span><span>Middellange afstanden</span></div>
+      </div>
+      <div class="card class-card">
+        <h3>Super-midsize</h3>
+        <p>Een ruime cabine waarin je rechtop kunt staan, en genoeg bereik voor langere vluchten zonder tussenstop.</p>
+        <div class="card-meta"><span>8–10 passagiers</span><span>Lange afstanden</span></div>
+      </div>
+      <div class="card class-card">
+        <h3>Heavy jet</h3>
+        <p>Maximaal comfort voor grotere gezelschappen en intercontinentale vluchten.</p>
+        <div class="card-meta"><span>10–16 passagiers</span><span>Intercontinentaal</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div>
+    <span class="section-label">ZO WERKT HET</span>
+    <h2 class="section-title">Van aanvraag naar <em>vertrek</em></h2>
+    <div class="cards four">
+      <div class="card"><div class="card-num">01</div><h3>Aanvraag</h3><p>Je geeft je route, datum en het aantal passagiers door via het formulier.</p></div>
+      <div class="card"><div class="card-num">02</div><h3>Voorstel</h3><p>We zoeken passende toestellen en sturen je een voorstel met prijs en voorwaarden.</p></div>
+      <div class="card"><div class="card-num">03</div><h3>Bevestiging</h3><p>Ga je akkoord met het voorstel, dan regelen we de boeking met de operator.</p></div>
+      <div class="card"><div class="card-num">04</div><h3>Vertrek</h3><p>Je meldt je kort voor vertrek op het vliegveld en stapt direct in.</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="cta-band">
+    <div>
+      <h2>Klaar om je vlucht <em>aan te vragen</em>?</h2>
+      <p>Vrijblijvend: je ontvangt eerst een voorstel, en pas na jouw akkoord wordt er geboekt.</p>
+    </div>
+    <div class="btn-row">
+      <a href="faq.html" class="btn ghost">Veelgestelde vragen</a>
+      <a href="#aanvragen" class="btn primary" data-open-request>Vraag een vlucht aan →</a>
+    </div>
+  </div>
+</section>
+
+<!--FOOTER-->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <a href="index.html" class="footer-logo"><img src="images/logo-dutchjet-light.webp" alt="DutchJet home"></a>
+      <p>Empty legs, real prices. Vlieg privé op routes die toch al gevlogen worden, of laat een vlucht op maat voor je samenstellen.</p>
+    </div>
+    <div>
+      <h4>PAGINA'S</h4>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="empty-legs.html">Alle empty legs</a></li>
+        <li><a href="privejet-charter.html" aria-current="page">Privéjet charter</a></li>
+        <li><a href="over-ons.html">Over ons</a></li>
+        <li><a href="faq.html">Veelgestelde vragen</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>CONTACT</h4>
+      <ul>
+        <li><a href="mailto:dutchjet0@gmail.com">dutchjet0@gmail.com</a></li>
+        <li><a href="contact.html">Contactformulier</a></li>
+        <li><a href="privejet-charter.html#aanvragen" data-open-request>Vlucht aanvragen</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 DutchJet · Empty legs, real prices.</span>
+    <a href="#top">Terug naar boven ↑</a>
+  </div>
+</footer>
+<!--/FOOTER-->
+
+<script src="js/deals.js"></script>
+<script src="js/site.js"></script>
+</body>
+</html>
