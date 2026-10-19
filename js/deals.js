@@ -1,3 +1,14 @@
+// Airport positions (latitude, longitude) for the route map in the detail pop-up.
+// Add a line here when you add a flight from or to a new airport.
+const AIRPORTS = {
+  AMS: [52.3105, 4.7683],   CEG: [53.1781, -2.9778],  CEQ: [43.5420, 6.9534],
+  FAB: [51.2758, -0.7763],  FSC: [41.5006, 9.0978],   KIR: [52.1809, -9.5238],
+  LCY: [51.5053, 0.0553],   LTN: [51.8747, -0.3683],  NCE: [43.6584, 7.2159],
+  OXF: [51.8369, -1.3200],  PBI: [26.6832, -80.0956], RTM: [51.9569, 4.4372],
+  TEB: [40.8501, -74.0608], TLN: [43.0973, 6.1460],   VNY: [34.2098, -118.4899],
+  ASE: [39.2232, -106.8689]
+};
+
 // All empty legs on the site. Add, change or remove a flight here and it updates
 // the homepage carousel, the "Alle empty legs" page and the search pop-ups at once.
 const DEALS = [
@@ -62,7 +73,7 @@ function dealCardHtml(d, i){
           <div class="price-block"><div class="price-old">${esc(d.oldPrice)}</div><div class="price">${esc(d.price)}</div><div class="whole">Heel toestel</div></div>
         </div>
         <div class="deal-actions">
-          <button type="button" class="reserve" data-deal="${i}">RESERVEER ›</button>
+          <button type="button" class="reserve" data-deal="${i}">MEER INFORMATIE ›</button>
         </div>
       </div>
     </div>`;
