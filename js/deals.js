@@ -42,10 +42,8 @@ const DEALS = [
     oldPrice: '€12.500', price: '€4.450', img: 'images/jet-citation-cj3.jpg' }
 ];
 
-function dealCardHtml(d, i, opts){
+function dealCardHtml(d, i){
   const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  const view = opts && opts.viewLink
-    ? `<a href="empty-legs.html" class="view">ALLE LEGS ›</a>` : '';
   return `
     <div class="deal-card">
       <div class="deal-scene">
@@ -64,7 +62,6 @@ function dealCardHtml(d, i, opts){
           <div class="price-block"><div class="price-old">${esc(d.oldPrice)}</div><div class="price">${esc(d.price)}</div><div class="whole">Heel toestel</div></div>
         </div>
         <div class="deal-actions">
-          ${view}
           <button type="button" class="reserve" data-deal="${i}">RESERVEER ›</button>
         </div>
       </div>
@@ -73,5 +70,5 @@ function dealCardHtml(d, i, opts){
 
 // Fill every container that asks for deals: <div data-deals="carousel"> on the homepage.
 document.querySelectorAll('[data-deals="carousel"]').forEach(el => {
-  el.innerHTML = DEALS.map((d, i) => dealCardHtml(d, i, { viewLink: true })).join('');
+  el.innerHTML = DEALS.map((d, i) => dealCardHtml(d, i)).join('');
 });
