@@ -404,17 +404,19 @@ function sendRequest(subject, fields){
     const b = typeof AIRPORTS !== 'undefined' ? AIRPORTS[l.toCode] : null;
     const nm = a && b ? Math.round(distanceNm(a, b)) : null;
     const flexible = /beschikbaar tussen/i.test(l.when);
-    const old = +l.oldPrice.replace(/\D/g, '');
+    const old = +(l.oldPrice || '').replace(/\D/g, '');
     const pct = old ? Math.round((1 - l.priceNum / old) * 100) : 0;
     const cls = l.cap.split(' · ')[0];
     const images = l.images || [l.img];
+    // floor plans are shown whole instead of cropped
+    const isPlan = src => /plattegrond|layout|floorplan/i.test(src);
     const fmt = n => n.toLocaleString('nl-NL');
 
     modal.innerHTML = `
       <div class="dt">
         <div class="dt-top">
           <div class="dt-gallery">
-            <img src="${esc(images[0])}" alt="${esc(l.plane)}"${l.imgClass ? ` class="${esc(l.imgClass)}"` : ''}>
+            <img src="${esc(images[0])}" alt="${esc(l.plane)}" class="${esc(l.imgClass || '')}${isPlan(images[0]) ? ' is-plan' : ''}">
             <button type="button" class="dt-close req-close-btn" aria-label="Sluiten">×</button>
             ${images.length > 1 ? `
               <button type="button" class="dt-nav prev" aria-label="Vorige foto">‹</button>
@@ -426,7 +428,7 @@ function sendRequest(subject, fields){
           <div class="dt-info">
             <div class="dt-route">
               <div><span class="dt-code">${esc(l.fromCode)}</span><strong>${esc(l.from)}</strong><small>${esc(l.fromRegion)}</small></div>
-              <div class="dt-mid"><span>${esc(l.duration)}</span><i></i></div>
+              <div class="dt-mid"><span>${esc(l.duration || '')}</span><i></i></div>
               <div class="dest"><span class="dt-code">${esc(l.toCode)}</span><strong>${esc(l.to)}</strong><small>${esc(l.toRegion)}</small></div>
             </div>
             <div class="dt-facts">
@@ -446,12 +448,15 @@ function sendRequest(subject, fields){
         <div class="dt-section">
           <span class="dt-label">OVER DEZE VLUCHT</span>
           <div class="dt-specs">
-            <div><small>Toestel</small><strong>${esc(l.plane)}</strong></div>
-            <div><small>Klasse</small><strong>${esc(cls)}</strong></div>
-            <div><small>Vluchtduur</small><strong>${esc(l.duration)}</strong></div>
-            <div><small>Afstand</small><strong>${nm ? fmt(nm) + ' nm · ' + fmt(Math.round(nm * 1.852)) + ' km' : '–'}</strong></div>
-            <div><small>Normale prijs</small><strong><s>${esc(l.oldPrice)}</s></strong></div>
-            <div><small>Je bespaart</small><strong class="accent">${pct ? pct + '%' : '–'}</strong></div>
+            ${[
+              ['Toestel', esc(l.plane)],
+              ['Klasse', esc(cls)],
+              ['Passagiers', 'Tot ' + (l.seats || '?')],
+              l.duration ? ['Vluchtduur', esc(l.duration)] : null,
+              nm ? ['Afstand', fmt(nm) + ' nm · ' + fmt(Math.round(nm * 1.852)) + ' km'] : null,
+              l.oldPrice ? ['Normale prijs', '<s>' + esc(l.oldPrice) + '</s>'] : null,
+              pct ? ['Je bespaart', '<span class="accent">' + pct + '%</span>'] : null
+            ].filter(Boolean).map(([k, v]) => `<div><small>${k}</small><strong>${v}</strong></div>`).join('')}
           </div>
           <p class="dt-note">Een empty leg is pas definitief na bevestiging door de operator. Als de oorspronkelijke vlucht wijzigt, kan ook deze vlucht veranderen of vervallen.</p>
         </div>
@@ -467,7 +472,7 @@ function sendRequest(subject, fields){
     if (images.length > 1) {
       let i = 0;
       const img = modal.querySelector('.dt-gallery img'), count = modal.querySelector('.dt-count');
-      const go = step => { i = (i + step + images.length) % images.length; img.src = images[i]; count.textContent = (i + 1) + ' / ' + images.length; };
+      const go = step => { i = (i + step + images.length) % images.length; img.src = images[i]; img.classList.toggle('is-plan', isPlan(images[i])); count.textContent = (i + 1) + ' / ' + images.length; };
       modal.querySelector('.dt-nav.prev').addEventListener('click', () => go(-1));
       modal.querySelector('.dt-nav.next').addEventListener('click', () => go(1));
     }
@@ -565,7 +570,7 @@ function sendRequest(subject, fields){
       let rows = legs.filter(l => hit(qf, l.from, l.fromRegion) && hit(qt, l.to, l.toRegion) && (!pax || l.seats >= pax));
       if (fSort.value === 'price') rows = rows.slice().sort((a, b) => a.priceNum - b.priceNum);
       // biggest discount first: lowest share of the original price
-      const share = l => l.priceNum / +l.oldPrice.replace(/\D/g, '');
+      const share = l => l.oldPrice ? l.priceNum / +l.oldPrice.replace(/\D/g, '') : 1;
       if (fSort.value === 'discount') rows = rows.slice().sort((a, b) => share(a) - share(b));
       count.textContent = rows.length + (rows.length === 1 ? ' empty leg' : ' empty legs');
       list.innerHTML = rows.length
