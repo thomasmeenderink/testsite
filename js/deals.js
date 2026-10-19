@@ -17,11 +17,11 @@ const AIRPORTS = {
 const CJ3_PHOTOS = ['images/cj3-exterieur.webp', 'images/cj3-cabine.webp', 'images/cj3-plattegrond.webp'];
 const DEALS = [
   { from: 'Amsterdam', fromRegion: 'Schiphol, Nederland', fromCode: 'EHAM', to: 'Londen Stansted', toRegion: 'Verenigd Koninkrijk', toCode: 'EGSS',
-    when: 'Wo 2 dec 2026 · 10:29', plane: 'Cessna Citation CJ3', cap: 'Light jet · tot 7 passagiers',
-    price: '€6.500', img: CJ3_PHOTOS[0], images: CJ3_PHOTOS },
+    duration: '55m', when: 'Wo 2 dec 2026 · 10:29', plane: 'Cessna Citation CJ3', cap: 'Light jet · tot 7 passagiers',
+    oldPrice: '€11.000', price: '€6.500', img: CJ3_PHOTOS[0], images: CJ3_PHOTOS },
   { from: 'Londen Stansted', fromRegion: 'Verenigd Koninkrijk', fromCode: 'EGSS', to: 'Amsterdam', toRegion: 'Schiphol, Nederland', toCode: 'EHAM',
-    when: 'Wo 9 dec 2026 · 18:00', plane: 'Cessna Citation CJ3', cap: 'Light jet · tot 7 passagiers',
-    price: '€5.350', img: CJ3_PHOTOS[0], images: CJ3_PHOTOS },
+    duration: '55m', when: 'Wo 9 dec 2026 · 18:00', plane: 'Cessna Citation CJ3', cap: 'Light jet · tot 7 passagiers',
+    oldPrice: '€11.000', price: '€5.350', img: CJ3_PHOTOS[0], images: CJ3_PHOTOS },
   { from: 'Van Nuys', fromRegion: 'Californië', fromCode: 'VNY', to: 'Aspen', toRegion: 'Colorado', toCode: 'ASE',
     duration: '1h 20m', when: 'Zo 2 aug · 16:15', plane: 'Bombardier Challenger 350', cap: 'Super-midsize · tot 10 passagiers',
     oldPrice: '€17.000', price: '€6.500', img: 'images/jet-challenger-350.jpg' },
