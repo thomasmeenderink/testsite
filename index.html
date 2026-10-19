@@ -105,51 +105,6 @@
     .hero-tile{ min-height: 180px; }
   }
 
-  /* --- popular routes --- */
-  .routes-intro{ margin-bottom: 50px; }
-  .routes-intro p{ color: var(--text-dim); font-size: 0.9rem; margin-top: 14px; max-width: 60ch; }
-  .routes-grid{
-    display:flex; gap: 26px; overflow-x:auto; scroll-snap-type:x mandatory;
-    scrollbar-width:none; padding-bottom: 4px;
-  }
-  .routes-grid::-webkit-scrollbar{ display:none; }
-  .route-card{
-    flex: 0 0 clamp(210px, 32vw, 300px); scroll-snap-align:start;
-    position:relative; border-radius: 10px; overflow:hidden;
-    border: 1px solid var(--panel-line);
-    aspect-ratio: 3/4; display:flex; flex-direction:column; justify-content:flex-end;
-  }
-  .route-card .scene{ position:absolute; inset:0; z-index:0; background: var(--panel); }
-  .route-card .scene img{ width:100%; height:100%; display:block; object-fit:cover; }
-  .route-card .shade{
-    position:absolute; inset:0; z-index:1;
-    background: linear-gradient(180deg, rgba(30,46,61,0) 30%, rgba(30,46,61,0.6) 65%, rgba(30,46,61,0.95) 100%);
-  }
-  .route-card .top{
-    position:relative; z-index:2; padding: 20px 22px 0;
-  }
-  .route-line{
-    display:flex; align-items:center; gap: 10px; font-size: 0.72rem;
-    letter-spacing: 0.1em; color: var(--white); margin-bottom: 8px;
-  }
-  .route-line .dash{ flex:1; height:1px; background: rgba(255,255,255,0.5); }
-  .route-line.dest{ justify-content:flex-end; }
-  .bottom{
-    position:relative; z-index:2; padding: 0 22px 22px;
-  }
-  .bottom .label{ color: var(--accent); font-weight:600; font-size: 0.68rem; letter-spacing: 0.12em; display:block; margin-bottom: 4px; }
-  .bottom .price{ font-family:'Inter', sans-serif; font-weight:700; font-size: 1.7rem; color: #fff; font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
-  .bottom .flights{ color: rgba(255,255,255,0.8); font-size: 0.78rem; margin-top: 6px; }
-  .routes-cta{ display:flex; justify-content:flex-start; gap: 14px; margin-top: 44px; flex-wrap: wrap; }
-  .btn-solid, .btn-outline{
-    font-family:'Inter', sans-serif; font-size: 0.82rem; letter-spacing: 0.03em;
-    padding: 13px 24px; border-radius: var(--radius); text-decoration:none; display:inline-flex; align-items:center; gap:8px;
-  }
-  .btn-solid{ background: var(--accent); color: var(--bg); font-weight:600; }
-  .btn-solid:hover{ background: var(--accent-hover); }
-  .btn-outline{ border: 1px solid var(--panel-line); color: var(--text); }
-  .btn-outline:hover{ border-color: var(--accent); color: var(--accent); }
-
   section{ position: relative; z-index:1; padding: 6vh 6vw; }
   section > *{ max-width: 1180px; margin-left: auto; margin-right: auto; }
 
@@ -316,7 +271,7 @@
       <span class="logo-mark"><img src="images/logo.jpg" alt=""></span>
     </a>
     <nav>
-      <a href="#routes">Live legs</a>
+      <a href="#deals">Live legs</a>
       <a href="#how">Hoe het werkt</a>
       <a href="#voordelen">Voordelen</a>
       <a href="#signup">Meld je aan</a>
@@ -344,100 +299,13 @@
         <a href="#deals" class="hero-pill">Beste deals ›</a>
       </div>
       <div class="hero-tile">
-        <img src="images/route-vannuys-aspen.jpg" alt="Populaire routes">
+        <img src="images/route-vannuys-aspen.jpg" alt="Besneeuwde bergen bij Aspen">
         <div class="hero-shade"></div>
-        <a href="#routes" class="hero-pill">Populaire routes ›</a>
+        <a href="#how" class="hero-pill">Hoe het werkt ›</a>
       </div>
     </div>
   </div>
 </div>
-
-<section id="routes">
-  <div class="routes-intro">
-    <span class="section-label">POPULAIRE ROUTES</span>
-    <h2 class="section-title serif">Ontdek onze meest geboekte empty legs</h2>
-    <p>Bekijk de routes die het vaakst leeg terugvliegen en profiteer van scherpe prijzen voor privéjet-reizen.</p>
-  </div>
-
-  <div class="routes-grid">
-    <div class="route-card">
-      <div class="scene">
-        <img src="images/route-teterboro-westpalmbeach.jpg" alt="Teterboro naar West Palm Beach">
-      </div>
-      <div class="shade"></div>
-      <div class="top">
-        <div class="route-line"><span>TETERBORO</span><span class="dash"></span></div>
-        <div class="route-line dest"><span class="dash"></span><span><svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor" style="vertical-align:-1px;margin-right:2px;"><path d="M21,16v-2l-8-5V3.5C13,2.67,12.33,2,11.5,2S10,2.67,10,3.5V9l-8,5v2l8-2.5V19l-2.5,1.5V22L11.5,21l3.5,1.5v-1.5L12.5,19v-4.5L21,16z"/></svg> WEST PALM BEACH</span></div>
-      </div>
-      <div class="bottom">
-        <span class="label">VANAF</span>
-        <div class="price">€4.200</div>
-        <div class="flights"><svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor" style="vertical-align:-1px;margin-right:2px;"><path d="M21,16v-2l-8-5V3.5C13,2.67,12.33,2,11.5,2S10,2.67,10,3.5V9l-8,5v2l8-2.5V19l-2.5,1.5V22L11.5,21l3.5,1.5v-1.5L12.5,19v-4.5L21,16z"/></svg> 14 vluchten deze maand</div>
-      </div>
-    </div>
-
-    <div class="route-card">
-      <div class="scene">
-        <img src="images/route-luton-nice.jpg" alt="London Luton naar Nice">
-      </div>
-      <div class="shade"></div>
-      <div class="top">
-        <div class="route-line"><span>LONDON LUTON</span><span class="dash"></span></div>
-        <div class="route-line dest"><span class="dash"></span><span><svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor" style="vertical-align:-1px;margin-right:2px;"><path d="M21,16v-2l-8-5V3.5C13,2.67,12.33,2,11.5,2S10,2.67,10,3.5V9l-8,5v2l8-2.5V19l-2.5,1.5V22L11.5,21l3.5,1.5v-1.5L12.5,19v-4.5L21,16z"/></svg> NICE</span></div>
-      </div>
-      <div class="bottom">
-        <span class="label">VANAF</span>
-        <div class="price">€3.800</div>
-        <div class="flights"><svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor" style="vertical-align:-1px;margin-right:2px;"><path d="M21,16v-2l-8-5V3.5C13,2.67,12.33,2,11.5,2S10,2.67,10,3.5V9l-8,5v2l8-2.5V19l-2.5,1.5V22L11.5,21l3.5,1.5v-1.5L12.5,19v-4.5L21,16z"/></svg> 11 vluchten deze maand</div>
-      </div>
-    </div>
-
-    <div class="route-card">
-      <div class="scene">
-        <img src="images/route-vannuys-aspen.jpg" alt="Van Nuys naar Aspen">
-      </div>
-      <div class="shade"></div>
-      <div class="top">
-        <div class="route-line"><span>VAN NUYS</span><span class="dash"></span></div>
-        <div class="route-line dest"><span class="dash"></span><span><svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor" style="vertical-align:-1px;margin-right:2px;"><path d="M21,16v-2l-8-5V3.5C13,2.67,12.33,2,11.5,2S10,2.67,10,3.5V9l-8,5v2l8-2.5V19l-2.5,1.5V22L11.5,21l3.5,1.5v-1.5L12.5,19v-4.5L21,16z"/></svg> ASPEN</span></div>
-      </div>
-      <div class="bottom">
-        <span class="label">VANAF</span>
-        <div class="price">€6.500</div>
-        <div class="flights"><svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor" style="vertical-align:-1px;margin-right:2px;"><path d="M21,16v-2l-8-5V3.5C13,2.67,12.33,2,11.5,2S10,2.67,10,3.5V9l-8,5v2l8-2.5V19l-2.5,1.5V22L11.5,21l3.5,1.5v-1.5L12.5,19v-4.5L21,16z"/></svg> 9 vluchten deze maand</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="routes-cta">
-    <a href="#signup" class="btn-solid">Bekijk alle vluchten →</a>
-    <a href="#how" class="btn-outline">Blader door routes →</a>
-  </div>
-</section>
-
-<section id="how">
-  <div class="how-head">
-    <span class="section-label">HOE HET WERKT</span>
-    <h2 class="section-title serif">Van lege stoel naar geboekte vlucht in drie stappen</h2>
-  </div>
-  <div class="steps">
-    <div class="step">
-      <div class="step-num">01</div>
-      <h3>Operator meldt de leg</h3>
-      <p>Zodra een privéjet zonder betalende passagiers moet terugvliegen of doorvliegen, komt de route direct op ons bord.</p>
-    </div>
-    <div class="step">
-      <div class="step-num">02</div>
-      <h3>Jij claimt de stoel</h3>
-      <p>Boek één stoel of het hele toestel. Prijzen liggen doorgaans 60–75% onder een reguliere charter.</p>
-    </div>
-    <div class="step">
-      <div class="step-num">03</div>
-      <h3>Je vliegt privé</h3>
-      <p>Geen instapstress, geen tussenstops. Het toestel vloog toch al die kant op — jij profiteert mee.</p>
-    </div>
-  </div>
-</section>
 
 <section id="deals">
   <div class="deals-head">
@@ -751,6 +619,30 @@
           <a href="#signup" class="book">CONTACT ›</a>
         </div>
       </div>
+    </div>
+  </div>
+</section>
+
+<section id="how">
+  <div class="how-head">
+    <span class="section-label">HOE HET WERKT</span>
+    <h2 class="section-title serif">Van lege stoel naar geboekte vlucht in drie stappen</h2>
+  </div>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">01</div>
+      <h3>Operator meldt de leg</h3>
+      <p>Zodra een privéjet zonder betalende passagiers moet terugvliegen of doorvliegen, komt de route direct op ons bord.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">02</div>
+      <h3>Jij claimt de stoel</h3>
+      <p>Boek één stoel of het hele toestel. Prijzen liggen doorgaans 60–75% onder een reguliere charter.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">03</div>
+      <h3>Je vliegt privé</h3>
+      <p>Geen instapstress, geen tussenstops. Het toestel vloog toch al die kant op — jij profiteert mee.</p>
     </div>
   </div>
 </section>
