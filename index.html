@@ -355,14 +355,14 @@
   }
 
   /* --- build & book a flight --- */
-  .book{ overflow:hidden; background: var(--panel); padding-top: 110px; padding-bottom: 110px; }
-  .book > .book-bg{ position:absolute; inset:0; width:100%; max-width:none; height:100%; margin:0; object-fit:cover; }
-  .book::before{
+  .book-section{ overflow:hidden; background: var(--panel); padding-top: 110px; padding-bottom: 110px; }
+  .book-section > .book-bg{ position:absolute; inset:0; width:100%; max-width:none; height:100%; margin:0; object-fit:cover; }
+  .book-section::before{
     content:''; position:absolute; inset:0; z-index:1;
     background: linear-gradient(90deg, rgba(244,245,247,0.97) 0%, rgba(244,245,247,0.88) 50%, rgba(244,245,247,0.7) 100%);
   }
   .book-inner{ position:relative; z-index:2; }
-  .book .section-title{ font-size: clamp(2.4rem, 5vw, 4rem); max-width: none; }
+  .book-section .section-title{ font-size: clamp(2.4rem, 5vw, 4rem); max-width: none; }
 
   .search-bar{
     display:flex; align-items:center; margin-top: 36px;
@@ -1012,7 +1012,7 @@
   </div>
 </section>
 
-<section id="boeken" class="book">
+<section id="boeken" class="book-section">
   <img class="book-bg" src="images/advantage-tijd.jpg" alt="">
   <div class="book-inner">
     <span class="section-label">VLUCHT SAMENSTELLEN</span>
