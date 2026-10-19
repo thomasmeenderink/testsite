@@ -670,6 +670,8 @@ footer ul a:hover, .footer-bottom a:hover{ color: var(--accent); }
 .btn.ghost:hover{ border-color: var(--white); background: rgba(255,255,255,0.08); }
 .btn.dark{ background: var(--navy); color: var(--white); }
 .btn.dark:hover{ background: #2b4157; }
+.btn.outline{ background: transparent; color: var(--navy); border-color: var(--panel-line); }
+.btn.outline:hover{ border-color: var(--navy); }
 
 /* --- all empty legs --- */
 .legs-filter{
