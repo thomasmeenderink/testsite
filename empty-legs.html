@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alle empty legs · DutchJet</title>
+<meta name="description" content="Alle actuele empty legs van DutchJet op een rij. Filter op vertrek, bestemming en aantal passagiers en reserveer direct.">
+<link rel="icon" type="image/webp" href="images/logo.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<!--HEADER-->
+<header id="top">
+  <div class="bar">
+    <a href="index.html" class="logo" aria-label="DutchJet home">
+      <span class="logo-mark"><img src="images/logo-dutchjet.webp" alt="DutchJet"></span>
+    </a>
+    <button class="menu-toggle" id="menuToggle" aria-label="Menu" aria-expanded="false" aria-controls="menu">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="menu" id="menu">
+      <a href="empty-legs.html" aria-current="page">Empty legs</a>
+      <a href="privejet-charter.html">Privéjet charter</a>
+      <a href="over-ons.html">Over ons</a>
+      <a href="faq.html">FAQ</a>
+      <a href="contact.html">Contact</a>
+      <a href="privejet-charter.html#aanvragen" class="menu-cta" data-open-request>Vlucht aanvragen</a>
+    </nav>
+  </div>
+</header>
+<!--/HEADER-->
+
+<section class="page-hero">
+  <img class="page-hero-bg" src="images/jet-challenger-350.jpg" alt="">
+  <div class="page-hero-inner">
+    <div class="crumbs"><a href="index.html">Home</a> / Empty legs</div>
+    <span class="hero-badge">ALLE EMPTY LEGS</span>
+    <h1>Alle <em>empty legs</em> op een rij</h1>
+    <p class="hero-lead">Deze vluchten staan al gepland en vliegen leeg naar hun volgende bestemming. Jij boekt het hele toestel voor een fractie van de charterprijs.</p>
+  </div>
+</section>
+
+<section class="section-grey">
+  <div>
+    <form class="legs-filter" onsubmit="return false" autocomplete="off">
+      <label>VAN<input id="flFrom" list="cityList" placeholder="Alle vertrekplaatsen"></label>
+      <label>NAAR<input id="flTo" list="cityList" placeholder="Alle bestemmingen"></label>
+      <label>PASSAGIERS
+        <select id="flPax">
+          <option value="">Alle</option>
+          <option value="2">2 of meer</option>
+          <option value="4">4 of meer</option>
+          <option value="6">6 of meer</option>
+          <option value="8">8 of meer</option>
+          <option value="10">10 of meer</option>
+        </select>
+      </label>
+      <label>SORTEER OP
+        <select id="flSort">
+          <option value="date">Vertrekdatum</option>
+          <option value="price">Laagste prijs</option>
+          <option value="discount">Hoogste korting</option>
+        </select>
+      </label>
+      <button type="button" class="legs-reset" id="flReset">Wis filters</button>
+    </form>
+    <p class="legs-count" id="flCount" aria-live="polite"></p>
+    <div class="legs-grid" data-deals="list"></div>
+  </div>
+</section>
+
+<section>
+  <div>
+    <span class="section-label">ZO WERKT HET</span>
+    <h2 class="section-title">Wat is een <em>empty leg</em>?</h2>
+    <p class="section-lead">Een privéjet die een klant heeft afgezet, moet vaak leeg terug naar huis of door naar de volgende opdracht. Die lege vlucht noemen we een empty leg.</p>
+    <div class="cards">
+      <div class="card">
+        <div class="card-num">01</div>
+        <h3>De vlucht staat al vast</h3>
+        <p>Route en tijdstip zijn bepaald door de oorspronkelijke opdracht. Daardoor is de prijs flink lager dan bij een vlucht op maat.</p>
+      </div>
+      <div class="card">
+        <div class="card-num">02</div>
+        <h3>Jij reserveert het toestel</h3>
+        <p>Kies een vlucht en laat je gegevens achter. De prijs geldt voor het hele toestel, ongeacht hoeveel stoelen je gebruikt.</p>
+      </div>
+      <div class="card">
+        <div class="card-num">03</div>
+        <h3>Bevestiging door de operator</h3>
+        <p>Een empty leg is pas definitief na bevestiging. Als de oorspronkelijke opdracht wijzigt, kan ook de empty leg veranderen.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="cta-band">
+    <div>
+      <h2>Staat jouw route er <em>niet</em> tussen?</h2>
+      <p>Vraag een vlucht op maat aan. Je kiest zelf je vertrekplaats, bestemming en tijd.</p>
+    </div>
+    <div class="btn-row">
+      <a href="privejet-charter.html" class="btn ghost">Over privéjet charter</a>
+      <a href="privejet-charter.html#aanvragen" class="btn primary" data-open-request>Vraag een vlucht aan →</a>
+    </div>
+  </div>
+</section>
+
+<!--FOOTER-->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <a href="index.html" class="footer-logo"><img src="images/logo-dutchjet-light.webp" alt="DutchJet home"></a>
+      <p>Empty legs, real prices. Vlieg privé op routes die toch al gevlogen worden, of laat een vlucht op maat voor je samenstellen.</p>
+    </div>
+    <div>
+      <h4>PAGINA'S</h4>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="empty-legs.html" aria-current="page">Alle empty legs</a></li>
+        <li><a href="privejet-charter.html">Privéjet charter</a></li>
+        <li><a href="over-ons.html">Over ons</a></li>
+        <li><a href="faq.html">Veelgestelde vragen</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>CONTACT</h4>
+      <ul>
+        <li><a href="mailto:dutchjet0@gmail.com">dutchjet0@gmail.com</a></li>
+        <li><a href="contact.html">Contactformulier</a></li>
+        <li><a href="privejet-charter.html#aanvragen" data-open-request>Vlucht aanvragen</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 DutchJet · Empty legs, real prices.</span>
+    <a href="#top">Terug naar boven ↑</a>
+  </div>
+</footer>
+<!--/FOOTER-->
+
+<script src="js/deals.js"></script>
+<script src="js/site.js"></script>
+</body>
+</html>
