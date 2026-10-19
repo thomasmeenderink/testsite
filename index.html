@@ -49,7 +49,7 @@
     display:flex; justify-content: space-between; align-items:center;
   }
   .logo{ display:flex; align-items:center; text-decoration:none; }
-  .logo-mark img{ display:block; height: 44px; width:auto; }
+  .logo-mark img{ display:block; height: 40px; width:auto; }
   .menu{ display:flex; align-items:center; gap: 34px; }
   .menu a{
     color: var(--navy); text-decoration:none; font-size: 0.88rem; font-weight: 500;
@@ -375,56 +375,91 @@
   .popular-list .chip:hover{ background: var(--white); border-color: var(--navy); }
   .popular-list .chip small{ font-size: 0.82rem; font-weight: 400; color: var(--text-dim); }
 
-  .book-results{ margin-top: 36px; }
-  .results-head{ display:flex; justify-content:space-between; align-items:baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
-  .results-head h3{ font-family:'Playfair Display', serif; font-size: 1.4rem; }
-  .results-head p{ color: var(--text-dim); font-size: 0.85rem; }
-  .result-list{ display:grid; gap: 12px; }
-  .result{
-    display:grid; grid-template-columns: 1.6fr 1fr 1.2fr auto auto; gap: 20px; align-items:center;
-    background: var(--white); border-radius: 14px; padding: 18px 22px;
-    box-shadow: 0 1px 2px rgba(30,46,61,0.06), 0 8px 22px rgba(30,46,61,0.07);
+  /* --- request pop-up (opened by the search button) --- */
+  html:has(.req-modal[open]){ overflow: hidden; }
+  .req-modal{
+    width: min(620px, calc(100% - 32px)); max-height: calc(100% - 32px);
+    border: none; border-radius: 18px; padding: 0; margin: auto; overflow: auto;
+    background: var(--white); color: var(--navy);
+    box-shadow: 0 30px 80px rgba(30,46,61,0.35);
   }
-  .result .r-route{ font-weight: 700; font-size: 1.02rem; }
-  .result .r-route em{ font-style: normal; color: var(--accent); margin: 0 6px; }
-  .result .r-sub{ color: var(--text-dim); font-size: 0.8rem; margin-top: 2px; }
-  .result .r-price{ text-align:right; }
-  .result .r-price s{ color: var(--text-dim); font-size: 0.78rem; display:block; }
-  .result .r-price strong{ color: var(--accent); font-size: 1.35rem; font-variant-numeric: tabular-nums; }
-  .result .r-book, .no-results .r-book{
-    background: var(--navy); color: var(--white); font-size: 0.82rem; padding: 12px 18px; letter-spacing: 0.02em;
+  .req-modal::backdrop{ background: rgba(30,46,61,0.6); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); }
+  .req-modal[open]{ animation: req-in .22s ease; }
+  @keyframes req-in{ from{ opacity: 0; transform: translateY(14px) scale(.98); } to{ opacity: 1; transform: none; } }
+  .req-head{ position: relative; background: var(--navy); color: var(--white); padding: 26px 64px 22px 28px; }
+  .req-badge{
+    display:inline-flex; align-items:center; gap: 8px;
+    font-size: 0.68rem; font-weight: 600; letter-spacing: 0.16em;
+    border: 1px solid rgba(255,255,255,0.3); border-radius: 999px; padding: 6px 12px;
   }
-  .result .r-book:hover, .no-results .r-book:hover{ background: #2b4157; }
-  .no-results{
-    display:flex; justify-content:space-between; align-items:center; gap: 20px; flex-wrap: wrap;
-    background: var(--white); border-radius: 14px; padding: 24px;
-    box-shadow: 0 8px 22px rgba(30,46,61,0.07);
+  .req-badge::before{ content:''; width:7px; height:7px; border-radius:50%; background: var(--accent); }
+  .req-head h3{ font-family:'Playfair Display', serif; font-size: 1.7rem; line-height: 1.15; margin-top: 14px; }
+  .req-head h3 em{ font-style: italic; color: var(--accent); }
+  .req-head p{ color: rgba(255,255,255,0.75); font-size: 0.9rem; margin-top: 6px; }
+  .req-modal .req-close{
+    position:absolute; top: 18px; right: 18px; width: 38px; height: 38px; border-radius: 50%; padding: 0;
+    background: rgba(255,255,255,0.12); color: var(--white); font-size: 1.3rem; line-height: 1; letter-spacing: 0;
   }
-  .no-results p{ color: var(--text-dim); font-size: 0.92rem; max-width: 60ch; }
-  .no-results strong{ display:block; color: var(--navy); font-size: 1.05rem; margin-bottom: 4px; }
-
-  .book-form{
-    margin-top: 16px; background: var(--navy); color: var(--white);
-    border-radius: 16px; padding: 28px;
+  .req-modal .req-close:hover{ background: rgba(255,255,255,0.22); }
+  .req-body{ padding: 24px 28px 28px; }
+  .req-legend{ display:block; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.14em; margin-bottom: 10px; }
+  .req-options{ display:grid; gap: 8px; margin-bottom: 22px; }
+  .req-option{
+    display:flex; align-items:center; gap: 12px; cursor: pointer;
+    border: 1px solid var(--panel-line); border-radius: 12px; padding: 12px 14px;
+    transition: border-color .15s ease, background .15s ease;
   }
-  .book-form h3{ font-family:'Playfair Display', serif; font-size: 1.4rem; }
-  .book-form .bf-summary{ color: rgba(255,255,255,0.75); font-size: 0.9rem; margin-top: 6px; }
-  .book-form .bf-grid{ display:grid; grid-template-columns: repeat(3, minmax(0, 1fr)) auto; gap: 12px; margin-top: 20px; align-items:end; }
-  .result .r-when{ font-size: 0.9rem; }
-  .book-form label{ display:flex; flex-direction:column; gap: 6px; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.12em; color: rgba(255,255,255,0.7); }
-  .book-form input{
-    background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); color: var(--white);
-    border-radius: 8px; padding: 13px 14px; font-family:'Inter', sans-serif; font-size: 0.95rem;
-    width: 100%; min-width: 0;
+  .req-option:hover{ border-color: #b9c1ca; }
+  .req-option:has(input:checked){ border-color: var(--accent); background: #fff6f1; }
+  .req-option input{ accent-color: var(--accent); width: 18px; height: 18px; flex: 0 0 auto; }
+  .req-option .o-main{ flex: 1; min-width: 0; font-weight: 600; font-size: 0.92rem; }
+  .req-option .o-main small{ display:block; font-weight: 400; color: var(--text-dim); font-size: 0.78rem; margin-top: 2px; }
+  .req-option .o-price{ color: var(--accent); font-weight: 700; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .req-empty{
+    background: var(--panel); border-radius: 12px; padding: 14px 16px; margin-bottom: 22px;
+    color: var(--text-dim); font-size: 0.9rem;
   }
-  .book-form input::placeholder{ color: rgba(255,255,255,0.45); }
-  .book-form input:focus{ outline: 2px solid var(--accent); outline-offset: 1px; }
-  .book-form .bf-done{ display:flex; align-items:center; gap: 14px; }
-  .book-form .bf-done .tick{
-    flex: 0 0 auto; width: 44px; height: 44px; border-radius: 50%; background: var(--accent);
-    display:flex; align-items:center; justify-content:center; font-size: 1.2rem;
+  .req-empty strong{ display:block; color: var(--navy); margin-bottom: 2px; }
+  .req-fields{ display:grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .req-fields label{ display:flex; flex-direction:column; gap: 6px; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.12em; }
+  .req-fields .full{ grid-column: 1 / -1; }
+  .req-fields input, .req-fields textarea{
+    width: 100%; min-width: 0; background: var(--white); color: var(--navy);
+    border: 1px solid var(--panel-line); border-radius: 8px; padding: 12px 14px;
+    font-family: 'Inter', sans-serif; font-size: 0.95rem; font-weight: 400; letter-spacing: normal;
   }
-  .book-form .bf-note{ color: rgba(255,255,255,0.55); font-size: 0.76rem; margin-top: 14px; }
+  .req-fields select{
+    width: 100%; background: var(--white); color: var(--navy);
+    border: 1px solid var(--panel-line); border-radius: 8px; padding: 12px 14px;
+    font-family: 'Inter', sans-serif; font-size: 0.95rem; font-weight: 400; letter-spacing: normal;
+  }
+  .req-fields textarea{ min-height: 84px; resize: vertical; }
+  .req-fields input:focus, .req-fields textarea:focus, .req-fields select:focus{ outline: 2px solid var(--accent); outline-offset: 0; border-color: transparent; }
+  .req-fields + .req-legend{ margin-top: 24px; }
+  .req-fields .req-check{
+    flex-direction: row; align-items: center; gap: 10px; cursor: pointer;
+    font-size: 0.9rem; font-weight: 500; letter-spacing: normal;
+  }
+  .req-fields .req-check input{ width: 18px; height: 18px; padding: 0; accent-color: var(--accent); }
+  .req-fields [hidden]{ display: none; }
+  .req-modal .req-submit{ width: 100%; margin-top: 18px; padding: 15px; font-size: 0.95rem; }
+  .req-note{ color: var(--text-dim); font-size: 0.76rem; margin-top: 12px; }
+  .req-note.error{ color: #c0392b; }
+  .req-done{ text-align:center; padding: 44px 28px 36px; }
+  .req-done .tick{
+    width: 64px; height: 64px; border-radius: 50%; margin: 0 auto 18px;
+    background: var(--accent); color: var(--white); font-size: 1.8rem;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .req-done h3{ font-family:'Playfair Display', serif; font-size: 1.7rem; }
+  .req-done p{ color: var(--text-dim); margin: 8px auto 24px; max-width: 42ch; }
+  .req-modal .req-done .req-ok{ background: var(--navy); }
+  .req-modal .req-done .req-ok:hover{ background: #2b4157; }
+  @media (max-width: 560px){
+    .req-head{ padding: 22px 60px 20px 20px; }
+    .req-body{ padding: 20px; }
+    .req-fields{ grid-template-columns: 1fr; }
+  }
 
   @media (max-width: 900px){
     .search-bar{ flex-wrap: wrap; border-radius: 20px; padding: 14px; position: relative; }
@@ -436,11 +471,6 @@
     .search-bar .sb-swap{ position:absolute; right: 24px; top: 52px; z-index: 2; }
     .search-bar .sb-go{ flex: 1 1 100%; height: 52px; border-radius: 12px; margin: 10px 0 0; }
     .search-bar .sb-go::after{ content:'Zoek vluchten'; margin-left: 10px; font-weight: 600; }
-    .result{ grid-template-columns: 1fr auto; gap: 8px 16px; }
-    .result .r-when, .result .r-plane{ grid-column: 1; }
-    .result .r-price{ grid-column: 2; grid-row: 1 / span 2; }
-    .result .r-book{ grid-column: 1 / -1; }
-    .book-form .bf-grid{ grid-template-columns: 1fr; }
   }
 
   /* --- advantages gallery --- */
@@ -514,7 +544,7 @@
     display:grid; grid-template-columns: 2fr 1fr 1fr; gap: 40px;
   }
   .footer-logo{ display:inline-block; }
-  .footer-logo img{ display:block; height: 52px; width:auto; }
+  .footer-logo img{ display:block; height: 44px; width:auto; }
   .footer-grid p{ margin-top: 18px; max-width: 38ch; }
   footer h4{ color: var(--white); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.16em; margin-bottom: 16px; }
   footer ul{ list-style: none; }
@@ -537,7 +567,7 @@
 <header id="top">
   <div class="bar">
     <a href="#top" class="logo" aria-label="Home">
-      <span class="logo-mark"><img src="images/logo.webp" alt=""></span>
+      <span class="logo-mark"><img src="images/logo-dutchjet.webp" alt="DutchJet"></span>
     </a>
     <button class="menu-toggle" id="menuToggle" aria-label="Menu" aria-expanded="false" aria-controls="menu">
       <span></span><span></span><span></span>
@@ -932,7 +962,7 @@
   <div class="book-inner">
     <span class="section-label">VLUCHT SAMENSTELLEN</span>
     <h2 class="section-title">Waar gaan we <em>naartoe</em>?</h2>
-    <p class="section-lead">Kies je route, datum en het aantal passagiers. Je ziet meteen welke empty legs passen, of je vraagt in één stap een privévlucht aan.</p>
+    <p class="section-lead">Kies je route, datum en het aantal passagiers en vraag in één stap je eigen privévlucht aan. Je ontvangt een voorstel op maat.</p>
 
     <form class="search-bar" id="flightSearch" autocomplete="off">
       <label class="sb-field sb-from"><span>VAN</span><input id="sbFrom" list="cityList" placeholder="Overal"></label>
@@ -966,7 +996,7 @@
       <div class="popular-list" id="popularList"></div>
     </div>
 
-    <div class="book-results" id="bookResults" hidden></div>
+    <dialog class="req-modal" id="reqModal" aria-labelledby="reqTitle"></dialog>
   </div>
 </section>
 
@@ -1045,7 +1075,7 @@
 <footer>
   <div class="footer-grid">
     <div>
-      <a href="#top" class="footer-logo"><img src="images/logo-light.webp" alt="Naar boven"></a>
+      <a href="#top" class="footer-logo"><img src="images/logo-dutchjet-light.webp" alt="DutchJet, naar boven"></a>
       <p>Empty legs, real prices. Vlieg privé op routes die toch al gevlogen worden, voor een fractie van de charterprijs.</p>
     </div>
     <div>
@@ -1174,50 +1204,23 @@
     if(!form) return;
     const $ = id => document.getElementById(id);
     const fromIn = $('sbFrom'), toIn = $('sbTo'), whenIn = $('sbWhen'), paxIn = $('sbPax');
-    const results = $('bookResults');
-    const MONTHS = ['jan','feb','mrt','apr','mei','jun','jul','aug','sep','okt','nov','dec'];
+    const modal = $('reqModal');
     const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-    const text = el => el ? el.textContent.trim() : '';
-    const placeName = el => el ? el.firstChild.textContent.trim() : '';
 
-    // The deal cards are the single source of truth for which legs can be booked.
-    const legs = Array.from(document.querySelectorAll('#dealsTrack .deal-card')).map(card => {
-      const places = card.querySelectorAll('.route-cities .place');
-      const when = text(card.querySelector('.deal-when'));
-      const m = when.match(/(\d{1,2}) ([a-z]{3})/);
-      const cap = text(card.querySelector('.deal-plane .cap'));
-      const price = text(card.querySelector('.deal-plane .price'));
-      return {
-        from: placeName(places[0]), fromRegion: text(places[0].querySelector('.region')),
-        to: placeName(places[1]), toRegion: text(places[1].querySelector('.region')),
-        when, day: m ? +m[1] : null, month: m ? MONTHS.indexOf(m[2]) : -1,
-        plane: text(card.querySelector('.deal-plane .name')), cap,
-        seats: +((cap.match(/tot (\d+)/) || [])[1] || 0),
-        oldPrice: text(card.querySelector('.deal-plane .price-old')),
-        price, priceNum: +price.replace(/\D/g, '')
-      };
-    });
-
-    // city suggestions
-    const cities = [...new Set(legs.flatMap(l => [l.from, l.to]))].sort((a, b) => a.localeCompare(b, 'nl'));
-    $('cityList').innerHTML = cities.map(c => `<option value="${esc(c)}">`).join('');
-
-    const hit = (q, name, region) => !q || name.toLowerCase().includes(q) || region.toLowerCase().includes(q);
-
-    // popular routes from Amsterdam, most popular first; the price comes from a matching empty leg
+    // city suggestions: popular destinations plus every city from the deals
     const POPULAR_FROM = 'Amsterdam';
     const POPULAR_TO = ['Londen', 'Nice', 'Ibiza', 'Cannes', 'Genève', 'Mykonos'];
-    const popular = POPULAR_TO.map(to => {
-      const cheapest = legs
-        .filter(l => hit(POPULAR_FROM.toLowerCase(), l.from, l.fromRegion) && hit(to.toLowerCase(), l.to, l.toRegion))
-        .sort((a, b) => a.priceNum - b.priceNum)[0];
-      return { to, price: cheapest ? cheapest.price : '' };
-    });
-    $('popularList').innerHTML = popular.map((p, i) =>
-      `<button type="button" class="chip" data-i="${i}">${esc(POPULAR_FROM)} → ${esc(p.to)} <small>${p.price ? 'vanaf ' + esc(p.price) : 'op aanvraag'}</small></button>`).join('');
+    const dealCities = Array.from(document.querySelectorAll('#dealsTrack .route-cities .place'))
+      .map(el => el.firstChild.textContent.trim());
+    const cities = [...new Set([POPULAR_FROM, ...POPULAR_TO, ...dealCities])].sort((a, b) => a.localeCompare(b, 'nl'));
+    $('cityList').innerHTML = cities.map(c => `<option value="${esc(c)}">`).join('');
+
+    // popular routes from Amsterdam, most popular first
+    $('popularList').innerHTML = POPULAR_TO.map(to =>
+      `<button type="button" class="chip" data-to="${esc(to)}">${esc(POPULAR_FROM)} → ${esc(to)}</button>`).join('');
     $('popularList').addEventListener('click', e => {
       const chip = e.target.closest('.chip'); if (!chip) return;
-      fromIn.value = POPULAR_FROM; toIn.value = popular[+chip.dataset.i].to;
+      fromIn.value = POPULAR_FROM; toIn.value = chip.dataset.to;
       form.requestSubmit();
     });
 
@@ -1227,119 +1230,106 @@
     paxIn.addEventListener('change', () => paxIn.classList.toggle('empty', !paxIn.value));
 
     $('sbSwap').addEventListener('click', () => { [fromIn.value, toIn.value] = [toIn.value, fromIn.value]; });
-    function daysApart(leg, iso){
-      if (leg.month < 0) return Infinity;
-      const d = new Date(iso + 'T00:00');
-      const legDate = new Date(d.getFullYear(), leg.month, leg.day);
-      return Math.round(Math.abs(legDate - d) / 864e5);
-    }
-    function niceDate(iso){
-      const d = new Date(iso + 'T00:00');
-      return d.getDate() + ' ' + MONTHS[d.getMonth()];
-    }
-
-    let query = {};
-    let found = [];
 
     form.addEventListener('submit', e => {
       e.preventDefault();
-      query = {
+      openModal({
         from: fromIn.value.trim(), to: toIn.value.trim(),
-        when: whenIn.type === 'date' ? whenIn.value : '', pax: +paxIn.value || 0
-      };
-      const qf = query.from.toLowerCase(), qt = query.to.toLowerCase();
-      found = legs.filter(l =>
-        hit(qf, l.from, l.fromRegion) && hit(qt, l.to, l.toRegion) &&
-        (!query.pax || l.seats >= query.pax) &&
-        (!query.when || daysApart(l, query.when) <= 3)
-      ).sort((a, b) => a.priceNum - b.priceNum);
-      render();
-    });
-
-    function summary(){
-      const parts = [(query.from || 'Overal') + ' → ' + (query.to || 'Overal')];
-      if (query.when) parts.push(niceDate(query.when) + ' (± 3 dagen)');
-      if (query.pax) parts.push(query.pax + (query.pax === 1 ? ' passagier' : ' passagiers'));
-      return parts.join(' · ');
-    }
-
-    function render(){
-      results.hidden = false;
-      if (!found.length) {
-        results.innerHTML = `
-          <div class="results-head"><h3>Geen empty leg gevonden</h3><p>${esc(summary())}</p></div>
-          <div class="no-results">
-            <div><strong>Nog geen lege vlucht op deze route</strong>
-            <p>Vraag een privévlucht aan. Laat je gegevens achter, dan nemen we contact met je op met een voorstel.</p></div>
-            <button type="button" class="r-book" data-charter>Vraag privévlucht aan</button>
-          </div>`;
-      } else {
-        results.innerHTML = `
-          <div class="results-head"><h3>${found.length} ${found.length === 1 ? 'empty leg' : 'empty legs'} gevonden</h3><p>${esc(summary())}</p></div>
-          <div class="result-list">${found.map((l, i) => `
-            <div class="result">
-              <div><div class="r-route">${esc(l.from)}<em>→</em>${esc(l.to)}</div><div class="r-sub">${esc(l.fromRegion)} – ${esc(l.toRegion)}</div></div>
-              <div class="r-when">${esc(l.when)}</div>
-              <div class="r-plane">${esc(l.plane)}<div class="r-sub">${esc(l.cap)}</div></div>
-              <div class="r-price"><s>${esc(l.oldPrice)}</s><strong>${esc(l.price)}</strong></div>
-              <button type="button" class="r-book" data-i="${i}">Boek deze vlucht</button>
-            </div>`).join('')}
-          </div>`;
-      }
-      results.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-
-    results.addEventListener('click', e => {
-      const btn = e.target.closest('.r-book'); if (!btn) return;
-      const old = results.querySelector('.book-form'); if (old) old.remove();
-      let title, details;
-      if (btn.hasAttribute('data-charter')) {
-        title = 'Privévlucht aanvragen';
-        details = summary();
-      } else {
-        const l = found[+btn.dataset.i];
-        title = 'Boek ' + l.from + ' → ' + l.to;
-        details = [l.when, l.plane, (query.pax ? query.pax + (query.pax === 1 ? ' passagier' : ' passagiers') : l.cap), l.price + ' heel toestel'].join(' · ');
-      }
-      const f = document.createElement('form');
-      f.className = 'book-form';
-      f.innerHTML = `
-        <h3>${esc(title)}</h3>
-        <p class="bf-summary">${esc(details)}</p>
-        <div class="bf-grid">
-          <label>NAAM<input name="name" required placeholder="Voor- en achternaam" autocomplete="name"></label>
-          <label>E-MAIL<input name="email" type="email" required placeholder="jij@voorbeeld.nl" autocomplete="email"></label>
-          <label>TELEFOON<input name="phone" type="tel" placeholder="+31 6 12345678" autocomplete="tel"></label>
-          <button type="submit">Verstuur aanvraag</button>
-        </div>
-        <p class="bf-note">Je boeking is pas definitief na bevestiging door de operator. Routes en tijden kunnen tot vlak voor vertrek wijzigen.</p>`;
-      f.addEventListener('submit', ev => {
-        ev.preventDefault();
-        const name = f.elements.name.value, email = f.elements.email.value, phone = f.elements.phone.value;
-        const btn = f.querySelector('button[type=submit]');
-        const note = f.querySelector('.bf-note');
-        btn.disabled = true; btn.textContent = 'Versturen…';
-        sendRequest(title + ' (' + details + ')', {
-          'Aanvraag': title,
-          'Details': details,
-          'Gezocht': summary(),
-          'Naam': name, 'E-mail': email, 'Telefoon': phone || '-',
-          _replyto: email
-        }).then(() => {
-          f.innerHTML = `
-            <div class="bf-done"><span class="tick">✓</span>
-              <div><h3>Aanvraag verstuurd</h3>
-              <p class="bf-summary">${esc(title)} · ${esc(details)}. We nemen contact met je op via ${esc(email)}.</p></div>
-            </div>`;
-        }).catch(() => {
-          btn.disabled = false; btn.textContent = 'Opnieuw proberen';
-          note.textContent = 'Versturen is niet gelukt. Probeer het opnieuw of mail ons via ' + REQUEST_EMAIL + '.';
-        });
+        date: whenIn.type === 'date' ? whenIn.value : '', pax: paxIn.value
       });
-      results.appendChild(f);
-      f.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      f.elements.name.focus({ preventScroll: true });
     });
+
+    const today = new Date().toISOString().slice(0, 10);
+    const paxOptions = sel => ['1','2','3','4','5','6','7','8','9','10','12']
+      .map(n => `<option value="${n}" ${n === sel ? 'selected' : ''}>${n === '12' ? '12+' : n}</option>`).join('');
+
+    function openModal(q){
+      modal.innerHTML = `
+        <div class="req-head">
+          <span class="req-badge">NIEUWE VLUCHTAANVRAAG</span>
+          <h3 id="reqTitle">Stel je <em>eigen vlucht</em> samen</h3>
+          <p>Vul je reis aan en laat je gegevens achter. We sturen je een voorstel op maat.</p>
+          <button type="button" class="req-close" aria-label="Sluiten">×</button>
+        </div>
+        <form class="req-body" novalidate>
+          <span class="req-legend">JE REIS</span>
+          <div class="req-fields">
+            <label>VAN<input name="from" required list="cityList" placeholder="Vertrekplaats" value="${esc(q.from)}"></label>
+            <label>NAAR<input name="to" required list="cityList" placeholder="Bestemming" value="${esc(q.to)}"></label>
+            <label>VERTREKDATUM<input name="date" type="date" required min="${today}" value="${esc(q.date)}"></label>
+            <label>PASSAGIERS<select name="pax" required><option value="">Kies</option>${paxOptions(q.pax)}</select></label>
+            <label class="req-check full"><input type="checkbox" name="return"> Ik wil ook een retourvlucht</label>
+            <label class="full req-return" hidden>RETOURDATUM<input name="returnDate" type="date" min="${today}"></label>
+          </div>
+
+          <span class="req-legend">JE GEGEVENS</span>
+          <div class="req-fields">
+            <label>NAAM<input name="name" required placeholder="Voor- en achternaam" autocomplete="name"></label>
+            <label>E-MAIL<input name="email" type="email" required placeholder="jij@voorbeeld.nl" autocomplete="email"></label>
+            <label class="full">TELEFOON<input name="phone" type="tel" placeholder="+31 6 12345678" autocomplete="tel"></label>
+            <label class="full">OPMERKING<textarea name="message" placeholder="Bijvoorbeeld gewenste vertrektijd, bagage of huisdieren"></textarea></label>
+          </div>
+          <button type="submit" class="req-submit">Verstuur aanvraag</button>
+          <p class="req-note">Je aanvraag is vrijblijvend. Je ontvangt eerst een voorstel; pas na jouw akkoord wordt de vlucht geboekt.</p>
+        </form>`;
+
+      const f = modal.querySelector('form');
+      const ret = f.querySelector('.req-return');
+      f.elements.return.addEventListener('change', () => {
+        ret.hidden = !f.elements.return.checked;
+        f.elements.returnDate.required = f.elements.return.checked;
+      });
+      f.elements.date.addEventListener('change', () => { f.elements.returnDate.min = f.elements.date.value || today; });
+      modal.querySelector('.req-close').addEventListener('click', () => modal.close());
+      f.addEventListener('submit', submitRequest);
+      modal.showModal();
+      // focus the first field that still needs filling in
+      const firstEmpty = ['from', 'to', 'date', 'pax', 'name'].map(n => f.elements[n]).find(el => !el.value);
+      (firstEmpty || f.elements.name).focus();
+    }
+
+    // clicking the dimmed backdrop closes the pop-up
+    modal.addEventListener('click', e => { if (e.target === modal) modal.close(); });
+
+    const niceDate = iso => new Date(iso + 'T00:00').toLocaleDateString('nl-NL', { weekday: 'short', day: 'numeric', month: 'long', year: 'numeric' });
+
+    function submitRequest(ev){
+      ev.preventDefault();
+      const f = ev.target;
+      if (!f.reportValidity()) return;
+      const v = n => f.elements[n].value.trim();
+      const route = v('from') + ' → ' + v('to');
+      const pax = v('pax') === '12' ? '12+ passagiers' : v('pax') + (v('pax') === '1' ? ' passagier' : ' passagiers');
+      const trip = f.elements.return.checked
+        ? 'Retour · heen ' + niceDate(v('date')) + ' · terug ' + niceDate(v('returnDate'))
+        : 'Enkele reis · ' + niceDate(v('date'));
+      const email = v('email');
+      const btn = f.querySelector('.req-submit');
+      const note = f.querySelector('.req-note');
+      btn.disabled = true; btn.textContent = 'Versturen…';
+      sendRequest('Nieuwe vluchtaanvraag: ' + route + ' (' + pax + ')', {
+        'Route': route,
+        'Reis': trip,
+        'Passagiers': pax,
+        'Naam': v('name'), 'E-mail': email,
+        'Telefoon': v('phone') || '-',
+        'Opmerking': v('message') || '-',
+        _replyto: email
+      }).then(() => {
+        modal.innerHTML = `
+          <div class="req-done">
+            <div class="tick">✓</div>
+            <h3 id="reqTitle">Aanvraag verstuurd</h3>
+            <p>${esc(route)} · ${esc(trip)} · ${esc(pax)}. We sturen je zo snel mogelijk een voorstel via ${esc(email)}.</p>
+            <button type="button" class="req-ok">Sluiten</button>
+          </div>`;
+        modal.querySelector('.req-ok').addEventListener('click', () => modal.close());
+      }).catch(() => {
+        btn.disabled = false; btn.textContent = 'Opnieuw proberen';
+        note.classList.add('error');
+        note.textContent = 'Versturen is niet gelukt. Probeer het opnieuw of mail ons via ' + REQUEST_EMAIL + '.';
+      });
+    }
   })();
 </script>
 
