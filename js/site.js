@@ -133,11 +133,19 @@ function sendRequest(subject, fields){
 
   /* ---------- empty legs come from js/deals.js ---------- */
   const MONTHS = ['jan','feb','mrt','apr','mei','jun','jul','aug','sep','okt','nov','dec'];
+  const startOfToday = new Date(new Date().toDateString());
   const legs = (typeof DEALS !== 'undefined' ? DEALS : []).map((d, i) => {
     const m = d.when.match(/(\d{1,2}) ([a-z]{3})/);
+    const y = d.when.match(/\b(20\d\d)\b/);
+    const day = m ? +m[1] : null, month = m ? MONTHS.indexOf(m[2]) : -1;
+    // departure date: the year from the text, or else the first coming occurrence of that day
+    let date = null;
+    if (month >= 0) {
+      date = new Date(y ? +y[1] : startOfToday.getFullYear(), month, day);
+      if (!y && date < startOfToday) date.setFullYear(date.getFullYear() + 1);
+    }
     return Object.assign({}, d, {
-      index: i,
-      day: m ? +m[1] : null, month: m ? MONTHS.indexOf(m[2]) : -1,
+      index: i, day, month, date,
       seats: +((d.cap.match(/tot (\d+)/) || [])[1] || 0),
       priceNum: +d.price.replace(/\D/g, '')
     });
@@ -560,7 +568,7 @@ function sendRequest(subject, fields){
     const dealBtn = e.target.closest('[data-deal]');
     if (dealBtn) { const l = legs[+dealBtn.dataset.deal]; if (l) openDetail(l); return; }
     const reqBtn = e.target.closest('[data-open-request]');
-    if (reqBtn) { e.preventDefault(); openRequest({ from: reqBtn.dataset.from || '', to: reqBtn.dataset.to || '' }); }
+    if (reqBtn) { e.preventDefault(); openRequest({ from: reqBtn.dataset.from || '', to: reqBtn.dataset.to || '', date: reqBtn.dataset.date || '', pax: reqBtn.dataset.pax || '' }); }
   });
 
   /* ---------- search bar (homepage section "Vlucht samenstellen") ---------- */
@@ -631,22 +639,66 @@ function sendRequest(subject, fields){
   /* ---------- "Alle empty legs" page: grid with filters ---------- */
   const list = document.querySelector('[data-deals="list"]');
   if (list && typeof dealCardHtml === 'function') {
-    const fFrom = $('flFrom'), fTo = $('flTo'), fPax = $('flPax'), fSort = $('flSort'), count = $('flCount');
+    const fFrom = $('flFrom'), fTo = $('flTo'), fDate = $('flDate'), fPax = $('flPax'), fSort = $('flSort'), count = $('flCount');
+    const WINDOW_DAYS = 7;
+    const DAY = 864e5;
+    const longDate = d => d.toLocaleDateString('nl-NL', { weekday: 'long', day: 'numeric', month: 'long' });
+    const shortDate = d => d.toLocaleDateString('nl-NL', { day: 'numeric', month: 'short' });
+    // the date field shows "Altijd" until it is used, like the search bar on the homepage
+    fDate.addEventListener('focus', () => { fDate.type = 'date'; });
+    fDate.addEventListener('blur', () => { if (!fDate.value) fDate.type = 'text'; });
+    fDate.min = new Date().toISOString().slice(0, 10);
+    const chosenDate = () => fDate.type === 'date' && fDate.value ? new Date(fDate.value + 'T00:00') : null;
+
+    // biggest discount first: lowest share of the original price
+    const share = l => l.oldPrice ? l.priceNum / +l.oldPrice.replace(/\D/g, '') : 1;
+    function sortRows(rows, target){
+      const byDate = target
+        ? (a, b) => Math.abs(a.date - target) - Math.abs(b.date - target) || a.date - b.date  // closest to your date first
+        : (a, b) => (a.date || 0) - (b.date || 0);
+      if (fSort.value === 'price') return rows.slice().sort((a, b) => a.priceNum - b.priceNum);
+      if (fSort.value === 'discount') return rows.slice().sort((a, b) => share(a) - share(b));
+      return rows.slice().sort(byDate);
+    }
+    const cards = rows => rows.map(l => dealCardHtml(l, l.index)).join('');
+    const group = (title, sub) => `<div class="legs-group"><h3>${esc(title)}</h3>${sub ? `<span>${esc(sub)}</span>` : ''}</div>`;
+
     function render(){
       const qf = fFrom.value.trim().toLowerCase(), qt = fTo.value.trim().toLowerCase(), pax = +fPax.value || 0;
-      let rows = legs.filter(l => hit(qf, l.from, l.fromRegion) && hit(qt, l.to, l.toRegion) && (!pax || l.seats >= pax));
-      if (fSort.value === 'price') rows = rows.slice().sort((a, b) => a.priceNum - b.priceNum);
-      // biggest discount first: lowest share of the original price
-      const share = l => l.oldPrice ? l.priceNum / +l.oldPrice.replace(/\D/g, '') : 1;
-      if (fSort.value === 'discount') rows = rows.slice().sort((a, b) => share(a) - share(b));
-      count.textContent = rows.length + (rows.length === 1 ? ' empty leg' : ' empty legs');
-      list.innerHTML = rows.length
-        ? rows.map(l => dealCardHtml(l, l.index)).join('')
-        : `<div class="legs-empty"><strong>Geen empty legs op deze route</strong><p>Vraag een nieuwe vlucht aan, dan sturen we je een voorstel op maat.</p>
-           <button type="button" data-open-request data-from="${esc(fFrom.value.trim())}" data-to="${esc(fTo.value.trim())}">Vraag een vlucht aan</button></div>`;
+      const target = chosenDate();
+      const rows = legs.filter(l => hit(qf, l.from, l.fromRegion) && hit(qt, l.to, l.toRegion) && (!pax || l.seats >= pax));
+      let html = '', shown = 0;
+
+      if (target) {
+        // 1. flights on the chosen day, 2. flights up to a week before or after it
+        const days = l => l.date ? Math.round((l.date - target) / DAY) : Infinity;
+        const exact = sortRows(rows.filter(l => days(l) === 0), target);
+        const near = sortRows(rows.filter(l => days(l) !== 0 && Math.abs(days(l)) <= WINDOW_DAYS), target);
+        shown = exact.length + near.length;
+        const from = new Date(+target - WINDOW_DAYS * DAY), to = new Date(+target + WINDOW_DAYS * DAY);
+        if (exact.length) html += group('Op ' + longDate(target), exact.length === 1 ? '1 vlucht' : exact.length + ' vluchten') + cards(exact);
+        else if (near.length) html += `<div class="legs-note">Geen empty legs op ${esc(longDate(target))}. Deze vliegen in de week eromheen.</div>`;
+        if (near.length) html += group('Een week rondom je datum', shortDate(from) + ' – ' + shortDate(to)) + cards(near);
+      } else {
+        const sorted = sortRows(rows);
+        shown = sorted.length;
+        html = cards(sorted);
+      }
+
+      const filtered = !!(qf || qt || pax || target);
+      count.innerHTML = `<strong>${shown}</strong> ${shown === 1 ? 'empty leg' : 'empty legs'}${filtered ? ' van de ' + legs.length : ''}`;
+      // only offer "Wis filters" when something is set
+      $('flReset').hidden = !filtered && fSort.value === 'date';
+      list.innerHTML = shown
+        ? html
+        : `<div class="legs-empty"><strong>Geen empty legs ${target ? 'rond ' + esc(longDate(target)) : 'op deze route'}</strong><p>Vraag een nieuwe vlucht aan, dan sturen we je een voorstel op maat.</p>
+           <button type="button" data-open-request data-from="${esc(fFrom.value.trim())}" data-to="${esc(fTo.value.trim())}" data-date="${target ? fDate.value : ''}" data-pax="${pax || ''}">Vraag een vlucht aan</button></div>`;
     }
-    [fFrom, fTo, fPax, fSort].forEach(el => el.addEventListener('input', render));
-    $('flReset').addEventListener('click', () => { fFrom.value = ''; fTo.value = ''; fPax.value = ''; fSort.value = 'date'; render(); });
+    [fFrom, fTo, fDate, fPax, fSort].forEach(el => { el.addEventListener('input', render); el.addEventListener('change', render); });
+    $('flReset').addEventListener('click', () => {
+      fFrom.value = ''; fTo.value = ''; fDate.value = ''; fDate.type = 'text'; fPax.value = ''; fSort.value = 'date'; render();
+    });
+    if ($('flSwap')) $('flSwap').addEventListener('click', () => { [fFrom.value, fTo.value] = [fTo.value, fFrom.value]; render(); });
     render();
   }
 })();
