@@ -639,7 +639,10 @@ function sendRequest(subject, fields){
       // biggest discount first: lowest share of the original price
       const share = l => l.oldPrice ? l.priceNum / +l.oldPrice.replace(/\D/g, '') : 1;
       if (fSort.value === 'discount') rows = rows.slice().sort((a, b) => share(a) - share(b));
-      count.textContent = rows.length + (rows.length === 1 ? ' empty leg' : ' empty legs');
+      const filtered = !!(qf || qt || pax);
+      count.innerHTML = `<strong>${rows.length}</strong> ${rows.length === 1 ? 'empty leg' : 'empty legs'}${filtered ? ' van de ' + legs.length : ''}`;
+      // only offer "Wis filters" when something is set
+      $('flReset').hidden = !filtered && fSort.value === 'date';
       list.innerHTML = rows.length
         ? rows.map(l => dealCardHtml(l, l.index)).join('')
         : `<div class="legs-empty"><strong>Geen empty legs op deze route</strong><p>Vraag een nieuwe vlucht aan, dan sturen we je een voorstel op maat.</p>
@@ -647,6 +650,7 @@ function sendRequest(subject, fields){
     }
     [fFrom, fTo, fPax, fSort].forEach(el => el.addEventListener('input', render));
     $('flReset').addEventListener('click', () => { fFrom.value = ''; fTo.value = ''; fPax.value = ''; fSort.value = 'date'; render(); });
+    if ($('flSwap')) $('flSwap').addEventListener('click', () => { [fFrom.value, fTo.value] = [fTo.value, fFrom.value]; render(); });
     render();
   }
 })();
