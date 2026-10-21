@@ -1076,3 +1076,8 @@ footer ul a:hover, .footer-bottom a:hover{ color: var(--accent); }
 .deals-grid.is-pressed, .deals-grid.is-pressed .deal-card{ cursor: grabbing; }
 .deals-grid.is-dragging{ cursor: grabbing; scroll-snap-type: none; scroll-behavior: auto; user-select: none; }
 .deals-grid.is-dragging .deal-card{ cursor: grabbing; pointer-events: none; }
+
+/* standing (portrait) atmosphere photo next to text */
+.photo.is-portrait{ aspect-ratio: 4 / 5; max-width: 460px; justify-self: center; width: 100%; box-shadow: 0 24px 50px rgba(30,46,61,0.18); }
+.photo.is-portrait img{ object-position: center 62%; }
+@media (max-width: 900px){ .photo.is-portrait{ aspect-ratio: 4 / 4.4; max-width: none; } }
