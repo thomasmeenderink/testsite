@@ -59,10 +59,19 @@ const DEALS = [
 
 function dealCardHtml(d, i){
   const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const photos = d.images || [d.img];
+  const isPlan = src => /plattegrond|layout|floorplan/i.test(src);
+  const label = `${d.from} naar ${d.to}, ${d.when}, ${d.price}. Meer informatie`;
   return `
-    <div class="deal-card">
+    <div class="deal-card" data-deal="${i}" role="button" tabindex="0" aria-label="${esc(label)}">
       <div class="deal-scene">
-        <img src="${esc(d.img)}" alt="${esc(d.plane)}"${d.imgClass ? ` class="${esc(d.imgClass)}"` : ''} loading="lazy">
+        <div class="card-photos">
+          ${photos.map((src, n) => `<img src="${esc(src)}" alt="${esc(d.plane)}${photos.length > 1 ? ', foto ' + (n + 1) : ''}" class="${esc(d.imgClass || '')}${isPlan(src) ? ' is-plan' : ''}" loading="lazy" draggable="false">`).join('')}
+        </div>
+        ${photos.length > 1 ? `
+          <button type="button" class="photo-nav prev" aria-label="Vorige foto" tabindex="-1">‹</button>
+          <button type="button" class="photo-nav next" aria-label="Volgende foto" tabindex="-1">›</button>
+          <div class="photo-dots">${photos.map((_, n) => `<span${n === 0 ? ' class="on"' : ''}></span>`).join('')}</div>` : ''}
       </div>
       <div class="deal-body">
         <div class="codes"><span>${esc(d.fromCode)}</span><span>${esc(d.toCode)}</span></div>
@@ -77,11 +86,41 @@ function dealCardHtml(d, i){
           <div class="price-block">${d.oldPrice ? `<div class="price-old">${esc(d.oldPrice)}</div>` : ''}<div class="price">${esc(d.price)}</div><div class="whole">Heel toestel</div></div>
         </div>
         <div class="deal-actions">
-          <button type="button" class="reserve" data-deal="${i}">MEER INFORMATIE ›</button>
+          <span class="reserve" aria-hidden="true">MEER INFORMATIE ›</span>
         </div>
       </div>
     </div>`;
 }
+
+// Photo strips inside the cards: arrows scroll one photo, swiping works natively and the
+// dots follow the scroll position. This runs in the capture phase so a click on an arrow
+// never opens the detail pop-up.
+document.addEventListener('click', e => {
+  const nav = e.target.closest('.photo-nav');
+  if (!nav) return;
+  e.stopPropagation(); e.preventDefault();
+  const strip = nav.parentElement.querySelector('.card-photos');
+  const count = strip.children.length;
+  const current = Math.round(strip.scrollLeft / strip.clientWidth);
+  // wrap around at either end
+  const target = (current + (nav.classList.contains('next') ? 1 : -1) + count) % count;
+  strip.scrollTo({ left: target * strip.clientWidth, behavior: 'smooth' });
+  setPhotoDot(strip, target);
+}, true);
+function setPhotoDot(strip, n){
+  strip.parentElement.querySelectorAll('.photo-dots span').forEach((dot, k) => dot.classList.toggle('on', k === n));
+}
+document.addEventListener('scroll', e => {
+  const strip = e.target;
+  if (!strip.classList || !strip.classList.contains('card-photos')) return;
+  setPhotoDot(strip, Math.round(strip.scrollLeft / strip.clientWidth));
+}, true);
+// cards are focusable: Enter or Space opens the detail pop-up like a click
+document.addEventListener('keydown', e => {
+  if ((e.key === 'Enter' || e.key === ' ') && e.target.matches && e.target.matches('.deal-card[data-deal]')) {
+    e.preventDefault(); e.target.click();
+  }
+});
 
 // Fill every container that asks for deals: <div data-deals="carousel"> on the homepage.
 document.querySelectorAll('[data-deals="carousel"]').forEach(el => {
