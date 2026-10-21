@@ -918,3 +918,14 @@ footer ul a:hover, .footer-bottom a:hover{ color: var(--accent); }
   .lightbox .lb-nav{ top: auto; bottom: 12px; transform: none; width: 44px; height: 44px; }
   .lightbox .lb-nav.prev{ left: 16px; } .lightbox .lb-nav.next{ right: 16px; }
 }
+
+/* terms in the detail pop-up */
+.dt-terms{ list-style: none; display:grid; gap: 16px; margin-top: 16px; }
+.dt-terms li{ display:flex; gap: 14px; align-items:flex-start; }
+.dt-terms svg{
+  flex: 0 0 auto; width: 20px; height: 20px; margin-top: 2px;
+  fill: none; stroke: var(--navy); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round;
+}
+.dt-terms p{ color: var(--text-dim); font-size: 0.92rem; }
+.dt-terms strong{ color: var(--navy); }
+.dt-section + .dt-section{ margin-top: 0; }
