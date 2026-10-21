@@ -1122,3 +1122,29 @@ footer ul a:hover, .footer-bottom a:hover{ color: var(--accent); }
 .signup-mail{ flex-wrap: wrap; }
 .signup-mail input[type=email]{ flex: 1 1 200px; }
 .signup-mail button{ flex: 1 1 auto; }
+
+/* language switch in the header: EN | NL */
+.menu{ margin-left: auto; }
+.lang-switch{
+  display:flex; margin-left: 26px; padding: 3px;
+  border: 1px solid var(--panel-line); border-radius: 999px;
+}
+.lang-switch a{
+  min-width: 34px; padding: 5px 9px; border-radius: 999px; text-align:center;
+  color: var(--navy); text-decoration:none; font-size: 0.74rem; font-weight: 600; letter-spacing: .06em;
+}
+.lang-switch a:hover{ color: var(--accent); }
+.lang-switch a[aria-current="true"]{ background: var(--navy); color: var(--white); }
+@media (max-width: 960px){
+  .lang-switch{ margin-left: auto; margin-right: 12px; }
+}
+.menu a{ white-space: nowrap; }
+@media (max-width: 1060px) and (min-width: 961px){
+  .menu{ gap: 16px; } .menu a{ font-size: 0.8rem; } .menu .menu-cta{ padding: 10px 14px; }
+  .lang-switch{ margin-left: 16px; }
+}
+@media (max-width: 480px){
+  .logo-mark img{ height: 32px; }
+  .lang-switch{ margin-right: 10px; }
+  .lang-switch a{ min-width: 30px; padding: 5px 7px; }
+}
