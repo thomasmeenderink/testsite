@@ -792,10 +792,6 @@ footer ul a:hover, .footer-bottom a:hover{ color: var(--accent); }
 .dt-route small{ display:block; color: var(--text-dim); font-size: 0.85rem; }
 .dt-code{ display:inline-block; background: var(--navy); color: var(--white); font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; padding: 4px 8px; border-radius: 4px; }
 .dt-mid{ text-align:center; padding-top: 26px; min-width: 110px; }
-.dt-mid span{ color: var(--text-dim); font-size: 0.8rem; }
-.dt-mid i{ display:block; position:relative; height: 1px; margin-top: 8px; border-top: 1px dashed #b9c1ca; }
-.dt-mid i::before, .dt-mid i::after{ content:''; position:absolute; top: -3.5px; width: 6px; height: 6px; border-radius: 50%; background: var(--navy); }
-.dt-mid i::before{ left: -2px; } .dt-mid i::after{ right: -2px; background: var(--accent); }
 .dt-facts{ display:flex; justify-content:space-between; gap: 16px; padding-top: 18px; border-top: 1px solid var(--panel-line); }
 .dt-facts .right{ text-align:right; }
 .dt-facts strong{ display:block; margin-top: 6px; font-size: 0.98rem; }
@@ -868,3 +864,24 @@ footer ul a:hover, .footer-bottom a:hover{ color: var(--accent); }
 .photo-dots{ position:absolute; left: 0; right: 0; bottom: 10px; z-index: 2; display:flex; justify-content:center; gap: 5px; pointer-events:none; }
 .photo-dots span{ width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.6); box-shadow: 0 0 2px rgba(0,0,0,0.4); transition: width .2s ease; }
 .photo-dots span.on{ width: 16px; border-radius: 3px; background: var(--white); }
+
+/* detail pop-up: whole photo on a blurred copy of itself, so nothing is cropped */
+.dt-gallery img.dt-photo-bg{ object-fit: cover; filter: blur(24px) brightness(0.8) saturate(1.1); transform: scale(1.2); }
+.dt-gallery img.dt-photo{ object-fit: contain; z-index: 1; }
+.dt-gallery.is-plan{ background: var(--white); }
+.dt-gallery.is-plan img.dt-photo-bg{ display:none; }
+.dt-gallery.is-plan img.dt-photo{ padding: 28px; }
+.dt-gallery.is-plan::after{ display:none; }
+.dt-gallery::after{ z-index: 1; }
+.dt-gallery .dt-tag, .dt-gallery .dt-count, .dt-gallery .dt-discount{ z-index: 3; }
+.req-modal .dt-close, .req-modal .dt-nav{ z-index: 3; }
+/* duration with the same plane-on-a-line as the cards */
+.dt-mid.route-mid{ padding-top: 22px; }
+.dt-mid .dur{ margin-bottom: 6px; }
+/* price per person block */
+.dt-specs .is-pp{ background: #fff1e9; }
+.dt-specs .is-pp strong{ color: var(--accent-hover); }
+.dt-specs .is-pp em{ display:block; font-style: normal; font-weight: 400; color: var(--text-dim); font-size: 0.78rem; margin-top: 2px; }
+/* price bar: current price with the normal price struck through */
+.dt-price{ display:flex; align-items: baseline; gap: 10px; }
+.dt-price s{ color: var(--text-dim); font-size: 1rem; font-weight: 500; }

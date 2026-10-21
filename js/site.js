@@ -411,12 +411,15 @@ function sendRequest(subject, fields){
     // floor plans are shown whole instead of cropped
     const isPlan = src => /plattegrond|layout|floorplan/i.test(src);
     const fmt = n => n.toLocaleString('nl-NL');
+    // price per person when the plane is full: flight price divided by the maximum passengers
+    const perPerson = l.seats ? '€' + fmt(Math.round(l.priceNum / l.seats)) : '';
 
     modal.innerHTML = `
       <div class="dt">
         <div class="dt-top">
-          <div class="dt-gallery">
-            <img src="${esc(images[0])}" alt="${esc(l.plane)}" class="${esc(l.imgClass || '')}${isPlan(images[0]) ? ' is-plan' : ''}">
+          <div class="dt-gallery${isPlan(images[0]) ? ' is-plan' : ''}">
+            <img class="dt-photo-bg" src="${esc(images[0])}" alt="" aria-hidden="true">
+            <img class="dt-photo" src="${esc(images[0])}" alt="${esc(l.plane)}">
             <button type="button" class="dt-close req-close-btn" aria-label="Sluiten">×</button>
             ${images.length > 1 ? `
               <button type="button" class="dt-nav prev" aria-label="Vorige foto">‹</button>
@@ -428,7 +431,7 @@ function sendRequest(subject, fields){
           <div class="dt-info">
             <div class="dt-route">
               <div><span class="dt-code">${esc(l.fromCode)}</span><strong>${esc(l.from)}</strong><small>${esc(l.fromRegion)}</small></div>
-              <div class="dt-mid"><span>${esc(l.duration || '')}</span><i></i></div>
+              <div class="dt-mid route-mid"><div class="dur">${esc(l.duration || '')}</div><div class="dots"></div></div>
               <div class="dest"><span class="dt-code">${esc(l.toCode)}</span><strong>${esc(l.to)}</strong><small>${esc(l.toRegion)}</small></div>
             </div>
             <div class="dt-facts">
@@ -455,14 +458,18 @@ function sendRequest(subject, fields){
               l.duration ? ['Vluchtduur', esc(l.duration)] : null,
               nm ? ['Afstand', fmt(nm) + ' nm · ' + fmt(Math.round(nm * 1.852)) + ' km'] : null,
               l.oldPrice ? ['Normale prijs', '<s>' + esc(l.oldPrice) + '</s>'] : null,
-              pct ? ['Je bespaart', '<span class="accent">' + pct + '%</span>'] : null
-            ].filter(Boolean).map(([k, v]) => `<div><small>${k}</small><strong>${v}</strong></div>`).join('')}
+              pct ? ['Je bespaart', '<span class="accent">' + pct + '%</span>'] : null,
+              perPerson ? ['Prijs per persoon', perPerson + '<em>bij ' + l.seats + ' passagiers</em>', 'is-pp'] : null
+            ].filter(Boolean).map(([k, v, cls]) => `<div${cls ? ` class="${cls}"` : ''}><small>${k}</small><strong>${v}</strong></div>`).join('')}
           </div>
           <p class="dt-note">Een empty leg is pas definitief na bevestiging door de operator. Als de oorspronkelijke vlucht wijzigt, kan ook deze vlucht veranderen of vervallen.</p>
         </div>
 
         <div class="dt-bar">
-          <div><strong>${esc(l.price)}</strong><small>Heel toestel · tot ${l.seats || '?'} passagiers</small></div>
+          <div>
+            <div class="dt-price"><strong>${esc(l.price)}</strong>${l.oldPrice ? `<s>${esc(l.oldPrice)}</s>` : ''}</div>
+            <small>Tot ${l.seats || '?'} passagiers${perPerson ? ' · ' + perPerson + ' per persoon' : ''}</small>
+          </div>
           <button type="button" class="dt-book">RESERVEER ›</button>
         </div>
       </div>`;
@@ -471,8 +478,14 @@ function sendRequest(subject, fields){
     modal.querySelector('.dt-book').addEventListener('click', () => openLegs({ pax: '1' }, [l]));
     if (images.length > 1) {
       let i = 0;
-      const img = modal.querySelector('.dt-gallery img'), count = modal.querySelector('.dt-count');
-      const go = step => { i = (i + step + images.length) % images.length; img.src = images[i]; img.classList.toggle('is-plan', isPlan(images[i])); count.textContent = (i + 1) + ' / ' + images.length; };
+      const gallery = modal.querySelector('.dt-gallery'), count = modal.querySelector('.dt-count');
+      const photo = gallery.querySelector('.dt-photo'), backdrop = gallery.querySelector('.dt-photo-bg');
+      const go = step => {
+        i = (i + step + images.length) % images.length;
+        photo.src = backdrop.src = images[i];
+        gallery.classList.toggle('is-plan', isPlan(images[i]));
+        count.textContent = (i + 1) + ' / ' + images.length;
+      };
       modal.querySelector('.dt-nav.prev').addEventListener('click', () => go(-1));
       modal.querySelector('.dt-nav.next').addEventListener('click', () => go(1));
     }
