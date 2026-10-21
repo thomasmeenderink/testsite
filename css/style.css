@@ -995,3 +995,33 @@ footer ul a:hover, .footer-bottom a:hover{ color: var(--accent); }
 .legs-toolbar .legs-reset[hidden]{ display:none; }
 .legs-toolbar .legs-reset svg{ width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; }
 @media (max-width: 900px){ .legs-bar{ padding-right: 14px; } }
+
+/* filter bar with a date: five fields side by side */
+.search-bar .sb-sort{ flex: 1.2 1 0; border-left: 1px solid var(--panel-line); }
+@media (min-width: 901px){
+  .legs-bar .sb-from, .legs-bar .sb-to{ flex: 1.2 1 0; }
+  .legs-bar .sb-when{ flex: 1.15 1 0; }
+  .legs-bar .sb-pax{ flex: 1.25 1 0; }
+  .legs-bar .sb-sort{ flex: 1.2 1 0; }
+}
+@media (max-width: 900px){
+  .search-bar .sb-sort{ flex: 1 1 100%; border-left: none; border-top: 1px solid var(--panel-line); }
+}
+/* result groups when a date is chosen */
+.legs-group{ grid-column: 1 / -1; display:flex; align-items: baseline; gap: 12px; margin-top: 8px; }
+.legs-group:not(:first-child){ margin-top: 28px; }
+.legs-group h3{ font-family: 'Playfair Display', serif; font-size: 1.35rem; color: var(--navy); }
+.legs-group h3::first-letter{ text-transform: uppercase; }
+.legs-group span{ color: var(--text-dim); font-size: 0.88rem; }
+.legs-note{
+  grid-column: 1 / -1; background: var(--white); border-left: 3px solid var(--accent);
+  border-radius: 10px; padding: 14px 18px; color: var(--navy); font-size: 0.92rem;
+}
+/* medium screens: route and date on the first row, passengers and sorting on the second */
+@media (min-width: 901px) and (max-width: 1180px){
+  .legs-bar{ flex-wrap: wrap; border-radius: 22px; row-gap: 6px; }
+  .legs-bar .sb-from, .legs-bar .sb-to{ flex: 1 1 30%; }
+  .legs-bar .sb-when{ flex: 1 1 22%; }
+  .legs-bar .sb-pax{ flex: 1 1 40%; border-left: none; border-top: 1px solid var(--panel-line); padding-left: 0; }
+  .legs-bar .sb-sort{ flex: 1 1 40%; border-top: 1px solid var(--panel-line); }
+}
