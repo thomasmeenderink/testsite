@@ -97,6 +97,7 @@ function sendRequest(subject, fields){
   track.addEventListener('pointerdown', e => {
     if (e.pointerType !== 'mouse' || e.button !== 0 || e.target.closest('.photo-nav')) return;
     drag = { x: e.clientX, left: track.scrollLeft, moved: false, lastX: e.clientX, lastT: e.timeStamp, speed: 0 };
+    track.classList.add('is-pressed');   // grabbing hand while the button is down
   });
   window.addEventListener('pointermove', e => {
     if (!drag) return;
@@ -111,6 +112,7 @@ function sendRequest(subject, fields){
   window.addEventListener('pointerup', () => {
     if (!drag) return;
     const d = drag; drag = null;
+    track.classList.remove('is-pressed');
     if (!d.moved) return;
     track.classList.remove('is-dragging');
     // land on a whole card, a bit further in the direction of a quick flick

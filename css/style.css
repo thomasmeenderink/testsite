@@ -1071,8 +1071,8 @@ footer ul a:hover, .footer-bottom a:hover{ color: var(--accent); }
 
 /* deals carousel: drag with the mouse on desktop */
 @media (hover: hover) and (pointer: fine){
-  .deals-grid{ cursor: grab; }
-  .deals-grid .deal-card{ cursor: inherit; }
+  .deals-grid, .deals-grid .deal-card{ cursor: pointer; }
 }
+.deals-grid.is-pressed, .deals-grid.is-pressed .deal-card{ cursor: grabbing; }
 .deals-grid.is-dragging{ cursor: grabbing; scroll-snap-type: none; scroll-behavior: auto; user-select: none; }
 .deals-grid.is-dragging .deal-card{ cursor: grabbing; pointer-events: none; }
