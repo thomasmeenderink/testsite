@@ -16,11 +16,18 @@ function sendRequest(subject, fields){
   if(!form) return;
   form.addEventListener('submit', e => {
     e.preventDefault();
-    const btn = form.querySelector('button');
-    const email = form.elements.email.value;
+    if (!form.reportValidity()) return;
+    const btn = form.querySelector('button[type=submit]');
+    const email = form.elements.email.value.trim();
+    const from = form.elements.from ? form.elements.from.value.trim() : '';
+    const to = form.elements.to ? form.elements.to.value.trim() : '';
+    const route = (from || to) ? (from || 'Overal') + ' → ' + (to || 'Overal') : 'Alle routes';
     btn.disabled = true; btn.textContent = 'Versturen…';
-    sendRequest('Nieuwe aanmelding voor empty leg-alerts', { 'E-mail': email, _replyto: email })
-      .then(() => { btn.textContent = 'Aangemeld ✓'; form.elements.email.disabled = true; })
+    sendRequest('Nieuwe deal-alert: ' + route, { 'Route': route, 'E-mail': email, _replyto: email })
+      .then(() => {
+        btn.textContent = 'Aangemeld ✓';
+        [...form.elements].forEach(el => { el.disabled = true; });
+      })
       .catch(() => { btn.disabled = false; btn.textContent = 'Opnieuw proberen'; });
   });
 })();
@@ -180,8 +187,11 @@ function sendRequest(subject, fields){
       date = new Date(y ? +y[1] : startOfToday.getFullYear(), month, day);
       if (!y && date < startOfToday) date.setFullYear(date.getFullYear() + 1);
     }
+    // stable short name used in share links, e.g. "eham-egss-1202"
+    const slug = [d.fromCode, d.toCode, month >= 0 ? String(month + 1).padStart(2, '0') + String(day).padStart(2, '0') : i]
+      .join('-').toLowerCase();
     return Object.assign({}, d, {
-      index: i, day, month, date,
+      index: i, day, month, date, slug,
       seats: +((d.cap.match(/tot (\d+)/) || [])[1] || 0),
       priceNum: +d.price.replace(/\D/g, '')
     });
@@ -504,6 +514,7 @@ function sendRequest(subject, fields){
           <div class="dt-gallery${isPlan(images[0]) ? ' is-plan' : ''}">
             <img class="dt-photo" src="${esc(images[0])}" alt="${esc(l.plane)}">
             <button type="button" class="dt-close req-close-btn" aria-label="Sluiten">×</button>
+            <button type="button" class="dt-share" aria-label="Deel deze vlucht" aria-haspopup="menu" aria-expanded="false">${SHARE_ICON}<span>Delen</span></button>
             ${images.length > 1 ? `
               <button type="button" class="dt-nav prev" aria-label="Vorige foto">‹</button>
               <button type="button" class="dt-nav next" aria-label="Volgende foto">›</button>
@@ -587,7 +598,10 @@ function sendRequest(subject, fields){
     }
     // clicking the photo opens it large, starting at the photo that is showing
     photo.addEventListener('click', () => openLightbox(images, i, l.plane));
+    modal.querySelector('.dt-share').addEventListener('click', e => shareDeal(l, e.currentTarget));
     show(true);
+    // the address bar now points at this flight, so it can be copied or bookmarked as well
+    history.replaceState(null, '', '#deal=' + l.slug);
     modal.querySelector('.dt-book').focus({ preventScroll: true });
 
     const mapEl = modal.querySelector('#dtMap');
@@ -598,6 +612,63 @@ function sendRequest(subject, fields){
       mapEl.classList.add('is-off');
     }
   }
+
+  /* ---------- share one flight: a link that opens its detail pop-up ---------- */
+  const SHARE_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15V3"/><path d="M7 8l5-5 5 5"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg>';
+  const WHATSAPP_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 3.5A11 11 0 0 0 3.4 17.1L2 22l5-1.3A11 11 0 0 0 20.5 3.5zm-8.5 17a9 9 0 0 1-4.6-1.3l-.3-.2-3 .8.8-2.9-.2-.3A9 9 0 1 1 12 20.5zm5-6.7c-.3-.1-1.6-.8-1.8-.9s-.4-.1-.6.1-.7.9-.8 1-.3.2-.6.1a7.3 7.3 0 0 1-3.6-3.2c-.3-.5.3-.4.8-1.4a.5.5 0 0 0 0-.5l-.8-2c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 11.9 11.9 0 0 0 4.6 4c1.7.7 2.4.8 3.2.7.5-.1 1.6-.7 1.8-1.3s.2-1.2.2-1.3-.2-.2-.5-.3z" fill="currentColor" stroke="none"/></svg>';
+  const LINK_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 10a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg>';
+  const dealLink = l => new URL('empty-legs.html#deal=' + l.slug, location.href).href;
+  const dealText = l => `${l.from} → ${l.to} · ${l.when} · ${l.price}${l.oldPrice ? ' (normaal ' + l.oldPrice + ')' : ''} · ${l.plane}`;
+
+  function shareDeal(l, btn){
+    const url = dealLink(l), text = dealText(l);
+    // phones and tablets: the system share sheet (WhatsApp, Instagram, Messages, …)
+    if (navigator.share && matchMedia('(pointer: coarse)').matches) {
+      navigator.share({ title: 'Empty leg ' + l.from + ' → ' + l.to, text, url }).catch(() => {});
+      return;
+    }
+    const gallery = btn.parentElement;
+    const old = gallery.querySelector('.dt-share-menu');
+    if (old) { old.remove(); btn.setAttribute('aria-expanded', 'false'); return; }
+    const menu = document.createElement('div');
+    menu.className = 'dt-share-menu';
+    menu.setAttribute('role', 'menu');
+    menu.innerHTML = `
+      <a role="menuitem" href="https://wa.me/?text=${encodeURIComponent(text + '\n' + url)}" target="_blank" rel="noopener">${WHATSAPP_ICON}Deel via WhatsApp</a>
+      <button type="button" role="menuitem" data-copy>${LINK_ICON}<span>Kopieer link</span></button>
+      ${navigator.share ? `<button type="button" role="menuitem" data-native>${SHARE_ICON}Meer opties</button>` : ''}`;
+    gallery.appendChild(menu);
+    btn.setAttribute('aria-expanded', 'true');
+    menu.querySelector('[data-copy]').addEventListener('click', e => {
+      const label = e.currentTarget.querySelector('span');
+      const done = () => { label.textContent = 'Link gekopieerd ✓'; setTimeout(() => menu.remove(), 1200); };
+      if (navigator.clipboard) navigator.clipboard.writeText(url).then(done, () => prompt('Kopieer deze link:', url));
+      else prompt('Kopieer deze link:', url);
+    });
+    const native = menu.querySelector('[data-native]');
+    if (native) native.addEventListener('click', () => { navigator.share({ title: 'Empty leg', text, url }).catch(() => {}); menu.remove(); });
+    // close the menu when clicking elsewhere in the pop-up
+    setTimeout(() => modal.addEventListener('click', function off(e){
+      if (!menu.contains(e.target) && e.target !== btn) { menu.remove(); btn.setAttribute('aria-expanded', 'false'); modal.removeEventListener('click', off); }
+    }), 0);
+  }
+
+  // closing the pop-up takes "#deal=…" off the address again (Esc and backdrop via the close event,
+  // the buttons via close() itself)
+  const clearDealHash = () => {
+    if (location.hash.startsWith('#deal=')) history.replaceState(null, '', location.pathname + location.search);
+  };
+  modal.addEventListener('close', clearDealHash);
+  const nativeClose = modal.close.bind(modal);
+  modal.close = value => { clearDealHash(); nativeClose(value); };
+  // a shared link (…#deal=eham-egss-1202) opens that flight straight away
+  function openFromHash(){
+    const m = location.hash.match(/^#deal=([\w-]+)/);
+    const l = m && legs.find(x => x.slug === m[1].toLowerCase());
+    if (l) openDetail(l);
+  }
+  window.addEventListener('hashchange', openFromHash);
+  setTimeout(openFromHash, 0);
 
   /* ---------- buttons anywhere on the page ---------- */
   document.addEventListener('click', e => {

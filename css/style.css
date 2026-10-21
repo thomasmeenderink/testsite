@@ -1081,3 +1081,44 @@ footer ul a:hover, .footer-bottom a:hover{ color: var(--accent); }
 .photo.is-portrait{ aspect-ratio: 4 / 5; max-width: 460px; justify-self: center; width: 100%; box-shadow: 0 24px 50px rgba(30,46,61,0.18); }
 .photo.is-portrait img{ object-position: center 62%; }
 @media (max-width: 900px){ .photo.is-portrait{ aspect-ratio: 4 / 4.4; max-width: none; } }
+
+/* --- sign-up with a route (deal alerts) --- */
+.cta-form form.signup-form{ flex-direction: column; gap: 0; padding: 0; overflow: visible; border-radius: 14px; }
+.signup-route{ display:flex; border-bottom: 1px solid var(--panel-line); }
+.signup-route .sb-field{ flex: 1 1 0; padding: 12px 16px; }
+.signup-route .sb-field + .sb-field{ border-left: 1px solid var(--panel-line); }
+.signup-route .sb-field input{ font-size: 0.98rem; }
+.signup-mail{ display:flex; gap: 8px; padding: 8px; }
+.signup-mail input[type=email]{
+  flex: 1; min-width: 0; background: transparent; border: none; color: var(--text);
+  padding: 14px 10px; font-family: 'Inter', sans-serif; font-size: 0.95rem;
+}
+.signup-mail input[type=email]:focus{ outline: none; }
+.signup-form button:disabled{ opacity: 0.85; cursor: default; }
+@media (max-width: 480px){ .signup-mail{ flex-direction: column; } }
+.cta-form form.signup-form:focus-within{ outline: none; }
+
+/* --- share a flight from the detail pop-up --- */
+.req-modal .dt-share{
+  position:absolute; top: 16px; left: 64px; z-index: 3;
+  display:inline-flex; align-items:center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 999px;
+  background: rgba(255,255,255,0.92); color: var(--navy); font-size: 0.85rem; font-weight: 600; letter-spacing: 0;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+.req-modal .dt-share:hover{ background: var(--white); }
+.dt-share svg, .dt-share-menu svg{ width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex: 0 0 auto; }
+.dt-share-menu{
+  position:absolute; top: 64px; left: 64px; z-index: 4; min-width: 220px; padding: 6px;
+  background: var(--white); border-radius: 12px; border: 1px solid var(--panel-line);
+  box-shadow: 0 16px 40px rgba(30,46,61,0.22); animation: dd-in .14s ease;
+}
+.dt-share-menu a, .req-modal .dt-share-menu button{
+  display:flex; align-items:center; gap: 10px; width: 100%; padding: 10px 12px; border-radius: 8px;
+  background: transparent; color: var(--navy); text-decoration: none; text-align: left;
+  font-family: 'Inter', sans-serif; font-size: 0.9rem; font-weight: 500; letter-spacing: 0;
+}
+.dt-share-menu a:hover, .req-modal .dt-share-menu button:hover{ background: var(--panel); }
+.dt-share-menu a svg{ color: #25D366; }
+.signup-mail{ flex-wrap: wrap; }
+.signup-mail input[type=email]{ flex: 1 1 200px; }
+.signup-mail button{ flex: 1 1 auto; }
