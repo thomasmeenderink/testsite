@@ -8,7 +8,7 @@
 <link rel="icon" type="image/webp" href="images/logo.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=4aabba93">
+<link rel="stylesheet" href="css/style.css?v=7cfb830d">
 </head>
 <body>
 <!--HEADER-->
@@ -59,26 +59,38 @@
         <button type="button" data-mode="new" aria-pressed="false">Nieuwe aanvraag</button>
       </div>
 
-      <div class="trip-grid">
-        <label class="trip-field">Vertrek<input name="from" list="cityList" placeholder="Amsterdam"></label>
-        <button type="button" class="trip-swap" aria-label="Wissel vertrek en bestemming">⇄</button>
-        <label class="trip-field">Bestemming<input name="to" list="cityList" placeholder="Nice"></label>
-
-        <div class="trip-dates wide">
-          <label class="trip-field"><span data-date-label>Datum (± 3 dagen)</span><input name="date" type="date"></label>
-          <label class="trip-field" data-only="new" hidden>Retourdatum (optioneel)<input name="returnDate" type="date"></label>
+      <div class="trip-fields">
+        <div class="tf-row">
+          <label class="sb-field tf-from"><span>VAN</span><input name="from" list="cityList" placeholder="Vertrekplaats"></label>
+          <button type="button" class="trip-swap" aria-label="Wissel vertrek en bestemming">⇆</button>
+          <label class="sb-field tf-to"><span>NAAR</span><input name="to" list="cityList" placeholder="Bestemming"></label>
         </div>
-        <div class="trip-field wide">Passagiers
-          <div class="trip-pax">
-            <button type="button" data-step="-1" aria-label="Minder passagiers">−</button>
-            <output name="pax" aria-live="polite">1</output>
-            <button type="button" data-step="1" aria-label="Meer passagiers">+</button>
-          </div>
+        <div class="tf-row">
+          <label class="sb-field"><span>VERTREKDATUM</span><input name="date" type="text" placeholder="Kies een datum"></label>
+          <label class="sb-field" data-only="new" hidden><span>RETOURDATUM</span><input name="returnDate" type="text" placeholder="Optioneel"></label>
+        </div>
+        <div class="tf-row">
+          <label class="sb-field"><span>PASSAGIERS</span>
+            <select name="pax">
+              <option value="">Aantal passagiers</option>
+              <option value="1">1 passagier</option>
+              <option value="2">2 passagiers</option>
+              <option value="3">3 passagiers</option>
+              <option value="4">4 passagiers</option>
+              <option value="5">5 passagiers</option>
+              <option value="6">6 passagiers</option>
+              <option value="7">7 passagiers</option>
+              <option value="8">8 passagiers</option>
+              <option value="9">9 passagiers</option>
+              <option value="10">10 passagiers</option>
+              <option value="11">11 passagiers</option>
+              <option value="12">12+ passagiers</option>
+            </select>
+          </label>
         </div>
       </div>
 
       <button type="submit" class="trip-go">Zoek empty legs</button>
-      <p class="trip-note" data-only="leg">Empty legs zijn bestaande vluchten die leeg terugvliegen, tot 75% onder de charterprijs.</p>
       <p class="trip-note" data-only="new" hidden>Vrijblijvend: je ontvangt eerst een voorstel op maat voor jouw route en datum.</p>
     </form>
   </div>
@@ -372,7 +384,7 @@
 <!--/FOOTER-->
 
 <script src="js/deals.js?v=c4facfac"></script>
-<script src="js/site.js?v=2f009411"></script>
+<script src="js/site.js?v=f0308402"></script>
 <script src="js/dropdowns.js?v=b80cc8d1"></script>
 
 </body>

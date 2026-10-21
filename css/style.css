@@ -1025,3 +1025,28 @@ footer ul a:hover, .footer-bottom a:hover{ color: var(--accent); }
   .legs-bar .sb-pax{ flex: 1 1 40%; border-left: none; border-top: 1px solid var(--panel-line); padding-left: 0; }
   .legs-bar .sb-sort{ flex: 1 1 40%; border-top: 1px solid var(--panel-line); }
 }
+
+/* --- trip card fields: same look as the search and filter bars --- */
+.trip-fields{
+  margin-top: 4px; background: var(--white);
+  border: 1px solid var(--panel-line); border-radius: 16px;
+  box-shadow: 0 1px 2px rgba(30,46,61,0.04);
+}
+.tf-row{ position: relative; display:flex; }
+.tf-row + .tf-row{ border-top: 1px solid var(--panel-line); }
+.tf-row > .sb-field{ flex: 1 1 0; min-width: 0; padding: 12px 16px; }
+.tf-row > .sb-field ~ .sb-field{ border-left: 1px solid var(--panel-line); }
+.tf-row > .tf-to{ padding-left: 26px; }
+.tf-row > .tf-from{ padding-right: 26px; }
+.tf-row .sb-field input{ font-size: 1rem; }
+.trip-card .tf-row .trip-swap{
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 1;
+  width: 36px; height: 36px; border-radius: 50%; padding: 0;
+  background: var(--white); color: var(--navy); border: 1px solid var(--panel-line);
+  font-size: 0.95rem; box-shadow: 0 2px 6px rgba(30,46,61,0.08); transition: transform .2s ease;
+}
+.trip-card .tf-row .trip-swap:hover{ background: var(--white); border-color: var(--navy); transform: translate(-50%, -50%) rotate(180deg); }
+.trip-card .trip-switch{ margin-bottom: 16px; }
+.trip-card .trip-switch{ display:grid; width: 100%; }
+.trip-card .trip-switch{ grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+.trip-card .trip-switch button{ padding: 10px 8px; white-space: nowrap; }
