@@ -90,6 +90,40 @@ function sendRequest(subject, fields){
   prevBtn.addEventListener('click', ()=> goTo(page - 1));
   nextBtn.addEventListener('click', ()=> goTo(page + 1));
 
+  // Desktop: hold the mouse button down on the deals and move left or right to scroll.
+  // Touch screens already swipe natively, so this only listens to the mouse.
+  let drag = null;       // { x, left, moved, lastX, lastT, speed }
+  let justDragged = false;
+  track.addEventListener('pointerdown', e => {
+    if (e.pointerType !== 'mouse' || e.button !== 0 || e.target.closest('.photo-nav')) return;
+    drag = { x: e.clientX, left: track.scrollLeft, moved: false, lastX: e.clientX, lastT: e.timeStamp, speed: 0 };
+  });
+  window.addEventListener('pointermove', e => {
+    if (!drag) return;
+    const dx = e.clientX - drag.x;
+    if (!drag.moved && Math.abs(dx) < 6) return;   // a tiny wobble is still a click
+    if (!drag.moved) { drag.moved = true; track.classList.add('is-dragging'); }
+    track.scrollLeft = drag.left - dx;
+    const dt = e.timeStamp - drag.lastT;
+    if (dt > 0) drag.speed = (e.clientX - drag.lastX) / dt;   // px per ms, for a little flick at the end
+    drag.lastX = e.clientX; drag.lastT = e.timeStamp;
+  });
+  window.addEventListener('pointerup', () => {
+    if (!drag) return;
+    const d = drag; drag = null;
+    if (!d.moved) return;
+    track.classList.remove('is-dragging');
+    // land on a whole card, a bit further in the direction of a quick flick
+    const target = track.scrollLeft - d.speed * 180;
+    const idx = Math.max(0, Math.min(cards.length - 1, Math.round(target / cardStep())));
+    track.scrollTo({ left: cards[idx].offsetLeft - cards[0].offsetLeft, behavior: 'smooth' });
+    justDragged = true;
+    setTimeout(() => { justDragged = false; }, 0);
+  });
+  // the click that ends a drag must not open the card under the mouse
+  track.addEventListener('click', e => { if (justDragged) { e.stopPropagation(); e.preventDefault(); } }, true);
+  track.addEventListener('dragstart', e => e.preventDefault());
+
   let scrollTimer;
   track.addEventListener('scroll', ()=>{
     clearTimeout(scrollTimer);
