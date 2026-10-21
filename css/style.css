@@ -1068,3 +1068,11 @@ footer ul a:hover, .footer-bottom a:hover{ color: var(--accent); }
 @media (min-width: 901px){
   .hero-inner{ grid-template-columns: minmax(0, 1.2fr) minmax(380px, 1fr); gap: 48px; }
 }
+
+/* deals carousel: drag with the mouse on desktop */
+@media (hover: hover) and (pointer: fine){
+  .deals-grid{ cursor: grab; }
+  .deals-grid .deal-card{ cursor: inherit; }
+}
+.deals-grid.is-dragging{ cursor: grabbing; scroll-snap-type: none; scroll-behavior: auto; user-select: none; }
+.deals-grid.is-dragging .deal-card{ cursor: grabbing; pointer-events: none; }
