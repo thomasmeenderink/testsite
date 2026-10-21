@@ -601,38 +601,42 @@ function sendRequest(subject, fields){
 
   /* ---------- trip card (hero; charter page uses data-mode="new") ---------- */
   document.querySelectorAll('.trip-card').forEach(trip => {
-    const MAX_PAX = 19;
-    let mode = trip.dataset.mode || 'leg', pax = 1;
-    trip.elements.date.min = today; trip.elements.returnDate.min = today;
+    let mode = trip.dataset.mode || 'leg';
+    const date = trip.elements.date, back = trip.elements.returnDate;
+
+    // date fields show their placeholder until used, like the search and filter bars
+    [date, back].forEach(el => {
+      el.addEventListener('focus', () => { el.type = 'date'; el.min = el === back && date.value ? date.value : today; });
+      el.addEventListener('blur', () => { if (!el.value) el.type = 'text'; });
+    });
+    const dateValue = el => el.type === 'date' ? el.value : '';
 
     function setMode(m){
       mode = m;
       trip.classList.toggle('is-new', m === 'new');
       trip.querySelectorAll('.trip-switch button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.mode === m)));
       trip.querySelectorAll('[data-only]').forEach(el => { el.hidden = el.dataset.only !== m; });
-      trip.querySelector('[data-date-label]').textContent = m === 'new' ? 'Vertrekdatum' : 'Datum (± 3 dagen)';
       trip.querySelector('.trip-go').textContent = m === 'new' ? 'Vraag deze vlucht aan' : 'Zoek empty legs';
     }
     trip.querySelectorAll('.trip-switch button').forEach(b => b.addEventListener('click', () => setMode(b.dataset.mode)));
     setMode(mode);
 
-    trip.querySelectorAll('[data-step]').forEach(b => b.addEventListener('click', () => {
-      pax = Math.min(MAX_PAX, Math.max(1, pax + +b.dataset.step));
-      trip.querySelector('output[name=pax]').value = pax;
-    }));
     trip.querySelector('.trip-swap').addEventListener('click', () => {
       [trip.elements.from.value, trip.elements.to.value] = [trip.elements.to.value, trip.elements.from.value];
     });
-    trip.elements.date.addEventListener('change', () => { trip.elements.returnDate.min = trip.elements.date.value || today; });
 
     trip.addEventListener('submit', e => {
       e.preventDefault();
       const q = {
         from: trip.elements.from.value.trim(), to: trip.elements.to.value.trim(),
-        date: trip.elements.date.value, pax: String(pax),
-        returnDate: mode === 'new' ? trip.elements.returnDate.value : ''
+        date: dateValue(date), pax: trip.elements.pax.value,
+        returnDate: mode === 'new' ? dateValue(back) : ''
       };
-      if (mode === 'new') openRequest(q); else openLegs(q);
+      if (mode === 'new') { openRequest(q); return; }
+      // empty legs: show the results on the "Alle empty legs" page with these filters
+      const params = new URLSearchParams();
+      ['from', 'to', 'date', 'pax'].forEach(k => { if (q[k]) params.set(k, q[k]); });
+      location.href = 'empty-legs.html' + (params.toString() ? '?' + params : '') + '#resultaten';
     });
   });
 
@@ -699,6 +703,12 @@ function sendRequest(subject, fields){
       fFrom.value = ''; fTo.value = ''; fDate.value = ''; fDate.type = 'text'; fPax.value = ''; fSort.value = 'date'; render();
     });
     if ($('flSwap')) $('flSwap').addEventListener('click', () => { [fFrom.value, fTo.value] = [fTo.value, fFrom.value]; render(); });
+    // filters handed over by the search on the homepage: empty-legs.html?from=…&to=…&date=…&pax=…
+    const params = new URLSearchParams(location.search);
+    if (params.get('from')) fFrom.value = params.get('from');
+    if (params.get('to')) fTo.value = params.get('to');
+    if (/^\d{4}-\d{2}-\d{2}$/.test(params.get('date') || '')) { fDate.type = 'date'; fDate.value = params.get('date'); }
+    if (params.get('pax') && [...fPax.options].some(o => o.value === params.get('pax'))) fPax.value = params.get('pax');
     render();
   }
 })();
