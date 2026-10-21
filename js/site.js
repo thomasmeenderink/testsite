@@ -399,6 +399,46 @@ function sendRequest(subject, fields){
     setTimeout(() => map.invalidateSize(), 50);
   }
 
+  /* ---------- photo viewer: one photo large, on top of the detail pop-up ---------- */
+  let lightbox;
+  function openLightbox(images, start, title){
+    if (!lightbox) {
+      lightbox = document.createElement('dialog');
+      lightbox.className = 'lightbox';
+      lightbox.setAttribute('aria-label', 'Foto\'s');
+      document.body.appendChild(lightbox);
+      lightbox.addEventListener('click', e => { if (e.target === lightbox || e.target.classList.contains('lb-stage')) lightbox.close(); });
+    }
+    let i = start;
+    lightbox.innerHTML = `
+      <div class="lb-stage">
+        <img class="lb-photo" src="${esc(images[i])}" alt="${esc(title)}">
+      </div>
+      <button type="button" class="lb-close" aria-label="Sluiten">×</button>
+      ${images.length > 1 ? `
+        <button type="button" class="lb-nav prev" aria-label="Vorige foto">‹</button>
+        <button type="button" class="lb-nav next" aria-label="Volgende foto">›</button>
+        <span class="lb-count">${i + 1} / ${images.length}</span>` : ''}`;
+    const img = lightbox.querySelector('.lb-photo');
+    const go = step => {
+      i = (i + step + images.length) % images.length;
+      img.src = images[i];
+      lightbox.querySelector('.lb-count').textContent = (i + 1) + ' / ' + images.length;
+    };
+    lightbox.querySelector('.lb-close').addEventListener('click', () => lightbox.close());
+    if (images.length > 1) {
+      lightbox.querySelector('.lb-nav.prev').addEventListener('click', () => go(-1));
+      lightbox.querySelector('.lb-nav.next').addEventListener('click', () => go(1));
+      lightbox.onkeydown = e => {
+        if (e.key === 'ArrowLeft') { e.preventDefault(); go(-1); }
+        if (e.key === 'ArrowRight') { e.preventDefault(); go(1); }
+      };
+    } else {
+      lightbox.onkeydown = null;
+    }
+    lightbox.showModal();
+  }
+
   function openDetail(l){
     const a = typeof AIRPORTS !== 'undefined' ? AIRPORTS[l.fromCode] : null;
     const b = typeof AIRPORTS !== 'undefined' ? AIRPORTS[l.toCode] : null;
@@ -418,7 +458,6 @@ function sendRequest(subject, fields){
       <div class="dt">
         <div class="dt-top">
           <div class="dt-gallery${isPlan(images[0]) ? ' is-plan' : ''}">
-            <img class="dt-photo-bg" src="${esc(images[0])}" alt="" aria-hidden="true">
             <img class="dt-photo" src="${esc(images[0])}" alt="${esc(l.plane)}">
             <button type="button" class="dt-close req-close-btn" aria-label="Sluiten">×</button>
             ${images.length > 1 ? `
@@ -476,19 +515,21 @@ function sendRequest(subject, fields){
 
     modal.querySelector('.dt-close').addEventListener('click', () => modal.close());
     modal.querySelector('.dt-book').addEventListener('click', () => openLegs({ pax: '1' }, [l]));
+    let i = 0;
+    const gallery = modal.querySelector('.dt-gallery'), count = modal.querySelector('.dt-count');
+    const photo = gallery.querySelector('.dt-photo');
     if (images.length > 1) {
-      let i = 0;
-      const gallery = modal.querySelector('.dt-gallery'), count = modal.querySelector('.dt-count');
-      const photo = gallery.querySelector('.dt-photo'), backdrop = gallery.querySelector('.dt-photo-bg');
       const go = step => {
         i = (i + step + images.length) % images.length;
-        photo.src = backdrop.src = images[i];
+        photo.src = images[i];
         gallery.classList.toggle('is-plan', isPlan(images[i]));
         count.textContent = (i + 1) + ' / ' + images.length;
       };
       modal.querySelector('.dt-nav.prev').addEventListener('click', () => go(-1));
       modal.querySelector('.dt-nav.next').addEventListener('click', () => go(1));
     }
+    // clicking the photo opens it large, starting at the photo that is showing
+    photo.addEventListener('click', () => openLightbox(images, i, l.plane));
     show(true);
     modal.querySelector('.dt-book').focus({ preventScroll: true });
 
