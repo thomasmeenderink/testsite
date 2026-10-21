@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="nl" data-root="../">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact · DutchJet</title>
+<meta name="description" content="Neem contact op met DutchJet over empty legs, een vlucht op maat of een andere vraag.">
+<link rel="icon" type="image/webp" href="../images/logo.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css?v=369b1570">
+<!--ALT-->
+<link rel="alternate" hreflang="en" href="https://thomasmeenderink.github.io/testsite/contact.html">
+<link rel="alternate" hreflang="nl" href="https://thomasmeenderink.github.io/testsite/nl/contact.html">
+<link rel="alternate" hreflang="x-default" href="https://thomasmeenderink.github.io/testsite/contact.html">
+<!--/ALT-->
+</head>
+<body>
+<!--HEADER-->
+<header id="top">
+  <div class="bar">
+    <a href="index.html" class="logo" aria-label="DutchJet home">
+      <span class="logo-mark"><img src="../images/logo-dutchjet.webp" alt="DutchJet"></span>
+    </a>
+    <nav class="menu" id="menu">
+      <a href="empty-legs.html">Empty legs</a>
+      <a href="privejet-charter.html">Privéjet charter</a>
+      <a href="over-ons.html">Over ons</a>
+      <a href="faq.html">FAQ</a>
+      <a href="contact.html" aria-current="page">Contact</a>
+      <a href="privejet-charter.html#aanvragen" class="menu-cta" data-open-request>Vlucht aanvragen</a>
+    </nav>
+    <div class="lang-switch" role="group" aria-label="Taal">
+      <a href="../contact.html" hreflang="en" lang="en">EN</a>
+      <a href="contact.html" hreflang="nl" lang="nl" aria-current="true">NL</a>
+    </div>
+    <button class="menu-toggle" id="menuToggle" aria-label="Menu" aria-expanded="false" aria-controls="menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+<!--/HEADER-->
+
+
+<section class="page-hero">
+  <img class="page-hero-bg" src="../images/jet-phenom-300.jpg" alt="">
+  <div class="page-hero-inner">
+    <div class="crumbs"><a href="index.html">Home</a> / Contact</div>
+    <span class="hero-badge">CONTACT</span>
+    <h1>We helpen je <em>graag</em> verder</h1>
+    <p class="hero-lead">Heb je een vraag over een empty leg, een vlucht op maat of iets anders? Stuur ons een bericht, dan nemen we zo snel mogelijk contact met je op.</p>
+  </div>
+</section>
+
+<section class="section-grey">
+  <div class="split">
+    <div class="prose">
+      <span class="section-label">CONTACTGEGEVENS</span>
+      <h2 class="section-title">Neem <em>contact</em> op</h2>
+      <p>Het snelst help je ons met je route, datum en het aantal passagiers. Wil je meteen een vlucht aanvragen, gebruik dan het <a href="privejet-charter.html#aanvragen" data-open-request>aanvraagformulier</a>.</p>
+      <ul class="contact-list">
+        <li>
+          <span class="card-icon">✉</span>
+          <div><strong>E-mail</strong><a href="mailto:dutchjet0@gmail.com">dutchjet0@gmail.com</a></div>
+        </li>
+        <li>
+          <span class="card-icon">✈</span>
+          <div><strong>Empty legs</strong><span>Bekijk het actuele aanbod op <a href="empty-legs.html">alle empty legs</a>.</span></div>
+        </li>
+        <li>
+          <span class="card-icon">?</span>
+          <div><strong>Veelgestelde vragen</strong><span>Misschien staat je antwoord al bij de <a href="faq.html">veelgestelde vragen</a>.</span></div>
+        </li>
+      </ul>
+    </div>
+
+    <form class="contact-form" id="contactForm" novalidate>
+      <h2>Stuur een bericht</h2>
+      <div class="req-fields">
+        <label class="full">ONDERWERP
+          <select name="topic" required>
+            <option value="Algemene vraag">Algemene vraag</option>
+            <option value="Empty leg">Empty leg</option>
+            <option value="Vlucht op maat">Vlucht op maat</option>
+            <option value="Bestaande aanvraag">Bestaande aanvraag of reservering</option>
+            <option value="Samenwerking">Samenwerking</option>
+          </select>
+        </label>
+        <label>NAAM<input name="name" required placeholder="Voor- en achternaam" autocomplete="name"></label>
+        <label>E-MAIL<input name="email" type="email" required placeholder="jij@voorbeeld.nl" autocomplete="email"></label>
+        <label class="full">TELEFOON<input name="phone" type="tel" placeholder="+31 6 12345678" autocomplete="tel"></label>
+        <label class="full">BERICHT<textarea name="message" required placeholder="Waar kunnen we je mee helpen?"></textarea></label>
+      </div>
+      <button type="submit" class="req-submit">Verstuur bericht</button>
+      <p class="req-note">We gebruiken je gegevens alleen om op je bericht te reageren.</p>
+    </form>
+  </div>
+</section>
+
+<!--FOOTER-->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <a href="index.html" class="footer-logo"><img src="../images/logo-dutchjet-light.webp" alt="DutchJet home"></a>
+      <p>Empty legs, real prices. Vlieg privé op routes die toch al gevlogen worden, of laat een vlucht op maat voor je samenstellen.</p>
+    </div>
+    <div>
+      <h4>PAGINA'S</h4>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="empty-legs.html">Alle empty legs</a></li>
+        <li><a href="privejet-charter.html">Privéjet charter</a></li>
+        <li><a href="over-ons.html">Over ons</a></li>
+        <li><a href="faq.html">Veelgestelde vragen</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>CONTACT</h4>
+      <ul>
+        <li><a href="mailto:dutchjet0@gmail.com">dutchjet0@gmail.com</a></li>
+        <li><a href="contact.html" aria-current="page">Contactformulier</a></li>
+        <li><a href="privejet-charter.html#aanvragen" data-open-request>Vlucht aanvragen</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 DutchJet · Empty legs, real prices.</span>
+    <a href="#top">Terug naar boven ↑</a>
+  </div>
+</footer>
+<!--/FOOTER-->
+
+
+<script src="../js/i18n.js?v=8f90a0d7"></script>
+<script src="../js/deals.js?v=4b2b5a77"></script>
+<script src="../js/site.js?v=72cb44a8"></script>
+<script src="../js/dropdowns.js?v=b80cc8d1"></script>
+</body>
+</html>

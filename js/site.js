@@ -21,14 +21,15 @@ function sendRequest(subject, fields){
     const email = form.elements.email.value.trim();
     const from = form.elements.from ? form.elements.from.value.trim() : '';
     const to = form.elements.to ? form.elements.to.value.trim() : '';
+    // the mail to DutchJet stays in Dutch, whatever language the visitor uses
     const route = (from || to) ? (from || 'Overal') + ' → ' + (to || 'Overal') : 'Alle routes';
-    btn.disabled = true; btn.textContent = 'Versturen…';
-    sendRequest('Nieuwe deal-alert: ' + route, { 'Route': route, 'E-mail': email, _replyto: email })
+    btn.disabled = true; btn.textContent = t('send');
+    sendRequest('Nieuwe deal-alert: ' + route, { 'Route': route, 'Taal': LANG.toUpperCase(), 'E-mail': email, _replyto: email })
       .then(() => {
-        btn.textContent = 'Aangemeld ✓';
+        btn.textContent = t('signedUp');
         [...form.elements].forEach(el => { el.disabled = true; });
       })
-      .catch(() => { btn.disabled = false; btn.textContent = 'Opnieuw proberen'; });
+      .catch(() => { btn.disabled = false; btn.textContent = t('retry'); });
   });
 })();
 
@@ -43,6 +44,11 @@ function sendRequest(subject, fields){
   toggle.addEventListener('click', ()=> setOpen(!header.classList.contains('open')));
   document.querySelectorAll('#menu a').forEach(a => a.addEventListener('click', ()=> setOpen(false)));
 })();
+
+// EN | NL: switching language keeps the search filters and an open flight (#deal=…)
+document.querySelectorAll('.lang-switch a').forEach(a => a.addEventListener('click', () => {
+  a.href = a.href.split(/[?#]/)[0] + location.search + (location.hash.startsWith('#deal=') ? location.hash : '');
+}));
 
 (function(){
   const track = document.getElementById('dealsTrack');
@@ -147,16 +153,16 @@ function sendRequest(subject, fields){
 })();
 
 /* =====================================================================
-   Requests: new-flight pop-up, empty-leg pop-up, search bar, trip card
-   and the "Alle empty legs" list. Every part checks that its elements
-   exist, so the same file works on every page.
+   Requests: new-flight pop-up, empty-leg pop-up, detail pop-up, search bar,
+   trip card and the "All empty legs" list. Every part checks that its
+   elements exist, so the same file works on every page and in both languages.
+   Texts come from js/i18n.js (t), flights from js/deals.js (LEGS).
    ===================================================================== */
 (function(){
   const $ = id => document.getElementById(id);
   const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const today = new Date().toISOString().slice(0, 10);
-  const niceDate = iso => new Date(iso + 'T00:00').toLocaleDateString('nl-NL', { weekday: 'short', day: 'numeric', month: 'long', year: 'numeric' });
-  const paxText = n => n + (+n === 1 ? ' passagier' : ' passagiers');
+  const niceDate = iso => new Date(iso + 'T00:00').toLocaleDateString(LOCALE, { weekday: 'short', day: 'numeric', month: 'long', year: 'numeric' });
 
   // the pop-up lives at the end of <body> on every page
   let modal = $('reqModal');
@@ -175,47 +181,23 @@ function sendRequest(subject, fields){
   }
 
   /* ---------- empty legs come from js/deals.js ---------- */
-  const MONTHS = ['jan','feb','mrt','apr','mei','jun','jul','aug','sep','okt','nov','dec'];
-  const startOfToday = new Date(new Date().toDateString());
-  const legs = (typeof DEALS !== 'undefined' ? DEALS : []).map((d, i) => {
-    const m = d.when.match(/(\d{1,2}) ([a-z]{3})/);
-    const y = d.when.match(/\b(20\d\d)\b/);
-    const day = m ? +m[1] : null, month = m ? MONTHS.indexOf(m[2]) : -1;
-    // departure date: the year from the text, or else the first coming occurrence of that day
-    let date = null;
-    if (month >= 0) {
-      date = new Date(y ? +y[1] : startOfToday.getFullYear(), month, day);
-      if (!y && date < startOfToday) date.setFullYear(date.getFullYear() + 1);
-    }
-    // stable short name used in share links, e.g. "eham-egss-1202"
-    const slug = [d.fromCode, d.toCode, month >= 0 ? String(month + 1).padStart(2, '0') + String(day).padStart(2, '0') : i]
-      .join('-').toLowerCase();
-    return Object.assign({}, d, {
-      index: i, day, month, date, slug,
-      seats: +((d.cap.match(/tot (\d+)/) || [])[1] || 0),
-      priceNum: +d.price.replace(/\D/g, '')
-    });
-  });
-  const hit = (q, name, region) => !q || name.toLowerCase().includes(q) || region.toLowerCase().includes(q);
-  function daysApart(leg, iso){
-    if (leg.month < 0) return Infinity;
-    const d = new Date(iso + 'T00:00');
-    return Math.round(Math.abs(new Date(d.getFullYear(), leg.month, leg.day) - d) / 864e5);
-  }
+  const legs = typeof LEGS !== 'undefined' ? LEGS : [];
+  const hit = (q, l, side) => !q || (side === 'from' ? l.fromSearch : l.toSearch).includes(q);
+  const daysApart = (leg, iso) => Math.round(Math.abs(leg.date - new Date(iso + 'T00:00')) / 864e5);
   function findLegs(q){
     const qf = (q.from || '').toLowerCase(), qt = (q.to || '').toLowerCase(), pax = +q.pax || 0;
     return legs.filter(l =>
-      hit(qf, l.from, l.fromRegion) && hit(qt, l.to, l.toRegion) &&
+      hit(qf, l, 'from') && hit(qt, l, 'to') &&
       (!pax || l.seats >= pax) && (!q.date || daysApart(l, q.date) <= 3)
     ).sort((a, b) => a.priceNum - b.priceNum);
   }
 
   /* ---------- city suggestions ---------- */
-  const POPULAR_FROM = 'Amsterdam';
-  const POPULAR_TO = ['Londen', 'Nice', 'Ibiza', 'Cannes', 'Genève', 'Mykonos'];
+  const POPULAR_FROM = t('popularFrom');
+  const POPULAR_TO = t('popularTo');
   let cityList = $('cityList');
   if (!cityList) { cityList = document.createElement('datalist'); cityList.id = 'cityList'; document.body.appendChild(cityList); }
-  const cities = [...new Set([POPULAR_FROM, ...POPULAR_TO, ...legs.flatMap(l => [l.from, l.to])])].sort((a, b) => a.localeCompare(b, 'nl'));
+  const cities = [...new Set([POPULAR_FROM, ...POPULAR_TO, ...legs.flatMap(l => [l.from, l.to])])].sort((a, b) => a.localeCompare(b, LOCALE));
   cityList.innerHTML = cities.map(c => `<option value="${esc(c)}">`).join('');
 
   function closeButton(){
@@ -227,15 +209,15 @@ function sendRequest(subject, fields){
         <div class="tick">✓</div>
         <h3 id="reqTitle">${esc(title)}</h3>
         <p>${esc(text)}</p>
-        <button type="button" class="req-ok">Sluiten</button>
+        <button type="button" class="req-ok">${t('close')}</button>
       </div>`;
     modal.querySelector('.req-ok').addEventListener('click', () => modal.close());
   }
   function showError(f){
     const btn = f.querySelector('.req-submit'), note = f.querySelector('.req-note');
-    btn.disabled = false; btn.textContent = 'Opnieuw proberen';
+    btn.disabled = false; btn.textContent = t('retry');
     note.classList.add('error');
-    note.textContent = 'Versturen is niet gelukt. Probeer het opnieuw of mail ons via ' + REQUEST_EMAIL + '.';
+    note.textContent = t('sendFailed', { email: REQUEST_EMAIL });
   }
 
   /* ---------- pop-up: new flight request ---------- */
@@ -246,31 +228,31 @@ function sendRequest(subject, fields){
     q = q || {};
     modal.innerHTML = `
       <div class="req-head">
-        <span class="req-badge">NIEUWE VLUCHTAANVRAAG</span>
-        <h3 id="reqTitle">Stel je <em>eigen vlucht</em> samen</h3>
-        <p>Vul je reis aan en laat je gegevens achter. We sturen je een voorstel op maat.</p>
-        <button type="button" class="req-close" aria-label="Sluiten">×</button>
+        <span class="req-badge">${t('newRequest')}</span>
+        <h3 id="reqTitle">${t('buildOwn')}</h3>
+        <p>${t('buildOwnLead')}</p>
+        <button type="button" class="req-close" aria-label="${t('close')}">×</button>
       </div>
       <form class="req-body" novalidate>
-        <span class="req-legend">JE REIS</span>
+        <span class="req-legend">${t('yourTrip')}</span>
         <div class="req-fields">
-          <label>VAN<input name="from" required list="cityList" placeholder="Vertrekplaats" value="${esc(q.from || '')}"></label>
-          <label>NAAR<input name="to" required list="cityList" placeholder="Bestemming" value="${esc(q.to || '')}"></label>
-          <label>VERTREKDATUM<input name="date" type="date" required min="${today}" value="${esc(q.date || '')}"></label>
-          <label>PASSAGIERS<select name="pax" required><option value="">Kies</option>${paxOptions(q.pax || '')}</select></label>
-          <label class="req-check full"><input type="checkbox" name="return" ${q.returnDate ? 'checked' : ''}> Ik wil ook een retourvlucht</label>
-          <label class="full req-return" ${q.returnDate ? '' : 'hidden'}>RETOURDATUM<input name="returnDate" type="date" min="${today}" value="${esc(q.returnDate || '')}" ${q.returnDate ? 'required' : ''}></label>
+          <label>${t('fFrom')}<input name="from" required list="cityList" placeholder="${t('phFrom')}" value="${esc(q.from || '')}"></label>
+          <label>${t('fTo')}<input name="to" required list="cityList" placeholder="${t('phTo')}" value="${esc(q.to || '')}"></label>
+          <label>${t('fDeparture')}<input name="date" type="date" required min="${today}" value="${esc(q.date || '')}"></label>
+          <label>${t('fPax')}<select name="pax" required><option value="">${t('choose')}</option>${paxOptions(q.pax || '')}</select></label>
+          <label class="req-check full"><input type="checkbox" name="return" ${q.returnDate ? 'checked' : ''}> ${t('wantReturn')}</label>
+          <label class="full req-return" ${q.returnDate ? '' : 'hidden'}>${t('fReturn')}<input name="returnDate" type="date" min="${today}" value="${esc(q.returnDate || '')}" ${q.returnDate ? 'required' : ''}></label>
         </div>
 
-        <span class="req-legend">JE GEGEVENS</span>
+        <span class="req-legend">${t('yourDetails')}</span>
         <div class="req-fields">
-          <label>NAAM<input name="name" required placeholder="Voor- en achternaam" autocomplete="name"></label>
-          <label>E-MAIL<input name="email" type="email" required placeholder="jij@voorbeeld.nl" autocomplete="email"></label>
-          <label class="full">TELEFOON<input name="phone" type="tel" placeholder="+31 6 12345678" autocomplete="tel"></label>
-          <label class="full">OPMERKING<textarea name="message" placeholder="Bijvoorbeeld gewenste vertrektijd, bagage of huisdieren"></textarea></label>
+          <label>${t('fName')}<input name="name" required placeholder="${t('phName')}" autocomplete="name"></label>
+          <label>${t('fEmail')}<input name="email" type="email" required placeholder="${t('phEmail')}" autocomplete="email"></label>
+          <label class="full">${t('fPhone')}<input name="phone" type="tel" placeholder="${t('phPhone')}" autocomplete="tel"></label>
+          <label class="full">${t('fNote')}<textarea name="message" placeholder="${t('phNote')}"></textarea></label>
         </div>
-        <button type="submit" class="req-submit">Verstuur aanvraag</button>
-        <p class="req-note">Je aanvraag is vrijblijvend. Je ontvangt eerst een voorstel; pas na jouw akkoord wordt de vlucht geboekt.</p>
+        <button type="submit" class="req-submit">${t('sendRequest')}</button>
+        <p class="req-note">${t('requestNote')}</p>
       </form>`;
 
     const f = modal.querySelector('form');
@@ -288,18 +270,17 @@ function sendRequest(subject, fields){
       const route = v('from') + ' → ' + v('to');
       const pax = paxText(v('pax'));
       const trip = f.elements.return.checked
-        ? 'Retour · heen ' + niceDate(v('date')) + ' · terug ' + niceDate(v('returnDate'))
-        : 'Enkele reis · ' + niceDate(v('date'));
+        ? t('roundTrip') + ' · ' + t('out') + ' ' + niceDate(v('date')) + ' · ' + t('back') + ' ' + niceDate(v('returnDate'))
+        : t('oneWay') + ' · ' + niceDate(v('date'));
       const email = v('email');
       const btn = f.querySelector('.req-submit');
-      btn.disabled = true; btn.textContent = 'Versturen…';
+      btn.disabled = true; btn.textContent = t('send');
       sendRequest('Nieuwe vluchtaanvraag: ' + route + ' (' + pax + ')', {
-        'Soort': 'Nieuwe vlucht', 'Route': route, 'Reis': trip, 'Passagiers': pax,
+        'Soort': 'Nieuwe vlucht', 'Taal': LANG.toUpperCase(), 'Route': route, 'Reis': trip, 'Passagiers': pax,
         'Naam': v('name'), 'E-mail': email,
         'Telefoon': v('phone') || '-', 'Opmerking': v('message') || '-',
         _replyto: email
-      }).then(() => showDone('Aanvraag verstuurd',
-        route + ' · ' + trip + ' · ' + pax + '. We sturen je zo snel mogelijk een voorstel via ' + email + '.'))
+      }).then(() => showDone(t('requestSent'), t('requestDone', { route, trip, pax, email })))
         .catch(() => showError(f));
     });
     show(false);
@@ -314,23 +295,23 @@ function sendRequest(subject, fields){
     const paxLabel = paxText(+q.pax || 1);
     const extras = list && list.length === 1
       ? list[0].when + ' · ' + list[0].plane
-      : [q.date ? niceDate(q.date) + ' (± 3 dagen)' : 'Elke datum', paxLabel].join(' · ');
+      : [q.date ? niceDate(q.date) : t('anyDate'), paxLabel].join(' · ');
     const title = list && list.length === 1
       ? list[0].from + ' → ' + list[0].to
-      : (q.from || 'Overal') + ' → ' + (q.to || 'Overal');
+      : (q.from || t('anywhere')) + ' → ' + (q.to || t('anywhere'));
     const head = `
       <div class="req-head">
-        <span class="req-badge">EMPTY LEG</span>
+        <span class="req-badge">${t('emptyLeg')}</span>
         <h3 id="reqTitle">${esc(title)}</h3>
         <p>${esc(extras)}</p>
-        <button type="button" class="req-close" aria-label="Sluiten">×</button>
+        <button type="button" class="req-close" aria-label="${t('close')}">×</button>
       </div>`;
 
     if (!found.length) {
       modal.innerHTML = head + `
         <div class="req-body">
-          <div class="req-empty"><strong>Geen empty leg gevonden</strong>Er vliegt op dit moment geen lege vlucht die bij je zoekopdracht past. We kunnen wel een nieuwe vlucht voor je aanvragen.</div>
-          <button type="button" class="req-submit" data-to-new>Vraag een nieuwe vlucht aan</button>
+          <div class="req-empty"><strong>${t('noLegFound')}</strong>${t('noLegText')}</div>
+          <button type="button" class="req-submit" data-to-new>${t('requestNew')}</button>
         </div>`;
       modal.querySelector('[data-to-new]').addEventListener('click', () => { modal.close(); openRequest(q); });
       closeButton();
@@ -341,7 +322,7 @@ function sendRequest(subject, fields){
 
     modal.innerHTML = head + `
       <form class="req-body" novalidate>
-        <span class="req-legend">${found.length === 1 ? 'JE VLUCHT' : found.length + ' EMPTY LEGS GEVONDEN'}</span>
+        <span class="req-legend">${found.length === 1 ? t('yourFlight') : t('legsFound', { n: found.length })}</span>
         <div class="req-options">
           ${found.map((l, i) => `
             <label class="req-option">
@@ -350,15 +331,15 @@ function sendRequest(subject, fields){
               <span class="o-price">${esc(l.price)}</span>
             </label>`).join('')}
         </div>
-        <span class="req-legend">JE GEGEVENS</span>
+        <span class="req-legend">${t('yourDetails')}</span>
         <div class="req-fields">
-          <label>NAAM<input name="name" required placeholder="Voor- en achternaam" autocomplete="name"></label>
-          <label>E-MAIL<input name="email" type="email" required placeholder="jij@voorbeeld.nl" autocomplete="email"></label>
-          <label>TELEFOON<input name="phone" type="tel" placeholder="+31 6 12345678" autocomplete="tel"></label>
-          <label>PASSAGIERS<select name="pax" required>${paxOptions(q.pax || '1')}</select></label>
+          <label>${t('fName')}<input name="name" required placeholder="${t('phName')}" autocomplete="name"></label>
+          <label>${t('fEmail')}<input name="email" type="email" required placeholder="${t('phEmail')}" autocomplete="email"></label>
+          <label>${t('fPhone')}<input name="phone" type="tel" placeholder="${t('phPhone')}" autocomplete="tel"></label>
+          <label>${t('fPax')}<select name="pax" required>${paxOptions(q.pax || '1')}</select></label>
         </div>
-        <button type="submit" class="req-submit">Reserveer deze empty leg</button>
-        <p class="req-note">Je reservering is pas definitief na bevestiging door de operator. Routes en tijden kunnen tot vlak voor vertrek wijzigen.</p>
+        <button type="submit" class="req-submit">${t('reserveLeg')}</button>
+        <p class="req-note">${t('reserveNote')}</p>
       </form>`;
     const f = modal.querySelector('form');
     closeButton();
@@ -371,20 +352,19 @@ function sendRequest(subject, fields){
       if (l.seats && +f.elements.pax.value > l.seats) {
         const note = f.querySelector('.req-note');
         note.classList.add('error');
-        note.textContent = 'Dit toestel heeft plaats voor maximaal ' + l.seats + ' passagiers.';
+        note.textContent = t('tooMany', { n: l.seats });
         return;
       }
-      const details = [l.when, l.plane, pax, l.price + ' heel toestel'].join(' · ');
+      const details = [l.when, l.plane, pax, l.price].join(' · ');
       const email = f.elements.email.value.trim();
       const btn = f.querySelector('.req-submit');
-      btn.disabled = true; btn.textContent = 'Versturen…';
+      btn.disabled = true; btn.textContent = t('send');
       sendRequest('Empty leg reserveren: ' + route + ' (' + l.when + ')', {
-        'Soort': 'Empty leg', 'Route': route, 'Details': details,
+        'Soort': 'Empty leg', 'Taal': LANG.toUpperCase(), 'Route': route, 'Details': details,
         'Naam': f.elements.name.value.trim(), 'E-mail': email,
         'Telefoon': f.elements.phone.value.trim() || '-',
         _replyto: email
-      }).then(() => showDone('Reservering verstuurd',
-        route + ' · ' + details + '. We bevestigen je reservering zo snel mogelijk via ' + email + '.'))
+      }).then(() => showDone(t('reservationSent'), t('reservationDone', { route, details, email })))
         .catch(() => showError(f));
     });
     show(false);
@@ -459,7 +439,7 @@ function sendRequest(subject, fields){
     if (!lightbox) {
       lightbox = document.createElement('dialog');
       lightbox.className = 'lightbox';
-      lightbox.setAttribute('aria-label', 'Foto\'s');
+      lightbox.setAttribute('aria-label', t('photos'));
       document.body.appendChild(lightbox);
       lightbox.addEventListener('click', e => { if (e.target === lightbox || e.target.classList.contains('lb-stage')) lightbox.close(); });
     }
@@ -468,10 +448,10 @@ function sendRequest(subject, fields){
       <div class="lb-stage">
         <img class="lb-photo" src="${esc(images[i])}" alt="${esc(title)}">
       </div>
-      <button type="button" class="lb-close" aria-label="Sluiten">×</button>
+      <button type="button" class="lb-close" aria-label="${t('close')}">×</button>
       ${images.length > 1 ? `
-        <button type="button" class="lb-nav prev" aria-label="Vorige foto">‹</button>
-        <button type="button" class="lb-nav next" aria-label="Volgende foto">›</button>
+        <button type="button" class="lb-nav prev" aria-label="${t('prevPhoto')}">‹</button>
+        <button type="button" class="lb-nav next" aria-label="${t('nextPhoto')}">›</button>
         <span class="lb-count">${i + 1} / ${images.length}</span>` : ''}`;
     const img = lightbox.querySelector('.lb-photo');
     const go = step => {
@@ -494,48 +474,45 @@ function sendRequest(subject, fields){
   }
 
   function openDetail(l){
-    const a = typeof AIRPORTS !== 'undefined' ? AIRPORTS[l.fromCode] : null;
-    const b = typeof AIRPORTS !== 'undefined' ? AIRPORTS[l.toCode] : null;
+    const a = l.fromPos, b = l.toPos;
     const nm = a && b ? Math.round(distanceNm(a, b)) : null;
-    const flexible = /beschikbaar tussen/i.test(l.when);
-    const old = +(l.oldPrice || '').replace(/\D/g, '');
-    const pct = old ? Math.round((1 - l.priceNum / old) * 100) : 0;
-    const cls = l.cap.split(' · ')[0];
-    const images = l.images || [l.img];
+    const pct = l.oldNum ? Math.round((1 - l.priceNum / l.oldNum) * 100) : 0;
+    const images = l.images.length ? l.images : [l.img];
     // floor plans are shown whole instead of cropped
     const isPlan = src => /plattegrond|layout|floorplan/i.test(src);
-    const fmt = n => n.toLocaleString('nl-NL');
+    const fmt = n => n.toLocaleString(LOCALE);
+    const upTo = t('upTo', { n: l.seats || '?' });
     // price per person when the plane is full: flight price divided by the maximum passengers
-    const perPerson = l.seats ? '€' + fmt(Math.round(l.priceNum / l.seats)) : '';
+    const perPerson = l.seats ? euro(l.priceNum / l.seats) : '';
 
     modal.innerHTML = `
       <div class="dt">
         <div class="dt-top">
           <div class="dt-gallery${isPlan(images[0]) ? ' is-plan' : ''}">
             <img class="dt-photo" src="${esc(images[0])}" alt="${esc(l.plane)}">
-            <button type="button" class="dt-close req-close-btn" aria-label="Sluiten">×</button>
-            <button type="button" class="dt-share" aria-label="Deel deze vlucht" aria-haspopup="menu" aria-expanded="false">${SHARE_ICON}<span>Delen</span></button>
+            <button type="button" class="dt-close req-close-btn" aria-label="${t('close')}">×</button>
+            <button type="button" class="dt-share" aria-label="${t('shareLabel')}" aria-haspopup="menu" aria-expanded="false">${SHARE_ICON}<span>${t('share')}</span></button>
             ${images.length > 1 ? `
-              <button type="button" class="dt-nav prev" aria-label="Vorige foto">‹</button>
-              <button type="button" class="dt-nav next" aria-label="Volgende foto">›</button>
+              <button type="button" class="dt-nav prev" aria-label="${t('prevPhoto')}">‹</button>
+              <button type="button" class="dt-nav next" aria-label="${t('nextPhoto')}">›</button>
               <span class="dt-count">1 / ${images.length}</span>` : ''}
-            <span class="dt-tag">${esc(l.plane)} · ${esc(cls)}</span>
+            <span class="dt-tag">${esc(l.plane)} · ${esc(l.cls)}</span>
             ${pct ? `<span class="dt-discount">−${pct}%</span>` : ''}
           </div>
           <div class="dt-info">
             <div class="dt-route">
               <div><span class="dt-code">${esc(l.fromCode)}</span><strong>${esc(l.from)}</strong><small>${esc(l.fromRegion)}</small></div>
-              <div class="dt-mid route-mid"><div class="dur">${esc(l.duration || '')}</div><div class="dots"></div></div>
+              <div class="dt-mid route-mid"><div class="dur">${esc(l.duration)}</div><div class="dots"></div></div>
               <div class="dest"><span class="dt-code">${esc(l.toCode)}</span><strong>${esc(l.to)}</strong><small>${esc(l.toRegion)}</small></div>
             </div>
             <div class="dt-facts">
               <div>
-                <span class="dt-label">VERTREK ${flexible ? '<em class="dt-flex">FLEXIBEL</em>' : ''}</span>
+                <span class="dt-label">${t('departure')} ${l.flexible ? `<em class="dt-flex">${t('flexible')}</em>` : ''}</span>
                 <strong><span aria-hidden="true">🕓</span> ${esc(l.when)}</strong>
               </div>
               <div class="right">
-                <span class="dt-label">PASSAGIERS</span>
-                <strong>Tot ${l.seats || '?'}</strong>
+                <span class="dt-label">${t('paxLabel')}</span>
+                <strong>${esc(upTo)}</strong>
               </div>
             </div>
             <div class="dt-map" id="dtMap">${nm ? `<span class="dt-dist">● ${fmt(nm)} nm</span>` : ''}</div>
@@ -543,31 +520,31 @@ function sendRequest(subject, fields){
         </div>
 
         <div class="dt-section">
-          <span class="dt-label">OVER DEZE VLUCHT</span>
+          <span class="dt-label">${t('aboutFlight')}</span>
           <div class="dt-specs">
             ${[
-              ['Toestel', esc(l.plane)],
-              ['Klasse', esc(cls)],
-              ['Passagiers', 'Tot ' + (l.seats || '?')],
-              l.duration ? ['Vluchtduur', esc(l.duration)] : null,
-              nm ? ['Afstand', fmt(nm) + ' nm · ' + fmt(Math.round(nm * 1.852)) + ' km'] : null,
-              l.oldPrice ? ['Normale prijs', '<s>' + esc(l.oldPrice) + '</s>'] : null,
-              pct ? ['Je bespaart', '<span class="accent">' + pct + '%</span>'] : null,
-              perPerson ? ['Prijs per persoon', perPerson + '<em>bij ' + l.seats + ' passagiers</em>', 'is-pp'] : null
+              [t('aircraft'), esc(l.plane)],
+              [t('cls'), esc(l.cls)],
+              [t('passengers').replace(/^./, c => c.toUpperCase()), esc(upTo)],
+              l.duration ? [t('duration'), esc(l.duration)] : null,
+              nm ? [t('distance'), fmt(nm) + ' nm · ' + fmt(Math.round(nm * 1.852)) + ' km'] : null,
+              l.oldPrice ? [t('normalPrice'), '<s>' + esc(l.oldPrice) + '</s>'] : null,
+              pct ? [t('youSave'), '<span class="accent">' + pct + '%</span>'] : null,
+              perPerson ? [t('perPerson'), perPerson + '<em>' + t('withPax', { n: l.seats }) + '</em>', 'is-pp'] : null
             ].filter(Boolean).map(([k, v, cls]) => `<div${cls ? ` class="${cls}"` : ''}><small>${k}</small><strong>${v}</strong></div>`).join('')}
           </div>
         </div>
 
         <div class="dt-section">
-          <span class="dt-label">VOORWAARDEN</span>
+          <span class="dt-label">${t('terms')}</span>
           <ul class="dt-terms">
             <li>
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg>
-              <p><strong>Bevestiging door de operator.</strong> Een empty leg is pas definitief na bevestiging door de operator.</p>
+              <p><strong>${t('term1Title')}</strong> ${t('term1')}</p>
             </li>
             <li>
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.3-5.7"/><path d="M20 4v5h-5"/></svg>
-              <p><strong>Afhankelijk van de oorspronkelijke vlucht.</strong> Als de oorspronkelijke vlucht wijzigt, kan ook deze vlucht veranderen of vervallen.</p>
+              <p><strong>${t('term2Title')}</strong> ${t('term2')}</p>
             </li>
           </ul>
         </div>
@@ -575,9 +552,9 @@ function sendRequest(subject, fields){
         <div class="dt-bar">
           <div>
             <div class="dt-price"><strong>${esc(l.price)}</strong>${l.oldPrice ? `<s>${esc(l.oldPrice)}</s>` : ''}</div>
-            <small>Tot ${l.seats || '?'} passagiers${perPerson ? ' · ' + perPerson + ' per persoon' : ''}</small>
+            <small>${esc(t('upToPax', { n: l.seats || '?' }).replace(/^./, c => c.toUpperCase()))}${perPerson ? ' · ' + t('perPersonShort', { price: perPerson }) : ''}</small>
           </div>
-          <button type="button" class="dt-book">RESERVEER ›</button>
+          <button type="button" class="dt-book">${t('reserve')}</button>
         </div>
       </div>`;
 
@@ -607,7 +584,7 @@ function sendRequest(subject, fields){
     const mapEl = modal.querySelector('#dtMap');
     if (a && b) {
       loadLeaflet().then(() => { if (mapEl.isConnected) drawMap(mapEl, a, b); })
-        .catch(() => { mapEl.classList.add('is-off'); mapEl.insertAdjacentHTML('beforeend', '<p>De kaart kon niet worden geladen.</p>'); });
+        .catch(() => { mapEl.classList.add('is-off'); mapEl.insertAdjacentHTML('beforeend', `<p>${t('mapFailed')}</p>`); });
     } else {
       mapEl.classList.add('is-off');
     }
@@ -617,8 +594,9 @@ function sendRequest(subject, fields){
   const SHARE_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15V3"/><path d="M7 8l5-5 5 5"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg>';
   const WHATSAPP_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 3.5A11 11 0 0 0 3.4 17.1L2 22l5-1.3A11 11 0 0 0 20.5 3.5zm-8.5 17a9 9 0 0 1-4.6-1.3l-.3-.2-3 .8.8-2.9-.2-.3A9 9 0 1 1 12 20.5zm5-6.7c-.3-.1-1.6-.8-1.8-.9s-.4-.1-.6.1-.7.9-.8 1-.3.2-.6.1a7.3 7.3 0 0 1-3.6-3.2c-.3-.5.3-.4.8-1.4a.5.5 0 0 0 0-.5l-.8-2c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 11.9 11.9 0 0 0 4.6 4c1.7.7 2.4.8 3.2.7.5-.1 1.6-.7 1.8-1.3s.2-1.2.2-1.3-.2-.2-.5-.3z" fill="currentColor" stroke="none"/></svg>';
   const LINK_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 10a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg>';
+  // the empty legs page in the same language sits next to every page, so a relative link works
   const dealLink = l => new URL('empty-legs.html#deal=' + l.slug, location.href).href;
-  const dealText = l => `${l.from} → ${l.to} · ${l.when} · ${l.price}${l.oldPrice ? ' (normaal ' + l.oldPrice + ')' : ''} · ${l.plane}`;
+  const dealText = l => `${l.from} → ${l.to} · ${l.when} · ${l.price}${l.oldPrice ? ' (' + t('normally', { price: l.oldPrice }) + ')' : ''} · ${l.plane}`;
 
   function shareDeal(l, btn){
     const url = dealLink(l), text = dealText(l);
@@ -634,16 +612,16 @@ function sendRequest(subject, fields){
     menu.className = 'dt-share-menu';
     menu.setAttribute('role', 'menu');
     menu.innerHTML = `
-      <a role="menuitem" href="https://wa.me/?text=${encodeURIComponent(text + '\n' + url)}" target="_blank" rel="noopener">${WHATSAPP_ICON}Deel via WhatsApp</a>
-      <button type="button" role="menuitem" data-copy>${LINK_ICON}<span>Kopieer link</span></button>
-      ${navigator.share ? `<button type="button" role="menuitem" data-native>${SHARE_ICON}Meer opties</button>` : ''}`;
+      <a role="menuitem" href="https://wa.me/?text=${encodeURIComponent(text + '\n' + url)}" target="_blank" rel="noopener">${WHATSAPP_ICON}${t('shareWhatsApp')}</a>
+      <button type="button" role="menuitem" data-copy>${LINK_ICON}<span>${t('copyLink')}</span></button>
+      ${navigator.share ? `<button type="button" role="menuitem" data-native>${SHARE_ICON}${t('moreOptions')}</button>` : ''}`;
     gallery.appendChild(menu);
     btn.setAttribute('aria-expanded', 'true');
     menu.querySelector('[data-copy]').addEventListener('click', e => {
       const label = e.currentTarget.querySelector('span');
-      const done = () => { label.textContent = 'Link gekopieerd ✓'; setTimeout(() => menu.remove(), 1200); };
-      if (navigator.clipboard) navigator.clipboard.writeText(url).then(done, () => prompt('Kopieer deze link:', url));
-      else prompt('Kopieer deze link:', url);
+      const done = () => { label.textContent = t('linkCopied'); setTimeout(() => menu.remove(), 1200); };
+      if (navigator.clipboard) navigator.clipboard.writeText(url).then(done, () => prompt(t('copyThisLink'), url));
+      else prompt(t('copyThisLink'), url);
     });
     const native = menu.querySelector('[data-native]');
     if (native) native.addEventListener('click', () => { navigator.share({ title: 'Empty leg', text, url }).catch(() => {}); menu.remove(); });
@@ -678,7 +656,7 @@ function sendRequest(subject, fields){
     if (reqBtn) { e.preventDefault(); openRequest({ from: reqBtn.dataset.from || '', to: reqBtn.dataset.to || '', date: reqBtn.dataset.date || '', pax: reqBtn.dataset.pax || '' }); }
   });
 
-  /* ---------- search bar (homepage section "Vlucht samenstellen") ---------- */
+  /* ---------- search bar (homepage section "Plan your flight") ---------- */
   const form = $('flightSearch');
   if (form) {
     const fromIn = $('sbFrom'), toIn = $('sbTo'), whenIn = $('sbWhen'), paxIn = $('sbPax');
@@ -723,7 +701,7 @@ function sendRequest(subject, fields){
       trip.classList.toggle('is-new', m === 'new');
       trip.querySelectorAll('.trip-switch button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.mode === m)));
       trip.querySelectorAll('[data-only]').forEach(el => { el.hidden = el.dataset.only !== m; });
-      trip.querySelector('.trip-go').textContent = m === 'new' ? 'Vraag deze vlucht aan' : 'Zoek empty legs';
+      trip.querySelector('.trip-go').textContent = m === 'new' ? t('requestFlight') : t('searchLegs');
     }
     trip.querySelectorAll('.trip-switch button').forEach(b => b.addEventListener('click', () => setMode(b.dataset.mode)));
     setMode(mode);
@@ -740,33 +718,33 @@ function sendRequest(subject, fields){
         returnDate: mode === 'new' ? dateValue(back) : ''
       };
       if (mode === 'new') { openRequest(q); return; }
-      // empty legs: show the results on the "Alle empty legs" page with these filters
+      // empty legs: show the results on the empty legs page with these filters
       const params = new URLSearchParams();
       ['from', 'to', 'date', 'pax'].forEach(k => { if (q[k]) params.set(k, q[k]); });
-      location.href = 'empty-legs.html' + (params.toString() ? '?' + params : '') + '#resultaten';
+      location.href = 'empty-legs.html' + (params.toString() ? '?' + params : '') + '#results';
     });
   });
 
-  /* ---------- "Alle empty legs" page: grid with filters ---------- */
+  /* ---------- empty legs page: grid with filters ---------- */
   const list = document.querySelector('[data-deals="list"]');
   if (list && typeof dealCardHtml === 'function') {
     const fFrom = $('flFrom'), fTo = $('flTo'), fDate = $('flDate'), fPax = $('flPax'), fSort = $('flSort'), count = $('flCount');
     const WINDOW_DAYS = 7;
     const DAY = 864e5;
-    const longDate = d => d.toLocaleDateString('nl-NL', { weekday: 'long', day: 'numeric', month: 'long' });
-    const shortDate = d => d.toLocaleDateString('nl-NL', { day: 'numeric', month: 'short' });
-    // the date field shows "Altijd" until it is used, like the search bar on the homepage
+    const longDate = d => d.toLocaleDateString(LOCALE, { weekday: 'long', day: 'numeric', month: 'long' });
+    const shortDate = d => d.toLocaleDateString(LOCALE, { day: 'numeric', month: 'short' });
+    // the date field shows "Any time" until it is used, like the search bar on the homepage
     fDate.addEventListener('focus', () => { fDate.type = 'date'; });
     fDate.addEventListener('blur', () => { if (!fDate.value) fDate.type = 'text'; });
-    fDate.min = new Date().toISOString().slice(0, 10);
+    fDate.min = today;
     const chosenDate = () => fDate.type === 'date' && fDate.value ? new Date(fDate.value + 'T00:00') : null;
 
     // biggest discount first: lowest share of the original price
-    const share = l => l.oldPrice ? l.priceNum / +l.oldPrice.replace(/\D/g, '') : 1;
+    const share = l => l.oldNum ? l.priceNum / l.oldNum : 1;
     function sortRows(rows, target){
       const byDate = target
         ? (a, b) => Math.abs(a.date - target) - Math.abs(b.date - target) || a.date - b.date  // closest to your date first
-        : (a, b) => (a.date || 0) - (b.date || 0);
+        : (a, b) => a.date - b.date;
       if (fSort.value === 'price') return rows.slice().sort((a, b) => a.priceNum - b.priceNum);
       if (fSort.value === 'discount') return rows.slice().sort((a, b) => share(a) - share(b));
       return rows.slice().sort(byDate);
@@ -777,19 +755,19 @@ function sendRequest(subject, fields){
     function render(){
       const qf = fFrom.value.trim().toLowerCase(), qt = fTo.value.trim().toLowerCase(), pax = +fPax.value || 0;
       const target = chosenDate();
-      const rows = legs.filter(l => hit(qf, l.from, l.fromRegion) && hit(qt, l.to, l.toRegion) && (!pax || l.seats >= pax));
+      const rows = legs.filter(l => hit(qf, l, 'from') && hit(qt, l, 'to') && (!pax || l.seats >= pax));
       let html = '', shown = 0;
 
       if (target) {
         // 1. flights on the chosen day, 2. flights up to a week before or after it
-        const days = l => l.date ? Math.round((l.date - target) / DAY) : Infinity;
+        const days = l => Math.round((l.date - target) / DAY);
         const exact = sortRows(rows.filter(l => days(l) === 0), target);
         const near = sortRows(rows.filter(l => days(l) !== 0 && Math.abs(days(l)) <= WINDOW_DAYS), target);
         shown = exact.length + near.length;
         const from = new Date(+target - WINDOW_DAYS * DAY), to = new Date(+target + WINDOW_DAYS * DAY);
-        if (exact.length) html += group('Op ' + longDate(target), exact.length === 1 ? '1 vlucht' : exact.length + ' vluchten') + cards(exact);
-        else if (near.length) html += `<div class="legs-note">Geen empty legs op ${esc(longDate(target))}. Deze vliegen in de week eromheen.</div>`;
-        if (near.length) html += group('Een week rondom je datum', shortDate(from) + ' – ' + shortDate(to)) + cards(near);
+        if (exact.length) html += group(t('on', { date: longDate(target) }), exact.length === 1 ? t('flight1') : t('flightsN', { n: exact.length })) + cards(exact);
+        else if (near.length) html += `<div class="legs-note">${esc(t('noLegsOnDay', { date: longDate(target) }))}</div>`;
+        if (near.length) html += group(t('weekAround'), shortDate(from) + ' – ' + shortDate(to)) + cards(near);
       } else {
         const sorted = sortRows(rows);
         shown = sorted.length;
@@ -797,13 +775,13 @@ function sendRequest(subject, fields){
       }
 
       const filtered = !!(qf || qt || pax || target);
-      count.innerHTML = `<strong>${shown}</strong> ${shown === 1 ? 'empty leg' : 'empty legs'}${filtered ? ' van de ' + legs.length : ''}`;
-      // only offer "Wis filters" when something is set
+      count.innerHTML = `<strong>${shown}</strong> ${shown === 1 ? t('legs1') : t('legsN')}${filtered ? t('ofTotal', { n: legs.length }) : ''}`;
+      // only offer "Clear filters" when something is set
       $('flReset').hidden = !filtered && fSort.value === 'date';
       list.innerHTML = shown
         ? html
-        : `<div class="legs-empty"><strong>Geen empty legs ${target ? 'rond ' + esc(longDate(target)) : 'op deze route'}</strong><p>Vraag een nieuwe vlucht aan, dan sturen we je een voorstel op maat.</p>
-           <button type="button" data-open-request data-from="${esc(fFrom.value.trim())}" data-to="${esc(fTo.value.trim())}" data-date="${target ? fDate.value : ''}" data-pax="${pax || ''}">Vraag een vlucht aan</button></div>`;
+        : `<div class="legs-empty"><strong>${esc(target ? t('noLegsAround', { date: longDate(target) }) : t('noLegsRoute'))}</strong><p>${t('noLegsLead')}</p>
+           <button type="button" data-open-request data-from="${esc(fFrom.value.trim())}" data-to="${esc(fTo.value.trim())}" data-date="${target ? fDate.value : ''}" data-pax="${pax || ''}">${t('requestAFlight')}</button></div>`;
     }
     [fFrom, fTo, fDate, fPax, fSort].forEach(el => { el.addEventListener('input', render); el.addEventListener('change', render); });
     $('flReset').addEventListener('click', () => {
@@ -830,22 +808,22 @@ function sendRequest(subject, fields){
     if (!form.reportValidity()) return;
     const v = n => form.elements[n].value.trim();
     const btn = form.querySelector('.req-submit'), note = form.querySelector('.req-note');
-    btn.disabled = true; btn.textContent = 'Versturen…';
+    btn.disabled = true; btn.textContent = t('send');
     sendRequest('Contactformulier: ' + v('topic') + ' (' + v('name') + ')', {
-      'Soort': 'Contactformulier', 'Onderwerp': v('topic'),
+      'Soort': 'Contactformulier', 'Taal': LANG.toUpperCase(), 'Onderwerp': v('topic'),
       'Naam': v('name'), 'E-mail': v('email'), 'Telefoon': v('phone') || '-',
       'Bericht': v('message'), _replyto: v('email')
     }).then(() => {
       form.innerHTML = `
         <div class="form-done">
           <div class="tick">✓</div>
-          <h3>Bericht verstuurd</h3>
-          <p>Bedankt, ${esc(v('name'))}. We reageren zo snel mogelijk via ${esc(v('email'))}.</p>
+          <h3>${t('messageSent')}</h3>
+          <p>${esc(t('thanks', { name: v('name'), email: v('email') }))}</p>
         </div>`;
     }).catch(() => {
-      btn.disabled = false; btn.textContent = 'Opnieuw proberen';
+      btn.disabled = false; btn.textContent = t('retry');
       note.classList.add('error');
-      note.textContent = 'Versturen is niet gelukt. Probeer het opnieuw of mail ons via ' + REQUEST_EMAIL + '.';
+      note.textContent = t('sendFailed', { email: REQUEST_EMAIL });
     });
   });
 })();

@@ -1,14 +1,19 @@
 <!DOCTYPE html>
-<html lang="nl">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DutchJet · Empty legs en privéjet charter</title>
-<meta name="description" content="Vlieg privé voor een fractie van de prijs met empty legs, of vraag een privévlucht op maat aan bij DutchJet.">
+<title>DutchJet · Empty legs and private jet charter</title>
+<meta name="description" content="Fly private for a fraction of the price with empty legs, or request a tailored private flight from DutchJet.">
 <link rel="icon" type="image/webp" href="images/logo.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=dfbd40b3">
+<link rel="stylesheet" href="css/style.css?v=369b1570">
+<!--ALT-->
+<link rel="alternate" hreflang="en" href="https://thomasmeenderink.github.io/testsite/">
+<link rel="alternate" hreflang="nl" href="https://thomasmeenderink.github.io/testsite/nl/">
+<link rel="alternate" hreflang="x-default" href="https://thomasmeenderink.github.io/testsite/">
+<!--/ALT-->
 </head>
 <body>
 <!--HEADER-->
@@ -17,81 +22,86 @@
     <a href="index.html" class="logo" aria-label="DutchJet home">
       <span class="logo-mark"><img src="images/logo-dutchjet.webp" alt="DutchJet"></span>
     </a>
+    <nav class="menu" id="menu">
+      <a href="empty-legs.html">Empty legs</a>
+      <a href="private-jet-charter.html">Private jet charter</a>
+      <a href="about.html">About us</a>
+      <a href="faq.html">FAQ</a>
+      <a href="contact.html">Contact</a>
+      <a href="private-jet-charter.html#request" class="menu-cta" data-open-request>Request a flight</a>
+    </nav>
+    <div class="lang-switch" role="group" aria-label="Language">
+      <a href="index.html" hreflang="en" lang="en" aria-current="true">EN</a>
+      <a href="nl/index.html" hreflang="nl" lang="nl">NL</a>
+    </div>
     <button class="menu-toggle" id="menuToggle" aria-label="Menu" aria-expanded="false" aria-controls="menu">
       <span></span><span></span><span></span>
     </button>
-    <nav class="menu" id="menu">
-      <a href="empty-legs.html">Empty legs</a>
-      <a href="privejet-charter.html">Privéjet charter</a>
-      <a href="over-ons.html">Over ons</a>
-      <a href="faq.html">FAQ</a>
-      <a href="contact.html">Contact</a>
-      <a href="privejet-charter.html#aanvragen" class="menu-cta" data-open-request>Vlucht aanvragen</a>
-    </nav>
   </div>
 </header>
 <!--/HEADER-->
+
 
 <section class="hero">
   <img class="hero-bg" src="images/advantage-bereik.jpg" alt="">
   <div class="hero-inner">
     <div>
       <span class="hero-badge">EMPTY LEG MARKETPLACE</span>
-      <h1>Vlieg privé voor een <em>fractie</em> van de prijs.</h1>
-      <p class="hero-lead">Privéjets vliegen dagelijks leeg terug naar hun basis. Boek die lege vlucht en reis tot 75% goedkoper, zonder rijen en zonder tussenstops.</p>
+      <h1>Fly private for a <em>fraction</em> of the price.</h1>
+      <p class="hero-lead">Every day, private jets fly back to base empty. Book that empty flight and travel up to 75% cheaper, with no queues and no stopovers.</p>
       <div class="hero-actions">
-        <a href="#deals" class="hero-btn primary">Bekijk empty legs →</a>
-        <a href="#how" class="hero-btn ghost">Hoe het werkt</a>
+        <a href="#deals" class="hero-btn primary">View empty legs →</a>
+        <a href="#how" class="hero-btn ghost">How it works</a>
       </div>
       <div class="hero-stats">
-        <div><strong>60–75%</strong><span>onder charterprijs</span></div>
-        <div><strong>5.000+</strong><span>vliegvelden bereikbaar</span></div>
-        <div><strong>15 min</strong><span>voor vertrek aanwezig</span></div>
+        <div><strong>60–75%</strong><span>below charter price</span></div>
+        <div><strong>5,000+</strong><span>airports within reach</span></div>
+        <div><strong>15 min</strong><span>arrival before departure</span></div>
       </div>
     </div>
 
     <form class="trip-card" id="tripCard" autocomplete="off" novalidate>
-      <span class="trip-label">JE REIS</span>
-      <h2>Waar kunnen we je naartoe <em>brengen</em>?</h2>
+      <span class="trip-label">YOUR TRIP</span>
+      <h2>Where can we <em>take</em> you?</h2>
 
-      <div class="trip-switch" role="group" aria-label="Soort aanvraag">
-        <button type="button" data-mode="leg" aria-pressed="true">Empty leg zoeken</button>
-        <button type="button" data-mode="new" aria-pressed="false">Nieuwe aanvraag</button>
+      <div class="trip-switch" role="group" aria-label="Type of request">
+        <button type="button" data-mode="leg" aria-pressed="true">Find an empty leg</button>
+        <button type="button" data-mode="new" aria-pressed="false">New request</button>
       </div>
 
       <div class="trip-fields">
         <div class="tf-row">
-          <label class="sb-field tf-from"><span>VAN</span><input name="from" list="cityList" placeholder="Vertrek"></label>
-          <button type="button" class="trip-swap" aria-label="Wissel vertrek en bestemming">⇆</button>
-          <label class="sb-field tf-to"><span>NAAR</span><input name="to" list="cityList" placeholder="Bestemming"></label>
+          <label class="sb-field tf-from"><span>FROM</span><input name="from" list="cityList" placeholder="Departure"></label>
+          <button type="button" class="trip-swap" aria-label="Swap departure and destination">⇆</button>
+          <label class="sb-field tf-to"><span>TO</span><input name="to" list="cityList" placeholder="Destination"></label>
         </div>
         <div class="tf-row">
-          <label class="sb-field"><span>VERTREKDATUM</span><input name="date" type="text" placeholder="Kies datum"></label>
-          <label class="sb-field" data-only="new" hidden><span>RETOURDATUM</span><input name="returnDate" type="text" placeholder="Optioneel"></label>
+          <label class="sb-field"><span>DEPARTURE DATE</span><input name="date" type="text" placeholder="Choose date"></label>
+          <label class="sb-field" data-only="new" hidden><span>RETURN DATE</span><input name="returnDate" type="text" placeholder="Optional"></label>
         </div>
         <div class="tf-row">
-          <label class="sb-field"><span>PASSAGIERS</span>
+          <label class="sb-field"><span>PASSENGERS</span>
             <select name="pax">
-              <option value="">Aantal passagiers</option>
-              <option value="1">1 passagier</option>
-              <option value="2">2 passagiers</option>
-              <option value="3">3 passagiers</option>
-              <option value="4">4 passagiers</option>
-              <option value="5">5 passagiers</option>
-              <option value="6">6 passagiers</option>
-              <option value="7">7 passagiers</option>
-              <option value="8">8 passagiers</option>
-              <option value="9">9 passagiers</option>
-              <option value="10">10 passagiers</option>
-              <option value="11">11 passagiers</option>
-              <option value="12">12+ passagiers</option>
+              <option value="">Number of passengers</option>
+              <option value="1">1 passenger</option>
+              <option value="2">2 passengers</option>
+              <option value="3">3 passengers</option>
+              <option value="4">4 passengers</option>
+              <option value="5">5 passengers</option>
+              <option value="6">6 passengers</option>
+              <option value="7">7 passengers</option>
+              <option value="8">8 passengers</option>
+              <option value="9">9 passengers</option>
+              <option value="10">10 passengers</option>
+              <option value="11">11 passengers</option>
+              <option value="12">12+ passengers</option>
             </select>
           </label>
         </div>
       </div>
 
-      <button type="submit" class="trip-go">Zoek empty legs</button>
-      <p class="trip-note" data-only="new" hidden>Vrijblijvend: je ontvangt eerst een voorstel op maat voor jouw route en datum.</p>
+      <button type="submit" class="trip-go">Search empty legs</button>
+      <p class="trip-note" data-only="new" hidden>No obligation: you first receive a tailored proposal for your route and date.</p>
     </form>
   </div>
 </section>
@@ -99,14 +109,14 @@
 <section id="deals">
   <div class="deals-head">
     <div>
-      <span class="section-label">BESTE DEALS</span>
-      <h2 class="section-title">De scherpste <em>empty leg</em> deals van dit moment</h2>
-      <p class="section-lead">Deze routes staan al vast om te vliegen — hoe eerder je boekt, hoe groter de korting op het volledige toestel.</p>
+      <span class="section-label">BEST DEALS</span>
+      <h2 class="section-title">The sharpest <em>empty leg</em> deals right now</h2>
+      <p class="section-lead">These routes are already scheduled to fly. The sooner you book, the bigger the discount on the entire aircraft.</p>
     </div>
     <div class="deals-nav">
-      <button id="dealsPrev" aria-label="Vorige">‹</button>
+      <button id="dealsPrev" aria-label="Previous">‹</button>
       <div class="deals-dots" id="dealsDots"></div>
-      <button id="dealsNext" aria-label="Volgende">›</button>
+      <button id="dealsNext" aria-label="Next">›</button>
     </div>
   </div>
 
@@ -115,65 +125,65 @@
 
 <section id="how" class="on-dark">
   <div class="how-head">
-    <span class="section-label">HOE HET WERKT</span>
-    <h2 class="section-title">Van lege stoel naar <em>geboekte vlucht</em> in drie stappen</h2>
+    <span class="section-label">HOW IT WORKS</span>
+    <h2 class="section-title">From empty seat to <em>booked flight</em> in three steps</h2>
   </div>
   <div class="steps">
     <div class="step">
       <div class="step-num">01</div>
-      <h3>Operator meldt de leg</h3>
-      <p>Zodra een privéjet zonder betalende passagiers moet terugvliegen of doorvliegen, komt de route direct op ons bord.</p>
+      <h3>The operator lists the leg</h3>
+      <p>As soon as a private jet has to fly back or on without paying passengers, the route goes straight onto our board.</p>
     </div>
     <div class="step">
       <div class="step-num">02</div>
-      <h3>Jij claimt de stoel</h3>
-      <p>Boek één stoel of het hele toestel. Prijzen liggen doorgaans 60–75% onder een reguliere charter.</p>
+      <h3>You claim the seat</h3>
+      <p>Book one seat or the entire aircraft. Prices are usually 60–75% below a regular charter.</p>
     </div>
     <div class="step">
       <div class="step-num">03</div>
-      <h3>Je vliegt privé</h3>
-      <p>Geen instapstress, geen tussenstops. Het toestel vloog toch al die kant op — jij profiteert mee.</p>
+      <h3>You fly private</h3>
+      <p>No boarding stress, no stopovers. The aircraft was flying that way anyway, and you get to benefit.</p>
     </div>
   </div>
 </section>
 
-<section id="boeken" class="book-section">
+<section id="book" class="book-section">
   <img class="book-bg" src="images/advantage-tijd.jpg" alt="">
   <div class="book-inner">
-    <span class="section-label">VLUCHT SAMENSTELLEN</span>
-    <h2 class="section-title">Waar gaan we <em>naartoe</em>?</h2>
-    <p class="section-lead">Kies je route, datum en het aantal passagiers en vraag in één stap je eigen privévlucht aan. Je ontvangt een voorstel op maat.</p>
+    <span class="section-label">PLAN YOUR FLIGHT</span>
+    <h2 class="section-title">Where are we <em>going</em>?</h2>
+    <p class="section-lead">Choose your route, date and number of passengers and request your own private flight in one step. You will receive a tailored proposal.</p>
 
     <form class="search-bar" id="flightSearch" autocomplete="off">
-      <label class="sb-field sb-from"><span>VAN</span><input id="sbFrom" list="cityList" placeholder="Overal"></label>
-      <button type="button" class="sb-swap" id="sbSwap" aria-label="Wissel vertrek en bestemming">⇆</button>
-      <label class="sb-field sb-to"><span>NAAR</span><input id="sbTo" list="cityList" placeholder="Overal"></label>
-      <label class="sb-field sb-when"><span>WANNEER</span><input id="sbWhen" type="text" placeholder="Altijd"></label>
-      <label class="sb-field sb-pax"><span>PASSAGIERS</span>
+      <label class="sb-field sb-from"><span>FROM</span><input id="sbFrom" list="cityList" placeholder="Anywhere"></label>
+      <button type="button" class="sb-swap" id="sbSwap" aria-label="Swap departure and destination">⇆</button>
+      <label class="sb-field sb-to"><span>TO</span><input id="sbTo" list="cityList" placeholder="Anywhere"></label>
+      <label class="sb-field sb-when"><span>WHEN</span><input id="sbWhen" type="text" placeholder="Any time"></label>
+      <label class="sb-field sb-pax"><span>PASSENGERS</span>
         <select id="sbPax" class="empty">
-          <option value="">Passagiers</option>
-          <option value="1">1 passagier</option>
-          <option value="2">2 passagiers</option>
-          <option value="3">3 passagiers</option>
-          <option value="4">4 passagiers</option>
-          <option value="5">5 passagiers</option>
-          <option value="6">6 passagiers</option>
-          <option value="7">7 passagiers</option>
-          <option value="8">8 passagiers</option>
-          <option value="9">9 passagiers</option>
-          <option value="10">10 passagiers</option>
-          <option value="11">11 passagiers</option>
-          <option value="12">12+ passagiers</option>
+          <option value="">Passengers</option>
+          <option value="1">1 passenger</option>
+          <option value="2">2 passengers</option>
+          <option value="3">3 passengers</option>
+          <option value="4">4 passengers</option>
+          <option value="5">5 passengers</option>
+          <option value="6">6 passengers</option>
+          <option value="7">7 passengers</option>
+          <option value="8">8 passengers</option>
+          <option value="9">9 passengers</option>
+          <option value="10">10 passengers</option>
+          <option value="11">11 passengers</option>
+          <option value="12">12+ passengers</option>
         </select>
       </label>
-      <button type="submit" class="sb-go" aria-label="Zoek vluchten">
+      <button type="submit" class="sb-go" aria-label="Search flights">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4.2-4.2"/></svg>
       </button>
     </form>
     <datalist id="cityList"></datalist>
 
     <div class="popular">
-      <span class="popular-label">POPULAIR</span>
+      <span class="popular-label">POPULAR</span>
       <div class="popular-list" id="popularList"></div>
     </div>
 
@@ -181,107 +191,107 @@
   </div>
 </section>
 
-<section id="voordelen">
+<section id="benefits">
   <div class="adv-intro">
-    <span class="section-label">WAAROM PRIVÉ VLIEGEN</span>
-    <h2 class="section-title">De voordelen van <em>privé</em> vliegen</h2>
-    <p class="section-lead">Niet elke reis heeft een jet nodig — maar zodra je er een boekt, voel je meteen het verschil. Dit zijn de voordelen die reizigers laten kiezen voor privé boven een lijnvlucht.</p>
+    <span class="section-label">WHY FLY PRIVATE</span>
+    <h2 class="section-title">The benefits of flying <em>private</em></h2>
+    <p class="section-lead">Not every trip needs a jet, but once you book one you feel the difference straight away. These are the reasons travellers choose private over a scheduled flight.</p>
   </div>
 
   <div class="adv-top">
     <div class="adv-card">
-      <div class="adv-img"><img src="images/advantage-privacy.jpg" alt="Volledige privacy aan boord"></div>
+      <div class="adv-img"><img src="images/advantage-privacy.jpg" alt="Complete privacy on board"></div>
       <div class="adv-body">
-        <span class="adv-tag">PRIVACY · ELKE VLUCHT</span>
-        <h3>Volledige privacy</h3>
-        <p>Geen incheckrijen, geen vreemden aan boord. Jij en je gezelschap hebben de hele cabine voor jezelf, van instap tot landing.</p>
+        <span class="adv-tag">PRIVACY · EVERY FLIGHT</span>
+        <h3>Complete privacy</h3>
+        <p>No check-in queues, no strangers on board. You and your party have the whole cabin to yourselves, from boarding to landing.</p>
       </div>
     </div>
     <div class="adv-card">
-      <div class="adv-img"><img src="images/advantage-tijd.jpg" alt="Snel inchecken zonder wachtrijen"></div>
+      <div class="adv-img"><img src="images/advantage-tijd.jpg" alt="Quick check-in without queues"></div>
       <div class="adv-body">
-        <span class="adv-tag">TIJD · GEEN VERTRAGING</span>
-        <h3>15 minuten voor vertrek</h3>
-        <p>Stap in op de tarmac, geen security-rijen of gate-gedoe. Je bent aan boord voor de meeste mensen hun koffer hebben ingecheckt.</p>
+        <span class="adv-tag">TIME · NO DELAYS</span>
+        <h3>15 minutes before departure</h3>
+        <p>Board on the tarmac, with no security lines or gate hassle. You are on board before most people have checked their bags.</p>
       </div>
     </div>
   </div>
 
   <div class="adv-bottom">
     <div class="adv-card">
-      <div class="adv-img"><img src="images/advantage-bereik.jpg" alt="Landen op kleinere vliegvelden"></div>
+      <div class="adv-img"><img src="images/advantage-bereik.jpg" alt="Landing at smaller airports"></div>
       <div class="adv-body">
-        <span class="adv-tag">TOEGANG · 5.000+ VELDEN</span>
-        <h3>Dichter bij je bestemming</h3>
-        <p>Privéjets kunnen landen op kleine regionale vliegvelden die grote maatschappijen links laten liggen.</p>
+        <span class="adv-tag">ACCESS · 5,000+ AIRPORTS</span>
+        <h3>Closer to your destination</h3>
+        <p>Private jets can land at small regional airports that the big airlines pass by.</p>
       </div>
     </div>
     <div class="adv-card">
-      <div class="adv-img"><img src="images/advantage-flexibiliteit.jpg" alt="Vliegen op je eigen schema"></div>
+      <div class="adv-img"><img src="images/advantage-flexibiliteit.jpg" alt="Flying on your own schedule"></div>
       <div class="adv-body">
-        <span class="adv-tag">FLEXIBILITEIT</span>
-        <h3>Jouw schema, niet dat van de maatschappij</h3>
-        <p>Vertrek zodra jij klaar bent. Geen vaste dienstregeling, geen wachten op aansluitende vluchten.</p>
+        <span class="adv-tag">FLEXIBILITY</span>
+        <h3>Your schedule, not the airline's</h3>
+        <p>Leave when you are ready. No fixed timetable, no waiting for connecting flights.</p>
       </div>
     </div>
     <div class="adv-card">
-      <div class="adv-img"><img src="images/advantage-bagage.jpg" alt="Meer ruimte voor bagage en huisdieren"></div>
+      <div class="adv-img"><img src="images/advantage-bagage.jpg" alt="More room for luggage and pets"></div>
       <div class="adv-body">
-        <span class="adv-tag">BAGAGE & HUISDIEREN</span>
-        <h3>Neem mee wat je wilt</h3>
-        <p>Extra bagage, sportuitrusting of je huisdier aan je zijde — zonder beperkingen van een lijnvlucht.</p>
+        <span class="adv-tag">LUGGAGE & PETS</span>
+        <h3>Bring what you want</h3>
+        <p>Extra luggage, sports gear or your pet by your side, without the restrictions of a scheduled flight.</p>
       </div>
     </div>
   </div>
 </section>
 
-<section id="over-ons" class="section-grey">
+<section id="about" class="section-grey">
   <div class="split center">
     <div class="prose">
-      <span class="section-label">OVER DUTCHJET</span>
-      <h2 class="section-title">Privé vliegen, <em>eerlijk</em> geprijsd</h2>
-      <p>Elke dag vliegen privéjets leeg naar hun volgende opdracht. DutchJet brengt die lege vluchten in beeld en maakt ze eenvoudig te reserveren. Staat jouw route er niet tussen, dan zoeken we een toestel dat wel past.</p>
+      <span class="section-label">ABOUT DUTCHJET</span>
+      <h2 class="section-title">Private flying, <em>fairly</em> priced</h2>
+      <p>Every day, private jets fly empty to their next assignment. DutchJet puts those empty flights on display and makes them easy to reserve. If your route is not among them, we find an aircraft that does fit.</p>
       <div class="cards two" style="margin-top: 28px;">
-        <div class="card"><div class="card-icon">€</div><h3>Transparant</h3><p>Vooraf duidelijke prijzen, zonder lidmaatschap.</p></div>
-        <div class="card"><div class="card-icon">✈</div><h3>Persoonlijk</h3><p>Eén aanspreekpunt van aanvraag tot landing.</p></div>
+        <div class="card"><div class="card-icon">€</div><h3>Transparent</h3><p>Clear prices up front, with no membership.</p></div>
+        <div class="card"><div class="card-icon">✈</div><h3>Personal</h3><p>One point of contact from request to landing.</p></div>
       </div>
-      <div class="btn-row" style="margin-top: 28px;"><a href="over-ons.html" class="btn dark">Meer over ons →</a></div>
+      <div class="btn-row" style="margin-top: 28px;"><a href="about.html" class="btn dark">More about us →</a></div>
     </div>
-    <div class="photo is-portrait"><img src="images/sfeer-schiphol.webp" alt="Privéjet klaar voor vertrek op het platform" loading="lazy"></div>
+    <div class="photo is-portrait"><img src="images/sfeer-schiphol.webp" alt="Private jet ready for departure on the apron" loading="lazy"></div>
   </div>
 </section>
 
 <section id="faq">
   <div class="split">
     <div>
-      <span class="section-label">VEELGESTELDE VRAGEN</span>
-      <h2 class="section-title">Alles wat je wilt <em>weten</em></h2>
-      <p class="section-lead">De vragen die we het vaakst krijgen. Meer antwoorden vind je op de pagina met alle veelgestelde vragen.</p>
+      <span class="section-label">FREQUENTLY ASKED QUESTIONS</span>
+      <h2 class="section-title">Everything you want to <em>know</em></h2>
+      <p class="section-lead">The questions we get asked most. You will find more answers on the page with all frequently asked questions.</p>
       <div class="btn-row" style="margin-top: 28px;">
-        <a href="faq.html" class="btn dark">Alle vragen →</a>
-        <a href="#contact" class="btn outline">Stel je vraag</a>
+        <a href="faq.html" class="btn dark">All questions →</a>
+        <a href="#contact" class="btn outline">Ask your question</a>
       </div>
     </div>
     <div class="faq">
       <details>
-        <summary>Wat is een empty leg?</summary>
-        <div class="answer"><p>Een empty leg is een vlucht van een privéjet zonder passagiers, bijvoorbeeld nadat een klant is afgezet en het toestel terug moet naar de thuisbasis. Omdat de vlucht toch al gepland staat, kun je die vaak voor een fractie van de normale charterprijs boeken.</p></div>
+        <summary>What is an empty leg?</summary>
+        <div class="answer"><p>An empty leg is a private jet flight without passengers, for example after a client has been dropped off and the aircraft has to return to its home base. Because the flight is already scheduled, you can often book it for a fraction of the normal charter price.</p></div>
       </details>
       <details>
-        <summary>Betaal ik per stoel of voor het hele toestel?</summary>
-        <div class="answer"><p>De prijs van een empty leg geldt voor het hele toestel. Je kunt dus met je eigen gezelschap reizen tot het maximale aantal passagiers dat bij de vlucht staat.</p></div>
+        <summary>Do I pay per seat or for the entire aircraft?</summary>
+        <div class="answer"><p>The price of an empty leg is for the entire aircraft. You can travel with your own party up to the maximum number of passengers listed for the flight.</p></div>
       </details>
       <details>
-        <summary>Kan een empty leg nog veranderen?</summary>
-        <div class="answer"><p>Ja. Verandert de oorspronkelijke opdracht, dan kan ook het tijdstip of de route van de empty leg veranderen, of kan de vlucht vervallen. Je reservering is daarom pas definitief na bevestiging door de operator.</p></div>
+        <summary>Can an empty leg still change?</summary>
+        <div class="answer"><p>Yes. If the original assignment changes, the time or route of the empty leg can change too, or the flight can be cancelled. Your reservation is therefore only final once the operator confirms it.</p></div>
       </details>
       <details>
-        <summary>Is een aanvraag vrijblijvend?</summary>
-        <div class="answer"><p>Ja. Een aanvraag of reservering via de site is een verzoek. Je zit pas ergens aan vast nadat je het voorstel of de bevestiging hebt geaccepteerd.</p></div>
+        <summary>Is a request without obligation?</summary>
+        <div class="answer"><p>Yes. A request or reservation through the site is an enquiry. You are only committed once you have accepted the proposal or the confirmation.</p></div>
       </details>
       <details>
-        <summary>Hoe laat moet ik op het vliegveld zijn?</summary>
-        <div class="answer"><p>Bij privé vliegen ben je meestal kort voor vertrek aanwezig, vaak zo'n 15 minuten. De precieze tijd en de vertrekterminal ontvang je bij je bevestiging.</p></div>
+        <summary>When do I need to be at the airport?</summary>
+        <div class="answer"><p>When flying private you usually arrive shortly before departure, often around 15 minutes. You receive the exact time and the departure terminal with your confirmation.</p></div>
       </details>
     </div>
   </div>
@@ -291,22 +301,22 @@
   <div class="cta-box on-dark">
     <img src="images/advantage-flexibiliteit.jpg" alt="">
     <div class="cta-copy">
-      <span class="section-label">MELD JE AAN</span>
-      <h2 class="section-title">Krijg een seintje zodra jouw route <em>leeg terugvliegt</em></h2>
-      <p class="section-lead">Kies de route die je interesseert en laat je e-mailadres achter. Zodra er een empty leg op die route is, hoor je het als eerste. Laat Van of Naar leeg voor alle routes.</p>
+      <span class="section-label">SIGN UP</span>
+      <h2 class="section-title">Get a heads-up when your route <em>flies back empty</em></h2>
+      <p class="section-lead">Choose the route you are interested in and leave your email address. As soon as there is an empty leg on that route, you are the first to know. Leave From or To empty for all routes.</p>
     </div>
     <div class="cta-form">
       <form id="signupForm" class="signup-form" autocomplete="off">
         <div class="signup-route">
-          <label class="sb-field"><span>VAN</span><input name="from" list="cityList" placeholder="Overal"></label>
-          <label class="sb-field"><span>NAAR</span><input name="to" list="cityList" placeholder="Overal"></label>
+          <label class="sb-field"><span>FROM</span><input name="from" list="cityList" placeholder="Anywhere"></label>
+          <label class="sb-field"><span>TO</span><input name="to" list="cityList" placeholder="Anywhere"></label>
         </div>
         <div class="signup-mail">
-          <input type="email" name="email" placeholder="jij@voorbeeld.nl" required aria-label="E-mailadres" autocomplete="email">
-          <button type="submit">Hou me op de hoogte</button>
+          <input type="email" name="email" placeholder="you@example.com" required aria-label="Email address" autocomplete="email">
+          <button type="submit">Keep me posted</button>
         </div>
       </form>
-      <p class="form-note">Routes en tijden kunnen wijzigen — operators kunnen een leg tot vlak voor vertrek aanpassen of annuleren.</p>
+      <p class="form-note">Routes and times can change. Operators can adjust or cancel a leg until shortly before departure.</p>
     </div>
   </div>
 </section>
@@ -315,43 +325,43 @@
   <div class="split">
     <div class="prose">
       <span class="section-label">CONTACT</span>
-      <h2 class="section-title">We helpen je <em>graag</em> verder</h2>
-      <p>Heb je een vraag over een empty leg, een vlucht op maat of iets anders? Stuur ons een bericht, dan nemen we zo snel mogelijk contact met je op.</p>
+      <h2 class="section-title">We are <em>happy</em> to help</h2>
+      <p>Do you have a question about an empty leg, a tailored flight or something else? Send us a message and we will get back to you as soon as possible.</p>
       <ul class="contact-list">
         <li>
           <span class="card-icon">✉</span>
-          <div><strong>E-mail</strong><a href="mailto:dutchjet0@gmail.com">dutchjet0@gmail.com</a></div>
+          <div><strong>Email</strong><a href="mailto:dutchjet0@gmail.com">dutchjet0@gmail.com</a></div>
         </li>
         <li>
           <span class="card-icon">✈</span>
-          <div><strong>Direct een vlucht aanvragen</strong><span>Gebruik het <a href="privejet-charter.html#aanvragen" data-open-request>aanvraagformulier</a> met je route en datum.</span></div>
+          <div><strong>Request a flight directly</strong><span>Use the <a href="private-jet-charter.html#request" data-open-request>request form</a> with your route and date.</span></div>
         </li>
         <li>
           <span class="card-icon">?</span>
-          <div><strong>Veelgestelde vragen</strong><span>Misschien staat je antwoord al bij de <a href="faq.html">veelgestelde vragen</a>.</span></div>
+          <div><strong>Frequently asked questions</strong><span>Your answer may already be in the <a href="faq.html">frequently asked questions</a>.</span></div>
         </li>
       </ul>
     </div>
 
     <form class="contact-form" id="contactForm" novalidate>
-      <h2>Stuur een bericht</h2>
+      <h2>Send a message</h2>
       <div class="req-fields">
-        <label class="full">ONDERWERP
+        <label class="full">SUBJECT
           <select name="topic" required>
-            <option value="Algemene vraag">Algemene vraag</option>
+            <option value="Algemene vraag">General question</option>
             <option value="Empty leg">Empty leg</option>
-            <option value="Vlucht op maat">Vlucht op maat</option>
-            <option value="Bestaande aanvraag">Bestaande aanvraag of reservering</option>
-            <option value="Samenwerking">Samenwerking</option>
+            <option value="Vlucht op maat">Tailored flight</option>
+            <option value="Bestaande aanvraag">Existing request or reservation</option>
+            <option value="Samenwerking">Partnership</option>
           </select>
         </label>
-        <label>NAAM<input name="name" required placeholder="Voor- en achternaam" autocomplete="name"></label>
-        <label>E-MAIL<input name="email" type="email" required placeholder="jij@voorbeeld.nl" autocomplete="email"></label>
-        <label class="full">TELEFOON<input name="phone" type="tel" placeholder="+31 6 12345678" autocomplete="tel"></label>
-        <label class="full">BERICHT<textarea name="message" required placeholder="Waar kunnen we je mee helpen?"></textarea></label>
+        <label>NAME<input name="name" required placeholder="First and last name" autocomplete="name"></label>
+        <label>EMAIL<input name="email" type="email" required placeholder="you@example.com" autocomplete="email"></label>
+        <label class="full">PHONE<input name="phone" type="tel" placeholder="+44 7700 900123" autocomplete="tel"></label>
+        <label class="full">MESSAGE<textarea name="message" required placeholder="How can we help you?"></textarea></label>
       </div>
-      <button type="submit" class="req-submit">Verstuur bericht</button>
-      <p class="req-note">We gebruiken je gegevens alleen om op je bericht te reageren.</p>
+      <button type="submit" class="req-submit">Send message</button>
+      <p class="req-note">We only use your details to reply to your message.</p>
     </form>
   </div>
 </section>
@@ -361,36 +371,38 @@
   <div class="footer-grid">
     <div>
       <a href="index.html" class="footer-logo"><img src="images/logo-dutchjet-light.webp" alt="DutchJet home"></a>
-      <p>Empty legs, real prices. Vlieg privé op routes die toch al gevlogen worden, of laat een vlucht op maat voor je samenstellen.</p>
+      <p>Empty legs, real prices. Fly private on routes that are being flown anyway, or let us plan a flight around you.</p>
     </div>
     <div>
-      <h4>PAGINA'S</h4>
+      <h4>PAGES</h4>
       <ul>
         <li><a href="index.html" aria-current="page">Home</a></li>
-        <li><a href="empty-legs.html">Alle empty legs</a></li>
-        <li><a href="privejet-charter.html">Privéjet charter</a></li>
-        <li><a href="over-ons.html">Over ons</a></li>
-        <li><a href="faq.html">Veelgestelde vragen</a></li>
+        <li><a href="empty-legs.html">All empty legs</a></li>
+        <li><a href="private-jet-charter.html">Private jet charter</a></li>
+        <li><a href="about.html">About us</a></li>
+        <li><a href="faq.html">FAQ</a></li>
       </ul>
     </div>
     <div>
       <h4>CONTACT</h4>
       <ul>
         <li><a href="mailto:dutchjet0@gmail.com">dutchjet0@gmail.com</a></li>
-        <li><a href="contact.html">Contactformulier</a></li>
-        <li><a href="privejet-charter.html#aanvragen" data-open-request>Vlucht aanvragen</a></li>
+        <li><a href="contact.html">Contact form</a></li>
+        <li><a href="private-jet-charter.html#request" data-open-request>Request a flight</a></li>
       </ul>
     </div>
   </div>
   <div class="footer-bottom">
     <span>© 2026 DutchJet · Empty legs, real prices.</span>
-    <a href="#top">Terug naar boven ↑</a>
+    <a href="#top">Back to top ↑</a>
   </div>
 </footer>
 <!--/FOOTER-->
 
-<script src="js/deals.js?v=c4facfac"></script>
-<script src="js/site.js?v=ef2cf666"></script>
+
+<script src="js/i18n.js?v=8f90a0d7"></script>
+<script src="js/deals.js?v=4b2b5a77"></script>
+<script src="js/site.js?v=72cb44a8"></script>
 <script src="js/dropdowns.js?v=b80cc8d1"></script>
 
 </body>
