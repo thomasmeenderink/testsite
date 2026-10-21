@@ -1050,3 +1050,21 @@ footer ul a:hover, .footer-bottom a:hover{ color: var(--accent); }
 .trip-card .trip-switch{ display:grid; width: 100%; }
 .trip-card .trip-switch{ grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
 .trip-card .trip-switch button{ padding: 10px 8px; white-space: nowrap; }
+
+/* --- trip card: more breathing room between its parts --- */
+.trip-card{ padding: 36px 34px 32px; }
+.trip-card h2{ margin-top: 14px; padding-bottom: 24px; }
+.trip-card .trip-switch{ margin: 26px 0 22px; }
+.trip-card .tf-row > .sb-field{ padding: 15px 18px; gap: 6px; }
+.trip-card .tf-row > .tf-from{ padding-right: 28px; }
+.trip-card .tf-row > .tf-to{ padding-left: 28px; }
+.trip-card .trip-go{ margin-top: 26px; }
+.trip-card .trip-note{ margin-top: 16px; }
+@media (max-width: 480px){
+  .trip-card{ padding: 28px 20px 24px; }
+  .trip-card .trip-switch{ margin: 22px 0 18px; }
+  .trip-card .tf-row > .sb-field{ padding: 13px 14px; }
+}
+@media (min-width: 901px){
+  .hero-inner{ grid-template-columns: minmax(0, 1.2fr) minmax(380px, 1fr); gap: 48px; }
+}
