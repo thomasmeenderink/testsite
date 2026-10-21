@@ -501,7 +501,20 @@ function sendRequest(subject, fields){
               perPerson ? ['Prijs per persoon', perPerson + '<em>bij ' + l.seats + ' passagiers</em>', 'is-pp'] : null
             ].filter(Boolean).map(([k, v, cls]) => `<div${cls ? ` class="${cls}"` : ''}><small>${k}</small><strong>${v}</strong></div>`).join('')}
           </div>
-          <p class="dt-note">Een empty leg is pas definitief na bevestiging door de operator. Als de oorspronkelijke vlucht wijzigt, kan ook deze vlucht veranderen of vervallen.</p>
+        </div>
+
+        <div class="dt-section">
+          <span class="dt-label">VOORWAARDEN</span>
+          <ul class="dt-terms">
+            <li>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg>
+              <p><strong>Bevestiging door de operator.</strong> Een empty leg is pas definitief na bevestiging door de operator.</p>
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.3-5.7"/><path d="M20 4v5h-5"/></svg>
+              <p><strong>Afhankelijk van de oorspronkelijke vlucht.</strong> Als de oorspronkelijke vlucht wijzigt, kan ook deze vlucht veranderen of vervallen.</p>
+            </li>
+          </ul>
         </div>
 
         <div class="dt-bar">
