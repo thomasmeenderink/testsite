@@ -47,7 +47,7 @@ const CLASSES = {
 
 const CJ3_PHOTOS = ['images/cj3-exterieur.webp', 'images/cj3-cabine.webp', 'images/cj3-plattegrond.webp'];
 const DEALS = [
-  { from: 'EHAM', to: 'EGSS', date: '2026-12-02', time: '10:29', plane: 'Cessna Citation CJ3', class: 'light', seats: 7,
+  { from: 'EHAM', to: 'EGSS', date: '2026-12-02', time: '10:30', plane: 'Cessna Citation CJ3', class: 'light', seats: 7,
     duration: '55m', oldPrice: 11000, price: 6500, images: CJ3_PHOTOS },
   { from: 'EGSS', to: 'EHAM', date: '2026-12-09', time: '18:00', plane: 'Cessna Citation CJ3', class: 'light', seats: 7,
     duration: '55m', oldPrice: 11000, price: 5350, images: CJ3_PHOTOS },
