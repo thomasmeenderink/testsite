@@ -385,6 +385,107 @@ document.querySelectorAll('.lang-switch a').forEach(a => a.addEventListener('cli
     f.elements.name.focus();
   }
 
+  /* ---------- return trips: an empty leg out and one back on the same route ---------- */
+  const COMBO_DAYS = 14;
+  const combos = [];
+  legs.forEach(a => legs.forEach(b => {
+    const days = (b.date - a.date) / 864e5;
+    if (a.fromCode === b.toCode && a.toCode === b.fromCode && days > 0 && days <= COMBO_DAYS) combos.push([a, b]);
+  }));
+  combos.sort((x, y) => x[0].date - y[0].date);
+  const comboSeats = ([a, b]) => Math.min(a.seats || 99, b.seats || 99);
+  const comboPrice = ([a, b]) => a.priceNum + b.priceNum;
+  const comboOld = ([a, b]) => (a.oldNum || a.priceNum) + (b.oldNum || b.priceNum);
+
+  function comboCardHtml(c, i){
+    const [a, b] = c, seats = comboSeats(c), price = comboPrice(c), old = comboOld(c);
+    const pct = Math.round((1 - price / old) * 100);
+    return `
+      <div class="combo-card" data-combo="${i}" role="button" tabindex="0" aria-label="${esc(a.from + ' ⇄ ' + a.to + ', ' + euro(price))}">
+        <div class="combo-img"><img src="${esc(a.img)}" alt="${esc(a.plane)}" loading="lazy" draggable="false">${pct > 0 ? `<span class="dt-discount">−${pct}%</span>` : ''}</div>
+        <div class="combo-body">
+          <div class="combo-route">${esc(a.from)} <span aria-hidden="true">⇄</span> ${esc(a.to)}</div>
+          <div class="combo-legs">
+            <div><small>${t('comboOut')}</small><strong>${esc(a.when)}</strong></div>
+            <div><small>${t('comboBack')}</small><strong>${esc(b.when)}</strong></div>
+          </div>
+          <div class="combo-foot">
+            <div><div class="cap">${esc(a.plane)} · ${esc(t('upToPax', { n: seats }))}</div><div class="pp">${esc(t('ppCard', { price: euro(price / seats) }))}</div></div>
+            <div class="price-block">${old > price ? `<div class="price-old">${euro(old)}</div>` : ''}<div class="price">${euro(price)}</div></div>
+          </div>
+          <span class="reserve" aria-hidden="true">${t('comboReserve')}</span>
+        </div>
+      </div>`;
+  }
+  const comboWrap = document.querySelector('[data-combos]');
+  if (comboWrap) {
+    comboWrap.innerHTML = combos.map(comboCardHtml).join('');
+    comboWrap.closest('section').hidden = !combos.length;
+    comboWrap.addEventListener('click', e => { const c = e.target.closest('[data-combo]'); if (c) openCombo(combos[+c.dataset.combo]); });
+    comboWrap.addEventListener('keydown', e => {
+      if ((e.key === 'Enter' || e.key === ' ') && e.target.matches('[data-combo]')) { e.preventDefault(); e.target.click(); }
+    });
+  }
+
+  function openCombo(c){
+    const [a, b] = c, seats = comboSeats(c), price = comboPrice(c);
+    modal.innerHTML = `
+      <div class="req-head">
+        <span class="req-badge">${t('comboBadge')}</span>
+        <h3 id="reqTitle">${esc(a.from)} ⇄ ${esc(a.to)}</h3>
+        <p>${esc(t('comboLead', { price: euro(price), n: seats }))}</p>
+        <button type="button" class="req-close" aria-label="${t('close')}">×</button>
+      </div>
+      <form class="req-body" novalidate>
+        <span class="req-legend">${t('comboYourTrip')}</span>
+        <div class="req-options">
+          ${c.map((l, i) => `
+            <div class="req-option is-fixed">
+              <span class="o-step">${i ? t('comboBack') : t('comboOut')}</span>
+              <span class="o-main">${esc(l.from)} → ${esc(l.to)}<small>${esc(l.when)} · ${esc(l.plane)}</small></span>
+              <span class="o-price">${esc(l.price)}</span>
+            </div>`).join('')}
+        </div>
+        <span class="req-legend">${t('yourDetails')}</span>
+        <div class="req-fields">
+          <label>${t('fName')}<input name="name" required placeholder="${t('phName')}" autocomplete="name"></label>
+          <label>${t('fEmail')}<input name="email" type="email" required placeholder="${t('phEmail')}" autocomplete="email"></label>
+          <label>${t('fPhone')}<input name="phone" type="tel" placeholder="${t('phPhone')}" autocomplete="tel"></label>
+          <label>${t('fPax')}<select name="pax" required>${paxOptions('1')}</select></label>
+        </div>
+        <button type="submit" class="req-submit">${t('comboSubmit', { price: euro(price) })}</button>
+        <p class="req-note">${t('reserveNote')}</p>
+      </form>`;
+    const f = modal.querySelector('form');
+    closeButton();
+    f.addEventListener('submit', ev => {
+      ev.preventDefault();
+      if (!f.reportValidity()) return;
+      if (+f.elements.pax.value > seats) {
+        const note = f.querySelector('.req-note');
+        note.classList.add('error'); note.textContent = t('tooMany', { n: seats });
+        return;
+      }
+      const route = a.from + ' ⇄ ' + a.to, pax = paxText(f.elements.pax.value);
+      const details = [t('comboOut') + ' ' + a.when, t('comboBack') + ' ' + b.when, pax, euro(price)].join(' · ');
+      const email = f.elements.email.value.trim();
+      const btn = f.querySelector('.req-submit');
+      btn.disabled = true; btn.textContent = t('send');
+      sendRequest('Retour empty legs reserveren: ' + route, {
+        'Soort': 'Retour (2 empty legs)', 'Taal': LANG.toUpperCase(), 'Route': route,
+        'Heen': a.from + ' → ' + a.to + ' · ' + a.when + ' · ' + a.price,
+        'Terug': b.from + ' → ' + b.to + ' · ' + b.when + ' · ' + b.price,
+        'Passagiers': pax, 'Totaal': euro(price),
+        'Naam': f.elements.name.value.trim(), 'E-mail': email,
+        'Telefoon': f.elements.phone.value.trim() || '-',
+        _replyto: email
+      }).then(() => showDone(t('reservationSent'), t('reservationDone', { route, details, email })))
+        .catch(() => showError(f));
+    });
+    show(false);
+    f.elements.name.focus();
+  }
+
   /* ---------- pop-up: details of one empty leg ---------- */
   const toRad = d => d * Math.PI / 180, toDeg = r => r * 180 / Math.PI;
   function distanceNm(a, b){
@@ -549,6 +650,20 @@ document.querySelectorAll('.lang-switch a').forEach(a => a.addEventListener('cli
           </div>
         </div>
 
+        ${l.seats > 1 ? `
+        <div class="dt-section dt-split">
+          <span class="dt-label">${t('splitTitle')}</span>
+          <div class="split-box">
+            <div class="split-people" aria-hidden="true">${Array.from({ length: l.seats }, (_, i) => `<span data-n="${i + 1}"></span>`).join('')}</div>
+            <input type="range" class="split-range" min="1" max="${l.seats}" value="${Math.min(4, l.seats)}" aria-label="${t('fPax')}">
+            <div class="split-out">
+              <span class="split-count"></span>
+              <strong class="split-pp"></strong>
+              <small>${esc(t('splitNote', { price: l.price }))}</small>
+            </div>
+          </div>
+        </div>` : ''}
+
         <div class="dt-section">
           <span class="dt-label">${t('terms')}</span>
           <ul class="dt-terms">
@@ -590,6 +705,20 @@ document.querySelectorAll('.lang-switch a').forEach(a => a.addEventListener('cli
     // clicking the photo opens it large, starting at the photo that is showing
     photo.addEventListener('click', () => openLightbox(images, i, l.plane));
     modal.querySelector('.dt-share').addEventListener('click', e => shareDeal(l, e.currentTarget));
+    // split the cost: move the slider to see what each passenger pays
+    const range = modal.querySelector('.split-range');
+    if (range) {
+      const update = () => {
+        const n = +range.value;
+        modal.querySelector('.split-count').textContent = t('splitWith', { n: paxText(n) });
+        modal.querySelector('.split-pp').textContent = t('perPersonShort', { price: euro(l.priceNum / n) });
+        modal.querySelectorAll('.split-people span').forEach(s => s.classList.toggle('on', +s.dataset.n <= n));
+        range.style.setProperty('--fill', ((n - 1) / Math.max(1, l.seats - 1) * 100) + '%');
+      };
+      range.addEventListener('input', update);
+      modal.querySelectorAll('.split-people span').forEach(s => s.addEventListener('click', () => { range.value = s.dataset.n; update(); }));
+      update();
+    }
     show(true);
     // the address bar now points at this flight, so it can be copied or bookmarked as well
     history.replaceState(null, '', '#deal=' + l.slug);
@@ -764,6 +893,65 @@ document.querySelectorAll('.lang-switch a').forEach(a => a.addEventListener('cli
       if (fSort.value === 'discount') return rows.slice().sort((a, b) => share(a) - share(b));
       return rows.slice().sort(byDate);
     }
+    /* map with every flight that matches the filters; click a route to open the flight */
+    const mapEl = $('legsMap');
+    let routeMap, routeLayer;
+    // a gentle arc that bends to the left of the direction of travel, so a flight out and
+    // the flight back on the same route lie side by side instead of on top of each other
+    function arc(a, b){
+      const dx = b[1] - a[1], dy = b[0] - a[0], k = 0.16;
+      const c = [(a[0] + b[0]) / 2 + dx * k, (a[1] + b[1]) / 2 - dy * k];
+      return Array.from({ length: 33 }, (_, i) => {
+        const s = i / 32, u = 1 - s;
+        return [u * u * a[0] + 2 * u * s * c[0] + s * s * b[0], u * u * a[1] + 2 * u * s * c[1] + s * s * b[1]];
+      });
+    }
+    function drawRoutes(rows){
+      if (!mapEl) return;
+      loadLeaflet().then(() => {
+        if (!routeMap) {
+          routeMap = L.map(mapEl, { scrollWheelZoom: false, zoomControl: false });
+          L.control.zoom({ position: 'topright' }).addTo(routeMap);
+          L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 18, attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+          }).addTo(routeMap);
+          routeLayer = L.layerGroup().addTo(routeMap);
+        }
+        routeLayer.clearLayers();
+        const points = [], airports = new Map(), planes = [];
+        rows.filter(l => l.fromPos && l.toPos).forEach(l => {
+          const path = arc(l.fromPos, l.toPos);
+          const line = L.polyline(path, { color: '#1E2E3D', weight: 3, opacity: 0.8 }).addTo(routeLayer);
+          // a wide invisible line on top makes the route easy to hit
+          const hitLine = L.polyline(path, { color: '#000', opacity: 0, weight: 18 }).addTo(routeLayer);
+          hitLine.bindTooltip(`<strong>${esc(l.from)} → ${esc(l.to)}</strong><br>${esc(l.when)} · ${esc(l.price)}`, { sticky: true, className: 'route-tip' });
+          hitLine.on('mouseover', () => line.setStyle({ color: '#F06C25', weight: 4, opacity: 1 }));
+          hitLine.on('mouseout', () => line.setStyle({ color: '#1E2E3D', weight: 3, opacity: 0.8 }));
+          hitLine.on('click', () => openDetail(l));
+          airports.set(l.fromCode, [l.fromPos, l.from]); airports.set(l.toCode, [l.toPos, l.to]);
+          planes.push(path);
+          points.push(...path);
+        });
+        airports.forEach(([pos, name]) => L.circleMarker(pos, { radius: 5, color: '#fff', weight: 2, fillColor: '#F06C25', fillOpacity: 1 })
+          .bindTooltip(name, { direction: 'top', offset: [0, -6] }).addTo(routeLayer));
+        mapEl.classList.toggle('is-empty', !points.length);
+        if (!points.length) return;
+        // Europe first; flights elsewhere (the US) are there when you zoom out
+        const europe = points.filter(p => p[1] > -15 && p[1] < 40 && p[0] > 30);
+        routeMap.fitBounds(L.latLngBounds(europe.length ? europe : points), { padding: [36, 36], maxZoom: 7 });
+        // a small plane halfway along each route shows the direction of the flight
+        planes.forEach(path => {
+          const mid = 16, p1 = routeMap.latLngToLayerPoint(path[mid - 1]), p2 = routeMap.latLngToLayerPoint(path[mid + 1]);
+          const angle = toDeg(Math.atan2(p2.y - p1.y, p2.x - p1.x)) + 90;
+          L.marker(path[mid], { keyboard: false, interactive: false, icon: L.divIcon({
+            className: '', iconSize: [20, 20], iconAnchor: [10, 10],
+            html: `<span class="dt-plane-icon" style="transform: rotate(${angle}deg)">${PLANE_SVG}</span>`
+          }) }).addTo(routeLayer);
+        });
+        setTimeout(() => routeMap.invalidateSize(), 50);
+      }).catch(() => { mapEl.classList.add('is-off'); mapEl.innerHTML = `<p>${t('mapFailed')}</p>`; });
+    }
+
     const cards = rows => rows.map(l => dealCardHtml(l, l.index)).join('');
     const group = (title, sub) => `<div class="legs-group"><h3>${esc(title)}</h3>${sub ? `<span>${esc(sub)}</span>` : ''}</div>`;
 
@@ -771,7 +959,7 @@ document.querySelectorAll('.lang-switch a').forEach(a => a.addEventListener('cli
       const qf = fFrom.value.trim().toLowerCase(), qt = fTo.value.trim().toLowerCase(), pax = +fPax.value || 0;
       const target = chosenDate();
       const rows = legs.filter(l => hit(qf, l, 'from') && hit(qt, l, 'to') && (!pax || l.seats >= pax));
-      let html = '', shown = 0;
+      let html = '', shown = 0, visible = rows;
 
       if (target) {
         // 1. flights on the chosen day, 2. flights up to a week before or after it
@@ -779,6 +967,7 @@ document.querySelectorAll('.lang-switch a').forEach(a => a.addEventListener('cli
         const exact = sortRows(rows.filter(l => days(l) === 0), target);
         const near = sortRows(rows.filter(l => days(l) !== 0 && Math.abs(days(l)) <= WINDOW_DAYS), target);
         shown = exact.length + near.length;
+        visible = exact.concat(near);
         const from = new Date(+target - WINDOW_DAYS * DAY), to = new Date(+target + WINDOW_DAYS * DAY);
         if (exact.length) html += group(t('on', { date: longDate(target) }), exact.length === 1 ? t('flight1') : t('flightsN', { n: exact.length })) + cards(exact);
         else if (near.length) html += `<div class="legs-note">${esc(t('noLegsOnDay', { date: longDate(target) }))}</div>`;
@@ -797,6 +986,7 @@ document.querySelectorAll('.lang-switch a').forEach(a => a.addEventListener('cli
         ? html
         : `<div class="legs-empty"><strong>${esc(target ? t('noLegsAround', { date: longDate(target) }) : t('noLegsRoute'))}</strong><p>${t('noLegsLead')}</p>
            <button type="button" data-open-request data-from="${esc(fFrom.value.trim())}" data-to="${esc(fTo.value.trim())}" data-date="${target ? fDate.value : ''}" data-pax="${pax || ''}">${t('requestAFlight')}</button></div>`;
+      drawRoutes(visible);
     }
     [fFrom, fTo, fDate, fPax, fSort].forEach(el => { el.addEventListener('input', render); el.addEventListener('change', render); });
     $('flReset').addEventListener('click', () => {
