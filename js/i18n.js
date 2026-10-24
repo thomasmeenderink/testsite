@@ -62,6 +62,11 @@ const STRINGS = {
     // contact
     messageSent: 'Message sent', thanks: 'Thank you, {name}. We will get back to you as soon as possible at {email}.',
     // popular destinations in the search bar
+    // calendar and form checks (the browser would otherwise use its own language)
+    chooseDate: 'Choose a date', prevMonth: 'Previous month', nextMonth: 'Next month', clearDate: 'Clear date',
+    vRequired: 'Please fill in this field.', vSelect: 'Please choose an option.', vCheck: 'Please tick this box.',
+    vEmail: 'Please enter a valid email address, e.g. name@example.com.', vDateMin: 'Please choose a date from {date}.',
+    vInvalid: 'Please check this field.',
     popularFrom: 'Amsterdam', popularTo: ['London', 'Nice', 'Ibiza', 'Cannes', 'Geneva', 'Mykonos']
   },
   nl: {
@@ -108,6 +113,10 @@ const STRINGS = {
     noLegsAround: 'Geen empty legs rond {date}', noLegsRoute: 'Geen empty legs op deze route',
     noLegsLead: 'Vraag een nieuwe vlucht aan, dan sturen we je een voorstel op maat.', requestAFlight: 'Vraag een vlucht aan',
     messageSent: 'Bericht verstuurd', thanks: 'Bedankt, {name}. We reageren zo snel mogelijk via {email}.',
+    chooseDate: 'Kies een datum', prevMonth: 'Vorige maand', nextMonth: 'Volgende maand', clearDate: 'Datum wissen',
+    vRequired: 'Vul dit veld in.', vSelect: 'Kies een optie.', vCheck: 'Vink dit vakje aan.',
+    vEmail: 'Vul een geldig e-mailadres in, bijv. naam@voorbeeld.nl.', vDateMin: 'Kies een datum vanaf {date}.',
+    vInvalid: 'Controleer dit veld.',
     popularFrom: 'Amsterdam', popularTo: ['Londen', 'Nice', 'Ibiza', 'Cannes', 'Genève', 'Mykonos']
   }
 };
