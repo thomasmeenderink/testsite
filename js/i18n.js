@@ -68,6 +68,7 @@ const STRINGS = {
     vEmail: 'Please enter a valid email address, e.g. name@example.com.', vDateMin: 'Please choose a date from {date}.',
     vInvalid: 'Please check this field.',
     // split the cost, return trips, route map
+    splitSummary: 'Split the cost', splitFrom: 'from {price} pp',
     splitTitle: 'SPLIT THE COST', splitWith: 'With {n}', splitNote: 'The price of {price} is for the whole aircraft',
     comboOut: 'OUT', comboBack: 'BACK', comboReserve: 'RESERVE BOTH ›', comboBadge: 'RETURN TRIP', comboYourTrip: 'YOUR RETURN TRIP',
     comboLead: '2 empty legs · {price} in total · up to {n} passengers', comboSubmit: 'Reserve both flights · {price}',
@@ -121,6 +122,7 @@ const STRINGS = {
     vRequired: 'Vul dit veld in.', vSelect: 'Kies een optie.', vCheck: 'Vink dit vakje aan.',
     vEmail: 'Vul een geldig e-mailadres in, bijv. naam@voorbeeld.nl.', vDateMin: 'Kies een datum vanaf {date}.',
     vInvalid: 'Controleer dit veld.',
+    splitSummary: 'Deel de kosten', splitFrom: 'vanaf {price} p.p.',
     splitTitle: 'DEEL DE KOSTEN', splitWith: 'Met {n}', splitNote: 'De prijs van {price} geldt voor het hele toestel',
     comboOut: 'HEEN', comboBack: 'TERUG', comboReserve: 'RESERVEER BEIDE ›', comboBadge: 'RETOUR', comboYourTrip: 'JE RETOUR',
     comboLead: '2 empty legs · {price} totaal · tot {n} passagiers', comboSubmit: 'Reserveer beide vluchten · {price}',
