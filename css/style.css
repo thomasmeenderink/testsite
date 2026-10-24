@@ -100,15 +100,9 @@ header.open .menu-toggle span:nth-child(3){ transform: translateY(-7px) rotate(-
   position:relative; z-index:2; width:100%; max-width: 1180px; margin: 0 auto;
   display:grid; grid-template-columns: 1.4fr 1fr; gap: 60px; align-items:center;
 }
-.hero-badge{
-  display:inline-flex; align-items:center; gap: 8px;
-  color: var(--white); font-size: 0.75rem; font-weight: 600; letter-spacing: 0.16em;
-  border: 1px solid rgba(255,255,255,0.3); border-radius: 999px; padding: 7px 14px;
-}
-.hero-badge::before{ content:''; width:7px; height:7px; border-radius:50%; background: var(--accent); }
 .hero h1{
   font-family:'Playfair Display', serif; font-weight:700; color: var(--white);
-  font-size: clamp(2.4rem, 5.2vw, 4.2rem); line-height:1.05; margin-top: 24px; max-width: 13ch;
+  font-size: clamp(2.4rem, 5.2vw, 4.2rem); line-height:1.05; max-width: 13ch;
 }
 .hero h1 em{ font-style: italic; color: var(--accent); }
 .hero-lead{ color: rgba(255,255,255,0.82); font-size: 1.05rem; max-width: 46ch; margin-top: 22px; }
@@ -139,11 +133,6 @@ header.open .menu-toggle span:nth-child(3){ transform: translateY(-7px) rotate(-
   background: var(--white); color: var(--navy); border-radius: 18px;
   padding: 30px 30px 26px; box-shadow: 0 30px 70px rgba(0,0,0,0.32);
 }
-.trip-label{
-  display:inline-flex; align-items:center; gap: 8px;
-  font-size: 0.7rem; font-weight: 600; letter-spacing: 0.16em;
-}
-.trip-label::before{ content:''; width:7px; height:7px; border-radius:50%; background: var(--accent); }
 .trip-card h2{
   font-family:'Playfair Display', serif; font-weight: 700; font-size: 1.75rem; line-height: 1.15;
   margin-top: 10px; padding-bottom: 20px; border-bottom: 1px solid var(--panel-line);
@@ -208,20 +197,12 @@ section > *{ max-width: 1180px; margin-left: auto; margin-right: auto; }
 @media (max-width: 800px){ section{ padding: 64px 6vw; } }
 
 /* --- section headings (same language as the hero) --- */
-.section-label{
-  display:inline-flex; align-items:center; gap: 8px; width: fit-content;
-  color: var(--navy); background: var(--white);
-  font-size: 0.72rem; font-weight: 600; letter-spacing: 0.16em;
-  border: 1px solid var(--panel-line); border-radius: 999px; padding: 7px 14px; margin-bottom: 20px;
-}
-.section-label::before{ content:''; width:7px; height:7px; border-radius:50%; background: var(--accent); }
 .section-title{
   font-family:'Playfair Display', serif; font-weight:700; line-height:1.1;
   font-size: clamp(2rem, 3.6vw, 2.9rem); max-width: 18ch;
 }
 .section-title em{ font-style: italic; color: var(--accent); }
 .section-lead{ color: var(--text-dim); font-size: 1rem; margin-top: 16px; max-width: 54ch; }
-.on-dark .section-label{ color: var(--white); background: transparent; border-color: rgba(255,255,255,0.3); }
 .on-dark .section-title{ color: var(--white); }
 .on-dark .section-lead{ color: rgba(255,255,255,0.75); }
 
@@ -610,7 +591,7 @@ footer ul a:hover, .footer-bottom a:hover{ color: var(--accent); }
 .page-hero-inner{ position:relative; z-index:2; }
 .page-hero h1{
   font-family:'Playfair Display', serif; font-weight:700; color: var(--white);
-  font-size: clamp(2.2rem, 4.6vw, 3.6rem); line-height:1.08; margin-top: 22px; max-width: 16ch;
+  font-size: clamp(2.2rem, 4.6vw, 3.6rem); line-height:1.08; max-width: 16ch;
 }
 .page-hero h1 em{ font-style: italic; color: var(--accent); }
 .page-hero .hero-lead{ max-width: 56ch; }
@@ -1053,7 +1034,7 @@ footer ul a:hover, .footer-bottom a:hover{ color: var(--accent); }
 
 /* --- trip card: more breathing room between its parts --- */
 .trip-card{ padding: 36px 34px 32px; }
-.trip-card h2{ margin-top: 14px; padding-bottom: 24px; }
+.trip-card h2{ padding-bottom: 24px; }
 .trip-card .trip-switch{ margin: 26px 0 22px; }
 .trip-card .tf-row > .sb-field{ padding: 15px 18px; gap: 6px; }
 .trip-card .tf-row > .tf-from{ padding-right: 28px; }
