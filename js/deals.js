@@ -50,7 +50,7 @@ const DEALS = [
   { from: 'EHAM', to: 'EGSS', date: '2026-12-02', time: '10:30', plane: 'Cessna Citation CJ3', class: 'light', seats: 7,
     duration: '55m', oldPrice: 11000, price: 5800, images: CJ3_PHOTOS },
   { from: 'EGSS', to: 'EHAM', date: '2026-12-09', time: '18:00', plane: 'Cessna Citation CJ3', class: 'light', seats: 7,
-    duration: '55m', oldPrice: 10500, price: 5650, images: CJ3_PHOTOS },
+    duration: '55m', oldPrice: 10650, price: 5650, images: CJ3_PHOTOS },
   { from: 'VNY', to: 'ASE', date: '08-02', time: '16:15', plane: 'Bombardier Challenger 350', class: 'super-midsize', seats: 10,
     duration: '1h 20m', oldPrice: 17000, price: 6500, images: ['images/jet-challenger-350.jpg'] },
   { from: 'AMS', to: 'CEQ', date: '08-03', window: ['07:00', '17:00'], plane: 'Cessna CJ3', class: 'midsize', seats: 8,
