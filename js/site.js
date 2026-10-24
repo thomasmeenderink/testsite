@@ -652,7 +652,13 @@ document.querySelectorAll('.lang-switch a').forEach(a => a.addEventListener('cli
 
         ${l.seats > 1 ? `
         <div class="dt-section dt-split">
-          <span class="dt-label">${t('splitTitle')}</span>
+          <details class="split-card">
+            <summary>
+              <span class="split-icon" aria-hidden="true"></span>
+              <span class="split-title">${t('splitSummary')}</span>
+              <span class="split-from">${esc(t('splitFrom', { price: euro(l.priceNum / l.seats) }))}</span>
+              <span class="split-chev" aria-hidden="true"></span>
+            </summary>
           <div class="split-box">
             <div class="split-people" aria-hidden="true">${Array.from({ length: l.seats }, (_, i) => `<span data-n="${i + 1}"></span>`).join('')}</div>
             <input type="range" class="split-range" min="1" max="${l.seats}" value="${Math.min(4, l.seats)}" aria-label="${t('fPax')}">
@@ -662,6 +668,7 @@ document.querySelectorAll('.lang-switch a').forEach(a => a.addEventListener('cli
               <small>${esc(t('splitNote', { price: l.price }))}</small>
             </div>
           </div>
+          </details>
         </div>` : ''}
 
         <div class="dt-section">
@@ -893,65 +900,6 @@ document.querySelectorAll('.lang-switch a').forEach(a => a.addEventListener('cli
       if (fSort.value === 'discount') return rows.slice().sort((a, b) => share(a) - share(b));
       return rows.slice().sort(byDate);
     }
-    /* map with every flight that matches the filters; click a route to open the flight */
-    const mapEl = $('legsMap');
-    let routeMap, routeLayer;
-    // a gentle arc that bends to the left of the direction of travel, so a flight out and
-    // the flight back on the same route lie side by side instead of on top of each other
-    function arc(a, b){
-      const dx = b[1] - a[1], dy = b[0] - a[0], k = 0.16;
-      const c = [(a[0] + b[0]) / 2 + dx * k, (a[1] + b[1]) / 2 - dy * k];
-      return Array.from({ length: 33 }, (_, i) => {
-        const s = i / 32, u = 1 - s;
-        return [u * u * a[0] + 2 * u * s * c[0] + s * s * b[0], u * u * a[1] + 2 * u * s * c[1] + s * s * b[1]];
-      });
-    }
-    function drawRoutes(rows){
-      if (!mapEl) return;
-      loadLeaflet().then(() => {
-        if (!routeMap) {
-          routeMap = L.map(mapEl, { scrollWheelZoom: false, zoomControl: false });
-          L.control.zoom({ position: 'topright' }).addTo(routeMap);
-          L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 18, attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-          }).addTo(routeMap);
-          routeLayer = L.layerGroup().addTo(routeMap);
-        }
-        routeLayer.clearLayers();
-        const points = [], airports = new Map(), planes = [];
-        rows.filter(l => l.fromPos && l.toPos).forEach(l => {
-          const path = arc(l.fromPos, l.toPos);
-          const line = L.polyline(path, { color: '#1E2E3D', weight: 3, opacity: 0.8 }).addTo(routeLayer);
-          // a wide invisible line on top makes the route easy to hit
-          const hitLine = L.polyline(path, { color: '#000', opacity: 0, weight: 18 }).addTo(routeLayer);
-          hitLine.bindTooltip(`<strong>${esc(l.from)} → ${esc(l.to)}</strong><br>${esc(l.when)} · ${esc(l.price)}`, { sticky: true, className: 'route-tip' });
-          hitLine.on('mouseover', () => line.setStyle({ color: '#F06C25', weight: 4, opacity: 1 }));
-          hitLine.on('mouseout', () => line.setStyle({ color: '#1E2E3D', weight: 3, opacity: 0.8 }));
-          hitLine.on('click', () => openDetail(l));
-          airports.set(l.fromCode, [l.fromPos, l.from]); airports.set(l.toCode, [l.toPos, l.to]);
-          planes.push(path);
-          points.push(...path);
-        });
-        airports.forEach(([pos, name]) => L.circleMarker(pos, { radius: 5, color: '#fff', weight: 2, fillColor: '#F06C25', fillOpacity: 1 })
-          .bindTooltip(name, { direction: 'top', offset: [0, -6] }).addTo(routeLayer));
-        mapEl.classList.toggle('is-empty', !points.length);
-        if (!points.length) return;
-        // Europe first; flights elsewhere (the US) are there when you zoom out
-        const europe = points.filter(p => p[1] > -15 && p[1] < 40 && p[0] > 30);
-        routeMap.fitBounds(L.latLngBounds(europe.length ? europe : points), { padding: [36, 36], maxZoom: 7 });
-        // a small plane halfway along each route shows the direction of the flight
-        planes.forEach(path => {
-          const mid = 16, p1 = routeMap.latLngToLayerPoint(path[mid - 1]), p2 = routeMap.latLngToLayerPoint(path[mid + 1]);
-          const angle = toDeg(Math.atan2(p2.y - p1.y, p2.x - p1.x)) + 90;
-          L.marker(path[mid], { keyboard: false, interactive: false, icon: L.divIcon({
-            className: '', iconSize: [20, 20], iconAnchor: [10, 10],
-            html: `<span class="dt-plane-icon" style="transform: rotate(${angle}deg)">${PLANE_SVG}</span>`
-          }) }).addTo(routeLayer);
-        });
-        setTimeout(() => routeMap.invalidateSize(), 50);
-      }).catch(() => { mapEl.classList.add('is-off'); mapEl.innerHTML = `<p>${t('mapFailed')}</p>`; });
-    }
-
     const cards = rows => rows.map(l => dealCardHtml(l, l.index)).join('');
     const group = (title, sub) => `<div class="legs-group"><h3>${esc(title)}</h3>${sub ? `<span>${esc(sub)}</span>` : ''}</div>`;
 
@@ -959,7 +907,7 @@ document.querySelectorAll('.lang-switch a').forEach(a => a.addEventListener('cli
       const qf = fFrom.value.trim().toLowerCase(), qt = fTo.value.trim().toLowerCase(), pax = +fPax.value || 0;
       const target = chosenDate();
       const rows = legs.filter(l => hit(qf, l, 'from') && hit(qt, l, 'to') && (!pax || l.seats >= pax));
-      let html = '', shown = 0, visible = rows;
+      let html = '', shown = 0;
 
       if (target) {
         // 1. flights on the chosen day, 2. flights up to a week before or after it
@@ -967,7 +915,6 @@ document.querySelectorAll('.lang-switch a').forEach(a => a.addEventListener('cli
         const exact = sortRows(rows.filter(l => days(l) === 0), target);
         const near = sortRows(rows.filter(l => days(l) !== 0 && Math.abs(days(l)) <= WINDOW_DAYS), target);
         shown = exact.length + near.length;
-        visible = exact.concat(near);
         const from = new Date(+target - WINDOW_DAYS * DAY), to = new Date(+target + WINDOW_DAYS * DAY);
         if (exact.length) html += group(t('on', { date: longDate(target) }), exact.length === 1 ? t('flight1') : t('flightsN', { n: exact.length })) + cards(exact);
         else if (near.length) html += `<div class="legs-note">${esc(t('noLegsOnDay', { date: longDate(target) }))}</div>`;
@@ -986,7 +933,6 @@ document.querySelectorAll('.lang-switch a').forEach(a => a.addEventListener('cli
         ? html
         : `<div class="legs-empty"><strong>${esc(target ? t('noLegsAround', { date: longDate(target) }) : t('noLegsRoute'))}</strong><p>${t('noLegsLead')}</p>
            <button type="button" data-open-request data-from="${esc(fFrom.value.trim())}" data-to="${esc(fTo.value.trim())}" data-date="${target ? fDate.value : ''}" data-pax="${pax || ''}">${t('requestAFlight')}</button></div>`;
-      drawRoutes(visible);
     }
     [fFrom, fTo, fDate, fPax, fSort].forEach(el => { el.addEventListener('input', render); el.addEventListener('change', render); });
     $('flReset').addEventListener('click', () => {
