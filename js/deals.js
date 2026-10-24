@@ -145,7 +145,7 @@ function dealCardHtml(d, i){
         <div class="deal-when">${esc(d.when)}</div>
         <div class="deal-plane">
           <div><div class="name">${esc(d.plane)}</div><div class="cap">${esc(d.cap)}</div></div>
-          <div class="price-block">${d.oldPrice ? `<div class="price-old">${esc(d.oldPrice)}</div>` : ''}<div class="price">${esc(d.price)}</div></div>
+          <div class="price-block">${d.oldPrice ? `<div class="price-old">${esc(d.oldPrice)}</div>` : ''}<div class="price">${esc(d.price)}</div>${d.seats ? `<div class="pp">${esc(t('ppCard', { price: euro(d.priceNum / d.seats) }))}</div>` : ''}</div>
         </div>
         <div class="deal-actions">
           <span class="reserve" aria-hidden="true">${t('moreInfo')}</span>

@@ -594,8 +594,9 @@ document.querySelectorAll('.lang-switch a').forEach(a => a.addEventListener('cli
   const SHARE_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15V3"/><path d="M7 8l5-5 5 5"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg>';
   const WHATSAPP_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 3.5A11 11 0 0 0 3.4 17.1L2 22l5-1.3A11 11 0 0 0 20.5 3.5zm-8.5 17a9 9 0 0 1-4.6-1.3l-.3-.2-3 .8.8-2.9-.2-.3A9 9 0 1 1 12 20.5zm5-6.7c-.3-.1-1.6-.8-1.8-.9s-.4-.1-.6.1-.7.9-.8 1-.3.2-.6.1a7.3 7.3 0 0 1-3.6-3.2c-.3-.5.3-.4.8-1.4a.5.5 0 0 0 0-.5l-.8-2c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 11.9 11.9 0 0 0 4.6 4c1.7.7 2.4.8 3.2.7.5-.1 1.6-.7 1.8-1.3s.2-1.2.2-1.3-.2-.2-.5-.3z" fill="currentColor" stroke="none"/></svg>';
   const LINK_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 10a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg>';
-  // the empty legs page in the same language sits next to every page, so a relative link works
-  const dealLink = l => new URL('empty-legs.html#deal=' + l.slug, location.href).href;
+  // every flight has a share page next to the pages of its language (deal/<slug>.html) with its own
+  // title, price and photo for WhatsApp and LinkedIn; it sends visitors on to the flight here
+  const dealLink = l => new URL('deal/' + l.slug + '.html', location.href).href;
   const dealText = l => `${l.from} → ${l.to} · ${l.when} · ${l.price}${l.oldPrice ? ' (' + t('normally', { price: l.oldPrice }) + ')' : ''} · ${l.plane}`;
 
   function shareDeal(l, btn){
