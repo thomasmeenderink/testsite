@@ -11,6 +11,20 @@ function sendRequest(subject, fields){
     .then(d => { if (String(d.success) !== 'true') throw new Error(d.message || 'Versturen mislukt'); return d; });
 }
 
+// Form checks ("Please fill in this field") in the page's language instead of the browser's
+document.addEventListener('invalid', e => {
+  const el = e.target, v = el.validity;
+  el.setCustomValidity('');
+  let msg = t('vInvalid');
+  if (v.valueMissing) msg = el.tagName === 'SELECT' ? t('vSelect') : el.type === 'checkbox' ? t('vCheck') : t('vRequired');
+  else if (v.typeMismatch && el.type === 'email') msg = t('vEmail');
+  else if (v.rangeUnderflow && el.min) msg = t('vDateMin', { date: new Date(el.min + 'T00:00').toLocaleDateString(LOCALE, { day: 'numeric', month: 'long', year: 'numeric' }) });
+  el.setCustomValidity(msg);
+}, true);
+['input', 'change'].forEach(type => document.addEventListener(type, e => {
+  if (e.target.setCustomValidity) e.target.setCustomValidity('');
+}, true));
+
 (function(){
   const form = document.getElementById('signupForm');
   if(!form) return;

@@ -215,13 +215,152 @@
     });
   }
 
+  /* ---------- date fields ----------
+     The browser's own date picker speaks the browser's language ("dd-mm-jjjj" on a Dutch
+     computer). This calendar speaks the page's language. The real input stays in the form
+     (invisible) and still holds the date as 2026-12-02, so "required", "min" and the
+     existing scripts keep working. */
+  const CAL = '<svg class="dd-chev dd-cal-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>';
+  const inputValue = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value');
+  const pageLocale = typeof LOCALE !== 'undefined' ? LOCALE : document.documentElement.lang || 'en';
+  const say = (key, en, vars) => (typeof t === 'function' && t(key, vars) !== key ? t(key, vars) : en);
+  const pad = n => String(n).padStart(2, '0');
+  const isoOf = d => d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
+  const dateOf = iso => /^\d{4}-\d{2}-\d{2}$/.test(iso || '') ? new Date(iso + 'T00:00') : null;
+  // weekday names Monday to Sunday in the page's language
+  const WEEKDAYS = Array.from({ length: 7 }, (_, i) => new Date(2024, 0, 1 + i).toLocaleDateString(pageLocale, { weekday: 'short' }).replace('.', ''));
+
+  function enhanceDate(input){
+    if (input.dataset.dd) return;
+    input.dataset.dd = '1';
+    const host = input.parentElement;
+    host.classList.add('dd-host');
+    input.classList.add('dd-native');
+    input.tabIndex = -1;
+    input.setAttribute('aria-hidden', 'true');
+
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'dd-btn dd-date';
+    btn.setAttribute('aria-haspopup', 'dialog');
+    btn.setAttribute('aria-expanded', 'false');
+    btn.innerHTML = '<span class="dd-value"></span>' + CAL;
+    input.after(btn);
+    const name = (host.firstChild && host.firstChild.nodeType === 3 ? host.firstChild.textContent : (host.querySelector('span') || {}).textContent || '').trim();
+
+    function refresh(){
+      const d = dateOf(inputValue.get.call(input));
+      const text = d ? d.toLocaleDateString(pageLocale, { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' }).replace(/\./g, '') : (input.placeholder || '');
+      btn.querySelector('.dd-value').textContent = text;
+      btn.classList.toggle('is-empty', !d);
+      btn.setAttribute('aria-label', (name ? name + ': ' : '') + text);
+    }
+    // keep the button in step when a script sets the date directly
+    Object.defineProperty(input, 'value', {
+      configurable: true,
+      get(){ return inputValue.get.call(this); },
+      set(v){ inputValue.set.call(this, v); refresh(); }
+    });
+    input.addEventListener('change', refresh);
+    refresh();
+
+    function set(iso){
+      // the existing scripts only read a date from a field of type "date"
+      input.type = iso ? 'date' : 'text';
+      inputValue.set.call(input, iso);
+      refresh();
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+      input.dispatchEvent(new Event('change', { bubbles: true }));
+      if (current) current.close();
+      btn.focus();
+    }
+
+    function open(){
+      // the page scripts set the earliest date when a date field gets focus (e.g. return after departure)
+      input.dispatchEvent(new Event('focus'));
+      const today = new Date(new Date().toDateString());
+      const minDate = [dateOf(input.min), today].filter(Boolean).reduce((a, b) => (a > b ? a : b));
+      const chosen = dateOf(inputValue.get.call(input));
+      let month = new Date((chosen || minDate).getFullYear(), (chosen || minDate).getMonth(), 1);
+      let focusIso = isoOf(chosen || minDate);
+
+      const panel = document.createElement('div');
+      panel.className = 'dd-panel dd-cal';
+      panel.setAttribute('role', 'dialog');
+      panel.setAttribute('aria-label', name || say('chooseDate', 'Choose a date'));
+
+      function draw(){
+        const first = (month.getDay() + 6) % 7;            // Monday = 0
+        const days = new Date(month.getFullYear(), month.getMonth() + 1, 0).getDate();
+        const title = month.toLocaleDateString(pageLocale, { month: 'long', year: 'numeric' });
+        const canBack = new Date(month.getFullYear(), month.getMonth(), 0) >= minDate;
+        let cells = '';
+        for (let i = 0; i < first; i++) cells += '<span></span>';
+        for (let d = 1; d <= days; d++) {
+          const day = new Date(month.getFullYear(), month.getMonth(), d), iso = isoOf(day);
+          const off = day < minDate;
+          cells += `<button type="button" data-iso="${iso}" tabindex="${iso === focusIso ? 0 : -1}"${off ? ' disabled' : ''}
+            class="${chosen && iso === isoOf(chosen) ? 'is-chosen' : ''}${iso === isoOf(today) ? ' is-today' : ''}"
+            aria-label="${esc(day.toLocaleDateString(pageLocale, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }))}">${d}</button>`;
+        }
+        panel.innerHTML = `
+          <div class="cal-head">
+            <button type="button" class="cal-nav" data-step="-1" aria-label="${esc(say('prevMonth', 'Previous month'))}" ${canBack ? '' : 'disabled'}>‹</button>
+            <strong>${esc(title.charAt(0).toUpperCase() + title.slice(1))}</strong>
+            <button type="button" class="cal-nav" data-step="1" aria-label="${esc(say('nextMonth', 'Next month'))}">›</button>
+          </div>
+          <div class="cal-grid cal-week">${WEEKDAYS.map(w => `<span>${esc(w)}</span>`).join('')}</div>
+          <div class="cal-grid cal-days">${cells}</div>
+          ${chosen && !input.required ? `<button type="button" class="cal-clear">${esc(say('clearDate', 'Clear date'))}</button>` : ''}`;
+      }
+      function focusDay(){
+        const b = panel.querySelector(`[data-iso="${focusIso}"]`);
+        if (b && !b.disabled) b.focus({ preventScroll: true }); else panel.querySelector('.cal-days button:not([disabled])')?.focus({ preventScroll: true });
+      }
+      function moveTo(d){
+        if (d < minDate) d = minDate;
+        focusIso = isoOf(d);
+        if (d.getMonth() !== month.getMonth() || d.getFullYear() !== month.getFullYear()) month = new Date(d.getFullYear(), d.getMonth(), 1);
+        draw(); focusDay();
+      }
+      draw();
+      panel.addEventListener('click', e => {
+        const nav = e.target.closest('.cal-nav');
+        if (nav) { month = new Date(month.getFullYear(), month.getMonth() + +nav.dataset.step, 1); focusIso = isoOf(month < minDate ? minDate : month); draw(); return; }
+        if (e.target.closest('.cal-clear')) { set(''); return; }
+        const day = e.target.closest('[data-iso]');
+        if (day && !day.disabled) set(day.dataset.iso);
+      });
+      panel.addEventListener('keydown', e => {
+        const d = dateOf(focusIso);
+        const go = { ArrowLeft: -1, ArrowRight: 1, ArrowUp: -7, ArrowDown: 7 }[e.key];
+        if (go) { e.preventDefault(); d.setDate(d.getDate() + go); moveTo(d); }
+        else if (e.key === 'PageUp' || e.key === 'PageDown') { e.preventDefault(); d.setMonth(d.getMonth() + (e.key === 'PageUp' ? -1 : 1)); moveTo(d); }
+        else if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); current.close(); btn.focus(); }
+      });
+      btn.setAttribute('aria-expanded', 'true');
+      openPanel(panel, btn, () => btn.setAttribute('aria-expanded', 'false'));
+      panel.style.maxHeight = '';
+      place(panel, btn);
+      panel.style.maxHeight = '';
+      focusDay();
+    }
+    btn.addEventListener('click', () => { if (current && current.anchor === btn) current.close(); else open(); });
+    btn.addEventListener('keydown', e => { if (e.key === 'ArrowDown') { e.preventDefault(); open(); } });
+    // a click on the field's label lands on the hidden input
+    input.addEventListener('click', e => { e.preventDefault(); if (!current || current.anchor !== btn) open(); });
+  }
+
   /* ---------- apply now and to anything added later ---------- */
+  const DATE_FIELDS = 'input[type="date"], input[data-date]';
   function scan(root){
     if (!root.querySelectorAll) return;
     if (root.matches && root.matches('select')) enhanceSelect(root);
     if (root.matches && root.matches('input[list]')) enhanceCity(root);
+    if (root.matches && root.matches(DATE_FIELDS)) enhanceDate(root);
     root.querySelectorAll('select').forEach(enhanceSelect);
     root.querySelectorAll('input[list]').forEach(enhanceCity);
+    root.querySelectorAll(DATE_FIELDS).forEach(enhanceDate);
   }
   scan(document.body);
   new MutationObserver(records => records.forEach(r => r.addedNodes.forEach(n => {
