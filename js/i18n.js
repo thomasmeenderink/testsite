@@ -72,6 +72,7 @@ const STRINGS = {
     splitTitle: 'SPLIT THE COST', splitWith: 'With {n}', splitNote: 'The price of {price} is for the whole aircraft',
     comboOut: 'OUT', comboBack: 'BACK', comboReserve: 'RESERVE BOTH ›', comboBadge: 'RETURN TRIP', comboYourTrip: 'YOUR RETURN TRIP',
     comboLead: '2 empty legs · {price} in total · up to {n} passengers', comboSubmit: 'Reserve both flights · {price}',
+    returns1: 'return trip', returnsN: 'return trips', noReturns: 'No return trips on this route',
     popularFrom: 'Amsterdam', popularTo: ['London', 'Nice', 'Ibiza', 'Cannes', 'Geneva', 'Mykonos']
   },
   nl: {
@@ -126,6 +127,7 @@ const STRINGS = {
     splitTitle: 'DEEL DE KOSTEN', splitWith: 'Met {n}', splitNote: 'De prijs van {price} geldt voor het hele toestel',
     comboOut: 'HEEN', comboBack: 'TERUG', comboReserve: 'RESERVEER BEIDE ›', comboBadge: 'RETOUR', comboYourTrip: 'JE RETOUR',
     comboLead: '2 empty legs · {price} totaal · tot {n} passagiers', comboSubmit: 'Reserveer beide vluchten · {price}',
+    returns1: 'retour', returnsN: 'retouren', noReturns: 'Geen retouren op deze route',
     popularFrom: 'Amsterdam', popularTo: ['Londen', 'Nice', 'Ibiza', 'Cannes', 'Genève', 'Mykonos']
   }
 };

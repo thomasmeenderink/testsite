@@ -1163,7 +1163,6 @@ html[lang="nl"] .dt-gallery::before{ content:'⤢  Vergroot'; }
 .cal-clear:hover{ color: var(--accent); background: transparent; }
 
 /* return trips: two empty legs on the same route, out and back */
-.combo-grid{ display:grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 24px; margin-top: 8px; }
 .combo-card{
   display:flex; flex-direction:column; background: var(--white); border-radius: 14px; overflow:hidden; cursor:pointer;
   border: 1px solid var(--panel-line); box-shadow: 0 1px 2px rgba(30,46,61,0.06), 0 10px 28px rgba(30,46,61,0.08);
@@ -1171,7 +1170,7 @@ html[lang="nl"] .dt-gallery::before{ content:'⤢  Vergroot'; }
 }
 .combo-card:hover{ transform: translateY(-4px); box-shadow: 0 2px 4px rgba(30,46,61,0.06), 0 20px 40px rgba(30,46,61,0.16); }
 .combo-card:focus-visible{ outline: 3px solid var(--accent); outline-offset: 3px; }
-.combo-img{ position:relative; aspect-ratio: 16/8; background: var(--panel-line); }
+.combo-img{ position:relative; aspect-ratio: 16/10; background: var(--panel-line); }
 .combo-img img{ width:100%; height:100%; object-fit:cover; display:block; }
 .combo-body{ padding: 20px 22px 22px; display:flex; flex-direction:column; gap: 16px; flex: 1; }
 .combo-route{ font-family:'Playfair Display', serif; font-weight: 700; font-size: 1.35rem; color: var(--navy); line-height: 1.2; }
@@ -1215,13 +1214,6 @@ html[lang="nl"] .dt-gallery::before{ content:'⤢  Vergroot'; }
 .split-pp{ font-size: 1.35rem; font-weight: 700; color: var(--accent); }
 .split-out small{ font-size: 0.72rem; color: var(--text-dim); }
 @media (max-width: 560px){ .split-box{ grid-template-columns: 1fr; } .split-out{ text-align:left; } }
-/* desktop: two per row, photo on the left */
-@media (min-width: 900px){
-  .combo-grid{ grid-template-columns: repeat(2, 1fr); }
-  .combo-card{ flex-direction: row; }
-  .combo-img{ flex: 0 0 38%; aspect-ratio: auto; min-height: 100%; }
-  .combo-img img{ position:absolute; inset: 0; }
-}
 
 /* split the cost: closed by default, opens on click */
 .dt-split{ padding-top: 18px; padding-bottom: 18px; }
@@ -1252,3 +1244,16 @@ html[lang="nl"] .dt-gallery::before{ content:'⤢  Vergroot'; }
 .split-card[open] .split-chev{ transform: rotate(180deg); }
 .split-card .split-box{ margin: 0; padding: 4px 16px 16px; border-top: 1px solid var(--panel-line); padding-top: 16px; }
 @media (max-width: 480px){ .split-from{ display:none; } .split-chev{ margin-left: auto; } }
+
+/* one way | return trips on the empty legs page */
+.legs-left{ display:flex; align-items:center; gap: 18px; flex-wrap: wrap; }
+.legs-view{ margin: 0; }
+.legs-view[hidden]{ display:none; }
+.legs-view button{
+  background: transparent; color: var(--text-dim); padding: 9px 18px; border-radius: 999px; border: none;
+  font-family: 'Inter', sans-serif; font-size: 0.82rem; font-weight: 600; letter-spacing: 0; cursor: pointer; white-space: nowrap;
+}
+.legs-view button:hover{ background: transparent; color: var(--navy); }
+.legs-view button[aria-pressed="true"]{ background: var(--navy); color: var(--white); box-shadow: 0 4px 12px rgba(30,46,61,0.25); }
+.legs-view{ background: var(--white); }
+@media (max-width: 640px){ .legs-toolbar{ align-items:flex-start; } .legs-left{ gap: 10px; } }

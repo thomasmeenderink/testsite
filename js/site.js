@@ -417,16 +417,6 @@ document.querySelectorAll('.lang-switch a').forEach(a => a.addEventListener('cli
         </div>
       </div>`;
   }
-  const comboWrap = document.querySelector('[data-combos]');
-  if (comboWrap) {
-    comboWrap.innerHTML = combos.map(comboCardHtml).join('');
-    comboWrap.closest('section').hidden = !combos.length;
-    comboWrap.addEventListener('click', e => { const c = e.target.closest('[data-combo]'); if (c) openCombo(combos[+c.dataset.combo]); });
-    comboWrap.addEventListener('keydown', e => {
-      if ((e.key === 'Enter' || e.key === ' ') && e.target.matches('[data-combo]')) { e.preventDefault(); e.target.click(); }
-    });
-  }
-
   function openCombo(c){
     const [a, b] = c, seats = comboSeats(c), price = comboPrice(c);
     modal.innerHTML = `
@@ -903,9 +893,43 @@ document.querySelectorAll('.lang-switch a').forEach(a => a.addEventListener('cli
     const cards = rows => rows.map(l => dealCardHtml(l, l.index)).join('');
     const group = (title, sub) => `<div class="legs-group"><h3>${esc(title)}</h3>${sub ? `<span>${esc(sub)}</span>` : ''}</div>`;
 
+    /* one way or return: return trips are two empty legs out and back on the same route */
+    let view = new URLSearchParams(location.search).get('view') === 'return' ? 'return' : 'oneway';
+    const viewSwitch = document.querySelector('.legs-view');
+    if (viewSwitch) {
+      viewSwitch.hidden = !combos.length;
+      viewSwitch.querySelectorAll('[data-view]').forEach(b => b.addEventListener('click', () => { view = b.dataset.view; render(); }));
+    }
+    list.addEventListener('click', e => { const c = e.target.closest('[data-combo]'); if (c) openCombo(combos[+c.dataset.combo]); });
+    list.addEventListener('keydown', e => {
+      if ((e.key === 'Enter' || e.key === ' ') && e.target.matches('[data-combo]')) { e.preventDefault(); e.target.click(); }
+    });
+
+    function renderReturns(qf, qt, pax, target){
+      // a return trip matches a search in either direction (London → Amsterdam finds Amsterdam ⇄ London)
+      const fits = c => c.some(l => hit(qf, l, 'from') && hit(qt, l, 'to')) && (!pax || comboSeats(c) >= pax) &&
+        (!target || Math.abs(c[0].date - target) <= WINDOW_DAYS * DAY);
+      const rows = combos.map((c, i) => ({ c, i })).filter(x => fits(x.c));
+      const by = {
+        price: (x, y) => comboPrice(x.c) - comboPrice(y.c),
+        discount: (x, y) => comboPrice(x.c) / comboOld(x.c) - comboPrice(y.c) / comboOld(y.c),
+        date: target ? (x, y) => Math.abs(x.c[0].date - target) - Math.abs(y.c[0].date - target) : (x, y) => x.c[0].date - y.c[0].date
+      };
+      rows.sort(by[fSort.value] || by.date);
+      const filtered = !!(qf || qt || pax || target);
+      count.innerHTML = `<strong>${rows.length}</strong> ${rows.length === 1 ? t('returns1') : t('returnsN')}${filtered ? t('ofTotal', { n: combos.length }) : ''}`;
+      $('flReset').hidden = !filtered && fSort.value === 'date';
+      list.innerHTML = rows.length
+        ? rows.map(x => comboCardHtml(x.c, x.i)).join('')
+        : `<div class="legs-empty"><strong>${esc(t('noReturns'))}</strong><p>${t('noLegsLead')}</p>
+           <button type="button" data-open-request data-from="${esc(fFrom.value.trim())}" data-to="${esc(fTo.value.trim())}" data-date="${target ? fDate.value : ''}" data-pax="${pax || ''}">${t('requestAFlight')}</button></div>`;
+    }
+
     function render(){
       const qf = fFrom.value.trim().toLowerCase(), qt = fTo.value.trim().toLowerCase(), pax = +fPax.value || 0;
       const target = chosenDate();
+      if (viewSwitch) viewSwitch.querySelectorAll('[data-view]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.view === view)));
+      if (view === 'return') { renderReturns(qf, qt, pax, target); return; }
       const rows = legs.filter(l => hit(qf, l, 'from') && hit(qt, l, 'to') && (!pax || l.seats >= pax));
       let html = '', shown = 0;
 
