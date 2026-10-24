@@ -481,7 +481,8 @@ html:has(.req-modal[open]){ overflow: hidden; }
   .sb-when{ border-left: none; }
   .search-bar .sb-swap{ position:absolute; right: 24px; top: 52px; z-index: 2; }
   .search-bar .sb-go{ flex: 1 1 100%; height: 52px; border-radius: 12px; margin: 10px 0 0; }
-  .search-bar .sb-go::after{ content:'Zoek vluchten'; margin-left: 10px; font-weight: 600; }
+  .search-bar .sb-go::after{ content:'Search flights'; margin-left: 10px; font-weight: 600; }
+  html[lang="nl"] .search-bar .sb-go::after{ content:'Zoek vluchten'; }
 }
 
 /* --- advantages gallery --- */
@@ -851,11 +852,12 @@ footer ul a:hover, .footer-bottom a:hover{ color: var(--accent); }
 /* photo in the detail pop-up can be opened large */
 .dt-gallery img.dt-photo{ cursor: zoom-in; }
 .dt-gallery::before{
-  content:'⤢  Vergroot'; position:absolute; right: 16px; top: 18px; z-index: 2;
+  content:'⤢  Enlarge'; position:absolute; right: 16px; top: 18px; z-index: 2;
   background: rgba(30,46,61,0.75); color: var(--white); font-size: 0.75rem; font-weight: 600;
   padding: 6px 10px; border-radius: 999px; opacity: 0; transition: opacity .15s ease; pointer-events:none;
 }
 .dt-gallery:hover::before{ opacity: 1; }
+html[lang="nl"] .dt-gallery::before{ content:'⤢  Vergroot'; }
 .dt-gallery:has(.dt-discount)::before{ top: 56px; }
 
 /* photo viewer */
