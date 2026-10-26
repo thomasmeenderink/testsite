@@ -33,7 +33,7 @@ const CLASSES = {
 };
 
 const CJ3_PHOTOS = ['images/cj3-exterieur.webp', 'images/cj3-cabine.webp', 'images/cj3-plattegrond.webp'];
-const PC24_PHOTOS = ['images/pc24-hangar.webp', 'images/pc24-voorkant.webp', 'images/pc24-cabine.webp', 'images/pc24-cabine-catering.webp', 'images/pc24-stoelen.webp', 'images/pc24-stoel-detail.webp', 'images/pc24-catering.webp'];
+const PC24_PHOTOS = ['images/pc24-hangar.webp', 'images/pc24-voorkant.webp', 'images/pc24-cabine-lengte.webp', 'images/pc24-cabine-catering.webp', 'images/pc24-stoelen.webp', 'images/pc24-stoel-detail.webp', 'images/pc24-catering.webp'];
 const CJ2PLUS_PHOTOS = ['images/cj2plus-exterieur.webp', 'images/cj2plus-cabine-lang.webp', 'images/cj2plus-cabine.webp'];
 const DEALS = [
   { from: 'EHAM', to: 'EGSS', date: '2026-12-02', time: '10:30', plane: 'Cessna Citation CJ3', class: 'light', seats: 7,
