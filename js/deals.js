@@ -14,6 +14,8 @@
      price       price in euros, oldPrice (optional) the regular charter price
      duration    optional, e.g. '55m' or '1h 20m'
      images      photos; the first is shown on the card
+
+   Flights that have left are hidden by themselves; remove them here whenever convenient.
    ===================================================================== */
 
 // Airports: position for the route map, and the city and region as shown on the site.
@@ -64,7 +66,14 @@ function whenText(d, date){
   if (d.window) return s + ' · ' + t('window', { a: d.window[0], b: d.window[1] });
   return d.time ? s + ' · ' + d.time : s;
 }
-const LEGS = DEALS.map((d, i) => {
+// A flight disappears from the site by itself once it has left: at its departure time,
+// at the end of its time window, or at the end of the day when no time is given.
+function departsAt(d){
+  const at = dealDate(d), hm = (d.window ? d.window[1] : d.time || '23:59').split(':').map(Number);
+  at.setHours(hm[0], hm[1]);
+  return at;
+}
+const LEGS = DEALS.filter(d => departsAt(d) > new Date()).map((d, i) => {
   const A = AIRPORTS[d.from] || {}, B = AIRPORTS[d.to] || {};
   const date = dealDate(d);
   const name = (ap, code) => (ap.city && ap.city[LANG]) || code;
@@ -159,5 +168,7 @@ document.addEventListener('keydown', e => {
 // Fill every container that asks for deals: <div data-deals="carousel"> on the homepage.
 // The first flight to leave comes first.
 document.querySelectorAll('[data-deals="carousel"]').forEach(el => {
+  // no flights at the moment: hide the whole block instead of an empty row
+  if (!LEGS.length) { const section = el.closest('section'); if (section) section.hidden = true; return; }
   el.innerHTML = LEGS.slice().sort((a, b) => a.date - b.date).map(d => dealCardHtml(d, d.index)).join('');
 });
