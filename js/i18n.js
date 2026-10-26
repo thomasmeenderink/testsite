@@ -57,7 +57,7 @@ const STRINGS = {
     on: 'On {date}', flight1: '1 flight', flightsN: '{n} flights',
     noLegsOnDay: 'No empty legs on {date}. These fly in the week around it.',
     weekAround: 'A week around your date', legs1: 'empty leg', legsN: 'empty legs', ofTotal: ' of {n}',
-    noLegsAround: 'No empty legs around {date}', noLegsRoute: 'No empty legs on this route',
+    noLegsAround: 'No empty legs around {date}', noLegsRoute: 'No empty legs on this route', noLegsNow: 'No empty legs available right now',
     noLegsLead: 'Request a new flight and we will send you a tailored proposal.', requestAFlight: 'Request a flight',
     // contact
     messageSent: 'Message sent', thanks: 'Thank you, {name}. We will get back to you as soon as possible at {email}.',
@@ -116,7 +116,7 @@ const STRINGS = {
     on: 'Op {date}', flight1: '1 vlucht', flightsN: '{n} vluchten',
     noLegsOnDay: 'Geen empty legs op {date}. Deze vliegen in de week eromheen.',
     weekAround: 'Een week rondom je datum', legs1: 'empty leg', legsN: 'empty legs', ofTotal: ' van de {n}',
-    noLegsAround: 'Geen empty legs rond {date}', noLegsRoute: 'Geen empty legs op deze route',
+    noLegsAround: 'Geen empty legs rond {date}', noLegsRoute: 'Geen empty legs op deze route', noLegsNow: 'Op dit moment geen empty legs',
     noLegsLead: 'Vraag een nieuwe vlucht aan, dan sturen we je een voorstel op maat.', requestAFlight: 'Vraag een vlucht aan',
     messageSent: 'Bericht verstuurd', thanks: 'Bedankt, {name}. We reageren zo snel mogelijk via {email}.',
     chooseDate: 'Kies een datum', prevMonth: 'Vorige maand', nextMonth: 'Volgende maand', clearDate: 'Datum wissen',

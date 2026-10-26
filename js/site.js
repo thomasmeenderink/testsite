@@ -71,6 +71,7 @@ document.querySelectorAll('.lang-switch a').forEach(a => a.addEventListener('cli
   const dotsWrap = document.getElementById('dealsDots');
   if(!track || !prevBtn) return;
   const cards = Array.from(track.querySelectorAll('.deal-card'));
+  if(!cards.length) return;
 
   // Pages are counted in whole cards, so arrows and dots always land on a card edge.
   function cardStep(){
@@ -955,7 +956,7 @@ document.querySelectorAll('.lang-switch a').forEach(a => a.addEventListener('cli
       $('flReset').hidden = !filtered && fSort.value === 'date';
       list.innerHTML = shown
         ? html
-        : `<div class="legs-empty"><strong>${esc(target ? t('noLegsAround', { date: longDate(target) }) : t('noLegsRoute'))}</strong><p>${t('noLegsLead')}</p>
+        : `<div class="legs-empty"><strong>${esc(!legs.length ? t('noLegsNow') : target ? t('noLegsAround', { date: longDate(target) }) : t('noLegsRoute'))}</strong><p>${t('noLegsLead')}</p>
            <button type="button" data-open-request data-from="${esc(fFrom.value.trim())}" data-to="${esc(fTo.value.trim())}" data-date="${target ? fDate.value : ''}" data-pax="${pax || ''}">${t('requestAFlight')}</button></div>`;
     }
     [fFrom, fTo, fDate, fPax, fSort].forEach(el => { el.addEventListener('input', render); el.addEventListener('change', render); });
