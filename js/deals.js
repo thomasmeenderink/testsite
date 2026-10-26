@@ -40,9 +40,9 @@ const DEALS = [
     duration: '55m', oldPrice: 11000, price: 5800, images: CJ3_PHOTOS },
   { from: 'EGSS', to: 'EHAM', date: '2026-12-04', time: '18:00', plane: 'Cessna Citation CJ3', class: 'light', seats: 7,
     duration: '55m', oldPrice: 10650, price: 5650, images: CJ3_PHOTOS },
-  { from: 'EHAM', to: 'LFMD', date: '2026-10-31', plane: 'Cessna Citation CJ2+', class: 'light', seats: 7,
+  { from: 'EHAM', to: 'LFMD', date: '2026-10-31', time: '14:00', plane: 'Cessna Citation CJ2+', class: 'light', seats: 7,
     duration: '1h 45m', oldPrice: 14500, price: 9500, images: CJ2PLUS_PHOTOS },
-  { from: 'EBAW', to: 'LEIB', date: '2026-12-29', plane: 'Pilatus PC-24', class: 'light', seats: 8,
+  { from: 'EBAW', to: 'LEIB', date: '2026-12-29', time: '14:00', plane: 'Pilatus PC-24', class: 'light', seats: 8,
     duration: '2h 05m', oldPrice: 19350, price: 11750, images: PC24_PHOTOS }
 ];
 
