@@ -33,7 +33,7 @@ const CLASSES = {
 };
 
 const CJ3_PHOTOS = ['images/cj3-exterieur.webp', 'images/cj3-cabine.webp', 'images/cj3-plattegrond.webp'];
-const PC24_PHOTOS = ['images/pc24-hangar.webp', 'images/pc24-voorkant.webp', 'images/pc24-cabine.webp', 'images/pc24-cabine-catering.webp', 'images/pc24-stoelen.webp', 'images/pc24-stoel-detail.webp', 'images/pc24-catering.webp'];
+const PC24_PHOTOS = ['images/pc24-hangar.webp', 'images/pc24-voorkant.webp', 'images/pc24-cabine-lengte.webp', 'images/pc24-cabine-catering.webp', 'images/pc24-stoelen.webp', 'images/pc24-stoel-detail.webp', 'images/pc24-catering.webp'];
 const CJ2PLUS_PHOTOS = ['images/cj2plus-exterieur.webp', 'images/cj2plus-cabine-lang.webp', 'images/cj2plus-cabine.webp'];
 const DEALS = [
   { from: 'EHAM', to: 'EGSS', date: '2026-12-02', time: '10:30', plane: 'Cessna Citation CJ3', class: 'light', seats: 7,
@@ -41,9 +41,9 @@ const DEALS = [
   { from: 'EGSS', to: 'EHAM', date: '2026-12-04', time: '18:00', plane: 'Cessna Citation CJ3', class: 'light', seats: 7,
     duration: '55m', oldPrice: 10650, price: 5650, images: CJ3_PHOTOS },
   { from: 'EHAM', to: 'LFMD', date: '2026-10-31', plane: 'Cessna Citation CJ2+', class: 'light', seats: 7,
-    duration: '1h 45m', price: 9500, images: CJ2PLUS_PHOTOS },
+    duration: '1h 45m', oldPrice: 14500, price: 9500, images: CJ2PLUS_PHOTOS },
   { from: 'EBAW', to: 'LEIB', date: '2026-12-29', plane: 'Pilatus PC-24', class: 'light', seats: 8,
-    duration: '2h 05m', price: 11750, images: PC24_PHOTOS }
+    duration: '2h 05m', oldPrice: 19350, price: 11750, images: PC24_PHOTOS }
 ];
 
 /* ---------- turn the data into what the pages show, in the page's language ---------- */
