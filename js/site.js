@@ -594,7 +594,7 @@ document.querySelectorAll('.lang-switch a').forEach(a => a.addEventListener('cli
       <div class="dt">
         <div class="dt-top">
           <div class="dt-gallery${isPlan(images[0]) ? ' is-plan' : ''}">
-            <img class="dt-photo" src="${esc(images[0])}" alt="${esc(l.plane)}">
+            <img class="dt-photo ${esc(l.imgClass)}" src="${esc(images[0])}" alt="${esc(l.plane)}">
             <button type="button" class="dt-close req-close-btn" aria-label="${t('close')}">×</button>
             <button type="button" class="dt-share" aria-label="${t('shareLabel')}" aria-haspopup="menu" aria-expanded="false">${SHARE_ICON}<span>${t('share')}</span></button>
             ${images.length > 1 ? `

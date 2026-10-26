@@ -730,6 +730,8 @@ footer ul a:hover, .footer-bottom a:hover{ color: var(--accent); }
 .dt-gallery{ position: relative; min-height: 420px; background: var(--navy); border-bottom-right-radius: 18px; overflow: hidden; }
 .dt-gallery img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; }
 .dt-gallery img.crop-phenom{ object-position: center 35%; }
+/* portrait photos (e.g. the PC-24): show the lower part, where the aircraft is */
+.deal-scene img.crop-low, .dt-gallery img.crop-low, .combo-img img.crop-low{ object-position: center 68%; }
 .dt-gallery::after{ content:''; position:absolute; inset:auto 0 0 0; height: 40%; background: linear-gradient(0deg, rgba(30,46,61,0.55), rgba(30,46,61,0)); pointer-events:none; }
 .req-modal .dt-close{
   position:absolute; top: 16px; left: 16px; z-index: 2; width: 40px; height: 40px; padding: 0; border-radius: 50%;
