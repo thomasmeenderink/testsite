@@ -49,7 +49,7 @@ const DEALS = [
   { from: 'EBAW', to: 'LEIB', date: '2026-12-29', time: '14:00', plane: 'Pilatus PC-24', class: 'light', seats: 8,
     duration: '2h 05m', oldPrice: 19350, price: 11750, images: PC24_PHOTOS },
   { from: 'EBAW', to: 'LSGG', date: '2026-11-07', window: ['09:00', '12:00'], plane: 'Dassault Falcon 900LX', class: 'heavy', seats: 12,
-    duration: '1h 15m', oldPrice: 9550, price: 8800, images: FALCON900LX_PHOTOS }
+    duration: '1h 15m', oldPrice: 16250, price: 9550, images: FALCON900LX_PHOTOS }
 ];
 
 /* ---------- turn the data into what the pages show, in the page's language ---------- */
